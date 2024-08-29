@@ -9,6 +9,10 @@ sealed interface DataError: Error {
         UNKNOWN_ERROR
     }
 
+    enum class ProductError: DataError {
+        PRODUCT_NOT_FOUND
+    }
+
     enum class Local: DataError {
         DISK_FULL,
     }
