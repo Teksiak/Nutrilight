@@ -1,12 +1,13 @@
-package com.teksiak.nutrilight.core.domain.remote
+package com.teksiak.nutrilight.core.data
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RemoteProductDto(
     val code: String,
     val product: RemoteProduct,
+    val status: Int
 )
 
 @Serializable
@@ -31,9 +32,9 @@ data class RemoteIngredient (
 
 @Serializable
 data class RemoteNutriments(
-    @SerialName("energy-kj_100g")
+    @SerializedName("energy-kj_100g")
     val energyKj: Int?,
-    @SerialName("energy-kcal_100g")
+    @SerializedName("energy-kcal_100g")
     val energyKcal: Int?,
     val fat100g: Float?,
     val saturatedFat100g: Float?,
