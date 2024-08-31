@@ -1,8 +1,11 @@
 package com.teksiak.nutrilight.core.data.di
 
 import android.content.Context
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.teksiak.nutrilight.core.data.Constants
-import com.teksiak.nutrilight.core.data.ProductsApi
+import com.teksiak.nutrilight.core.data.ProductsApiService
 import com.teksiak.nutrilight.core.data.UserAgentInterceptor
 import dagger.Module
 import dagger.Provides
@@ -29,13 +32,23 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideGson(): Gson = GsonBuilder()
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .create()
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        baseUrl: String,
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     @Provides
     @Singleton
-    fun provideProductsApi(retrofit: Retrofit): ProductsApi = retrofit.create(ProductsApi::class.java)
+    fun provideProductsApi(retrofit: Retrofit): ProductsApiService = retrofit.create(ProductsApiService::class.java)
 }

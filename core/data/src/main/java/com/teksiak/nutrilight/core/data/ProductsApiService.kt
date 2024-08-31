@@ -1,17 +1,16 @@
 package com.teksiak.nutrilight.core.data
 
-import com.teksiak.nutrilight.core.domain.remote.RemoteProductDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ProductsApi {
+interface ProductsApiService {
 
     @GET(Constants.BASE_URL + "/product/{barcode}")
     suspend fun getProduct(
         @Path("barcode") barcode: String,
-        @Query("fields") fields: String = ""
+        @Query("fields") fields: String = "code,product_name,brands,nova_group,quantity,ecoscore_score,nutriscore_score,packaging,nutrients,ingredients,nutriments,allergens"
     ): Response<RemoteProductDto>
 
 }

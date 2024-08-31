@@ -36,11 +36,18 @@ data class RemoteNutriments(
     val energyKj: Int?,
     @SerializedName("energy-kcal_100g")
     val energyKcal: Int?,
+    @SerializedName("fat_100g")
     val fat100g: Float?,
+    @SerializedName("saturated-fat_100g")
     val saturatedFat100g: Float?,
+    @SerializedName("carbohydrates_100g")
     val carbohydrates100g: Float?,
+    @SerializedName("sugars_100g")
     val sugars100g: Float?,
+    @SerializedName("fiber_100g")
     val fiber100g: Float?,
+    @SerializedName("proteins_100g")
     val proteins100g: Float?,
+    @SerializedName("salt_100g")
     val salt100g: Float?,
 )
