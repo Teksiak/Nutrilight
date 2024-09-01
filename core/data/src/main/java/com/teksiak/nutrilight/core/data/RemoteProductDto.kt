@@ -21,7 +21,7 @@ data class RemoteProduct(
     val ecoscoreScore: Int?,
     val nutriscoreScore: Int?,
     val allergens: String?,
-    val ingredients: List<RemoteIngredient>
+    val ingredients: List<RemoteIngredient>?
     )
 
 @Serializable

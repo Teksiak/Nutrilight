@@ -2,15 +2,14 @@ package com.teksiak.nutrilight.core.domain.util
 
 sealed interface DataError: Error {
 
-    enum class NetworkError: DataError {
+    enum class Remote: DataError {
         NO_INTERNET,
         REQUEST_TIMEOUT,
         TOO_MANY_REQUESTS,
-        UNKNOWN_ERROR
-    }
-
-    enum class ProductError: DataError {
-        PRODUCT_NOT_FOUND
+        SERIALIZATION_ERROR,
+        SERVER_ERROR,
+        PRODUCT_NOT_FOUND,
+        UNKNOWN_ERROR,
     }
 
     enum class Local: DataError {
