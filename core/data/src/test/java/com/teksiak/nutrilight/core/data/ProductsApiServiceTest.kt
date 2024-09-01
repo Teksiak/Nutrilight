@@ -59,8 +59,8 @@ class ProductsApiServiceTest {
     @Test
     fun `test if product is parsed correctly`() = runTest {
         val mockResponse = File("src/test/resources/product.json").readText()
-
         mockWebServer.enqueue(MockResponse().setBody(mockResponse))
+
         val productDto = apiService.getProduct("20724696").body()
 
         assertThat(productDto).isNotNull()

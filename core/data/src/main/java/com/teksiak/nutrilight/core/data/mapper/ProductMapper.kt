@@ -16,7 +16,7 @@ fun RemoteProductDto.toProduct() = Product(
     packaging = product.packaging,
     novaGroup = product.novaGroup.toNovaGroup(),
     nutriments = product.nutriments.toNutriments(),
-    score = calculateScore(product.ecoscoreScore, product.nutriscoreScore),
+    score = calculateScore(product.nutriscoreScore, product.ecoscoreScore),
     allergens = product.allergens.toAllergensList(),
     ingredients = product.ingredients.toIngredients(),
 )
