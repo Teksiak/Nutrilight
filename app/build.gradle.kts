@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
 
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
     implementation(projects.core.presentation)
 
     testImplementation(libs.junit)
