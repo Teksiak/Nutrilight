@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RemoteProductDto(
     val code: String,
-    val product: RemoteProduct,
+    val product: RemoteProduct?,
     val status: Int
 )
 

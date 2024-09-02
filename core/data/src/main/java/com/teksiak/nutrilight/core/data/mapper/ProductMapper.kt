@@ -10,7 +10,7 @@ import com.teksiak.nutrilight.core.domain.product.calculateScore
 
 fun RemoteProductDto.toProduct() = Product(
     code = code,
-    name = product.productName!!,
+    name = product!!.productName!!,
     brands = product.brands,
     quantity = product.quantity,
     packaging = product.packaging.toFormattedPackaging(),

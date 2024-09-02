@@ -5,8 +5,6 @@ package com.teksiak.nutrilight.core.data
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.domain.product.Nutriments
@@ -19,10 +17,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -31,9 +26,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductsRepositoryTest {
@@ -74,13 +66,13 @@ class ProductsRepositoryTest {
 
     @ParameterizedTest
     @MethodSource("errorResponses")
-    fun `test getProduct with error apiResponse`() = runTest {
+    fun `test getProduct with error apiResponse`(errorCode: Int, expectedError: DataError.Remote) = runTest {
         apiService = object : ProductsApiService {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
             ): Response<RemoteProductDto> {
-                return Response.error(408, "".toResponseBody())
+                return Response.error(errorCode, "".toResponseBody())
             }
         }
         productsRepository = ProductsRepositoryImpl(apiService)
@@ -89,7 +81,7 @@ class ProductsRepositoryTest {
         assertThat(result).isInstanceOf(Result.Error::class)
         val error = (result as Result.Error).error
 
-        assertThat(error).isEqualTo(DataError.Remote.REQUEST_TIMEOUT)
+        assertThat(error).isEqualTo(expectedError)
     }
 
     @Test

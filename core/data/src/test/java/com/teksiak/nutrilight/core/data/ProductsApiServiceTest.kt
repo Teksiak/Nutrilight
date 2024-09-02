@@ -10,6 +10,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -20,6 +22,9 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
@@ -56,47 +61,175 @@ class ProductsApiServiceTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `test if product is parsed correctly`() = runTest {
-        val mockResponse = File("src/test/resources/product.json").readText()
+    @ParameterizedTest
+    @MethodSource("apiResponses")
+    fun `test if product is parsed correctly`(apiResponse: String, expectedParsing: RemoteProductDto) = runTest {
+        val mockResponse = File(apiResponse).readText()
+        mockWebServer.url("/product/20724696")
         mockWebServer.enqueue(MockResponse().setBody(mockResponse))
 
         val productDto = apiService.getProduct("20724696").body()
 
-        val expectedProductDto = RemoteProductDto(
-            status = 1,
-            code = "20724696",
-            product = RemoteProduct(
-                productName = "Californian Almond test",
-                brands = "Alesto,Lidl,Solent",
-                quantity = "200g",
-                packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
-                novaGroup = 1,
-                nutriments = RemoteNutriments(
-                    energyKj = 2567,
-                    energyKcal = 621,
-                    fat100g = 53.3f,
-                    saturatedFat100g = 4.3f,
-                    carbohydrates100g = 4.8f,
-                    sugars100g = 4.8f,
-                    fiber100g = 12.1f,
-                    proteins100g = 24.5f,
-                    salt100g = 0.01f
-                ),
-                allergens = "en:nuts",
-                ingredients = listOf(
-                    RemoteIngredient(
-                        id = "en:almond",
-                        text = "almonds"
+        assertThat(productDto).isEqualTo(expectedParsing)
+    }
+
+    companion object {
+        @JvmStatic
+        fun apiResponses() = listOf(
+            Arguments.of(
+                "src/test/resources/product_complete.json",
+                RemoteProductDto(
+                    status = 1,
+                    code = "20724696",
+                    product = RemoteProduct(
+                        productName = "Californian Almond test",
+                        brands = "Alesto,Lidl,Solent",
+                        quantity = "200g",
+                        packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+                        novaGroup = 1,
+                        nutriments = RemoteNutriments(
+                            energyKj = 2567,
+                            energyKcal = 621,
+                            fat100g = 53.3f,
+                            saturatedFat100g = 4.3f,
+                            carbohydrates100g = 4.8f,
+                            sugars100g = 4.8f,
+                            fiber100g = 12.1f,
+                            proteins100g = 24.5f,
+                            salt100g = 0.01f
+                        ),
+                        allergens = "en:nuts",
+                        ingredients = listOf(
+                            RemoteIngredient(
+                                id = "en:almond",
+                                text = "almonds"
+                            )
+                        ),
+                        ecoscoreScore = 24,
+                        nutriscoreScore = -3
                     )
                 ),
-                ecoscoreScore = 24,
-                nutriscoreScore = -3
-            )
+            ),
+            Arguments.of(
+                "src/test/resources/product_no_brands_packaging.json",
+                RemoteProductDto(
+                    status = 1,
+                    code = "20724696",
+                    product = RemoteProduct(
+                        productName = "Californian Almond test",
+                        brands = null,
+                        quantity = "200g",
+                        packaging = null,
+                        novaGroup = 1,
+                        nutriments = RemoteNutriments(
+                            energyKj = 2567,
+                            energyKcal = 621,
+                            fat100g = 53.3f,
+                            saturatedFat100g = 4.3f,
+                            carbohydrates100g = 4.8f,
+                            sugars100g = 4.8f,
+                            fiber100g = 12.1f,
+                            proteins100g = 24.5f,
+                            salt100g = 0.01f
+                        ),
+                        allergens = "en:nuts",
+                        ingredients = listOf(
+                            RemoteIngredient(
+                                id = "en:almond",
+                                text = "almonds"
+                            )
+                        ),
+                        ecoscoreScore = 24,
+                        nutriscoreScore = -3
+                    )
+                ),
+            ),
+            Arguments.of(
+                "src/test/resources/product_no_ingredients_allergens.json",
+                RemoteProductDto(
+                    status = 1,
+                    code = "20724696",
+                    product = RemoteProduct(
+                        productName = "Californian Almond test",
+                        brands = "Alesto,Lidl,Solent",
+                        quantity = "200g",
+                        packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+                        novaGroup = 1,
+                        nutriments = RemoteNutriments(
+                            energyKj = 2567,
+                            energyKcal = 621,
+                            fat100g = 53.3f,
+                            saturatedFat100g = 4.3f,
+                            carbohydrates100g = 4.8f,
+                            sugars100g = 4.8f,
+                            fiber100g = 12.1f,
+                            proteins100g = 24.5f,
+                            salt100g = 0.01f
+                        ),
+                        allergens = null,
+                        ingredients = null,
+                        ecoscoreScore = 24,
+                        nutriscoreScore = -3
+                    )
+                )
+            ),
+            Arguments.of(
+                "src/test/resources/product_no_nutriments.json",
+                RemoteProductDto(
+                    status = 1,
+                    code = "20724696",
+                    product = RemoteProduct(
+                        productName = "Californian Almond test",
+                        brands = "Alesto,Lidl,Solent",
+                        quantity = "200g",
+                        packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+                        novaGroup = 1,
+                        nutriments = null,
+                        allergens = "en:nuts",
+                        ingredients = listOf(
+                            RemoteIngredient(
+                                id = "en:almond",
+                                text = "almonds"
+                            )
+                        ),
+                        ecoscoreScore = null,
+                        nutriscoreScore = null
+                    )
+                ),
+            ),
+            Arguments.of(
+                "src/test/resources/product_no_nutriments_nova.json",
+                RemoteProductDto(
+                    status = 1,
+                    code = "20724696",
+                    product = RemoteProduct(
+                        productName = "Californian Almond test",
+                        brands = "Alesto,Lidl,Solent",
+                        quantity = "200g",
+                        packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+                        novaGroup = null,
+                        nutriments = null,
+                        allergens = "en:nuts",
+                        ingredients = listOf(
+                            RemoteIngredient(
+                                id = "en:almond",
+                                text = "almonds"
+                            )
+                        ),
+                        ecoscoreScore = null,
+                        nutriscoreScore = null
+                    )
+                ),
+            ),
+            Arguments.of(
+                "src/test/resources/no_product_found.json",
+                RemoteProductDto(
+                    status = 0,
+                    code = "20724696",
+                    product = null
+                ),
+            ),
         )
-
-        assertThat(productDto).isEqualTo(expectedProductDto)
-
     }
 
 }
