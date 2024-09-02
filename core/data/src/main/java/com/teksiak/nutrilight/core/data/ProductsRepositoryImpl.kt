@@ -15,12 +15,15 @@ class ProductsRepositoryImpl @Inject constructor(
 ): ProductsRepository {
 
     override suspend fun getProduct(barcode: String): Result<Product, DataError.Remote> {
-        val response = safeApiCall {
+        val result = safeApiCall {
             apiService.getProduct(barcode)
         }
-        return response.map {
-            it.toProduct()
+
+        if(result is Result.Success && result.data.status == 0) {
+            return Result.Error(DataError.Remote.PRODUCT_NOT_FOUND)
         }
+
+        return result.map { it.toProduct() }
     }
 
     override suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote> {

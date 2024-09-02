@@ -27,7 +27,14 @@ suspend inline fun <T> safeApiCall(call: () -> Response<T>): Result<T, DataError
 
 fun <T> responseToResult(response: Response<T>): Result<T, DataError.Remote> {
     return when(response.code()) {
-        in 200..299 -> Result.Success(response.body()!!)
+        in 200..299 -> {
+            val body = response.body()
+            if(body != null) {
+                Result.Success(body)
+            } else {
+                Result.Error(DataError.Remote.UNKNOWN_ERROR)
+            }
+        }
         408 -> Result.Error(DataError.Remote.REQUEST_TIMEOUT)
         429 -> Result.Error(DataError.Remote.TOO_MANY_REQUESTS)
         in 500..599 -> Result.Error(DataError.Remote.SERVER_ERROR)

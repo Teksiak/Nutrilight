@@ -12,12 +12,12 @@ data class RemoteProductDto(
 
 @Serializable
 data class RemoteProduct(
-    val productName: String,
+    val productName: String?,
     val brands: String?,
     val quantity: String?,
     val packaging: String?,
     val novaGroup: Int?,
-    val nutriments: RemoteNutriments,
+    val nutriments: RemoteNutriments?,
     val ecoscoreScore: Int?,
     val nutriscoreScore: Int?,
     val allergens: String?,

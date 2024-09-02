@@ -63,40 +63,39 @@ class ProductsApiServiceTest {
 
         val productDto = apiService.getProduct("20724696").body()
 
-        assertThat(productDto).isNotNull()
-        assertThat(productDto?.status).isEqualTo(1)
-        assertThat(productDto?.code).isEqualTo("20724696")
-
-        val remoteProduct = productDto?.product
-        val expectedRemoteProduct = RemoteProduct(
-            productName = "Californian Almond test",
-            brands = "Alesto,Lidl,Solent",
-            quantity = "200g",
-            packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
-            novaGroup = 1,
-            nutriments = RemoteNutriments(
-                energyKj = 2567,
-                energyKcal = 621,
-                fat100g = 53.3f,
-                saturatedFat100g = 4.3f,
-                carbohydrates100g = 4.8f,
-                sugars100g = 4.8f,
-                fiber100g = 12.1f,
-                proteins100g = 24.5f,
-                salt100g = 0.01f
-            ),
-            ecoscoreScore = 24,
-            nutriscoreScore = -3,
-            allergens = "en:nuts",
-            ingredients = listOf(
-                RemoteIngredient(
-                    id = "en:almond",
-                    text = "almonds"
-                )
+        val expectedProductDto = RemoteProductDto(
+            status = 1,
+            code = "20724696",
+            product = RemoteProduct(
+                productName = "Californian Almond test",
+                brands = "Alesto,Lidl,Solent",
+                quantity = "200g",
+                packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+                novaGroup = 1,
+                nutriments = RemoteNutriments(
+                    energyKj = 2567,
+                    energyKcal = 621,
+                    fat100g = 53.3f,
+                    saturatedFat100g = 4.3f,
+                    carbohydrates100g = 4.8f,
+                    sugars100g = 4.8f,
+                    fiber100g = 12.1f,
+                    proteins100g = 24.5f,
+                    salt100g = 0.01f
+                ),
+                allergens = "en:nuts",
+                ingredients = listOf(
+                    RemoteIngredient(
+                        id = "en:almond",
+                        text = "almonds"
+                    )
+                ),
+                ecoscoreScore = 24,
+                nutriscoreScore = -3
             )
         )
 
-        assertThat(remoteProduct).isEqualTo(expectedRemoteProduct)
+        assertThat(productDto).isEqualTo(expectedProductDto)
 
     }
 
