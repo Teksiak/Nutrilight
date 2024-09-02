@@ -68,33 +68,35 @@ class ProductsApiServiceTest {
         assertThat(productDto?.code).isEqualTo("20724696")
 
         val remoteProduct = productDto?.product
-        remoteProduct?.let { product ->
-            assertThat(product.productName).isEqualTo("Californian Almond test")
-            assertThat(product.brands).isEqualTo("Alesto,Lidl,Solent")
-            assertThat(product.quantity).isEqualTo("200g")
-            assertThat(product.packaging).isEqualTo("en:Andere Kunststoffe,en:Kunststoff,en:Tüte")
-            assertThat(product.novaGroup).isEqualTo(1)
-            assertThat(product.nutriments.energyKj).isEqualTo(2567)
-            assertThat(product.nutriments.energyKcal).isEqualTo(621)
-            assertThat(product.nutriments.fat100g).isEqualTo(53.3f)
-            assertThat(product.nutriments.saturatedFat100g).isEqualTo(4.3f)
-            assertThat(product.nutriments.carbohydrates100g).isEqualTo(4.8f)
-            assertThat(product.nutriments.sugars100g).isEqualTo(4.8f)
-            assertThat(product.nutriments.fiber100g).isEqualTo(12.1f)
-            assertThat(product.nutriments.proteins100g).isEqualTo(24.5f)
-            assertThat(product.nutriments.salt100g).isEqualTo(0.01f)
-            assertThat(product.ecoscoreScore).isEqualTo(24)
-            assertThat(product.nutriscoreScore).isEqualTo(-3)
-            assertThat(product.allergens).isEqualTo("en:nuts")
-            assertThat(product.ingredients).isEqualTo(
-                listOf(
-                    RemoteIngredient(
-                        id = "en:almond",
-                        text = "almonds"
-                    )
+        val expectedRemoteProduct = RemoteProduct(
+            productName = "Californian Almond test",
+            brands = "Alesto,Lidl,Solent",
+            quantity = "200g",
+            packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+            novaGroup = 1,
+            nutriments = RemoteNutriments(
+                energyKj = 2567,
+                energyKcal = 621,
+                fat100g = 53.3f,
+                saturatedFat100g = 4.3f,
+                carbohydrates100g = 4.8f,
+                sugars100g = 4.8f,
+                fiber100g = 12.1f,
+                proteins100g = 24.5f,
+                salt100g = 0.01f
+            ),
+            ecoscoreScore = 24,
+            nutriscoreScore = -3,
+            allergens = "en:nuts",
+            ingredients = listOf(
+                RemoteIngredient(
+                    id = "en:almond",
+                    text = "almonds"
                 )
             )
-        }
+        )
+
+        assertThat(remoteProduct).isEqualTo(expectedRemoteProduct)
 
     }
 
