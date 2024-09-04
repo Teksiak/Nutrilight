@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,11 +32,12 @@ import com.teksiak.nutrilight.core.presentation.designsystem.White
 @Composable
 fun Product(
     product: Product,
+    modifier: Modifier = Modifier,
     isFavourite: Boolean = false,
     onFavouriteToggle: () -> Unit = {}
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .border(width = 1.dp, color = ShadedWhite)
             .background(color = White)
