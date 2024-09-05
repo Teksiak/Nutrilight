@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
@@ -40,7 +41,9 @@ fun CircleButton(
 @Preview(showBackground = true)
 @Composable
 fun CircleButtonPreview() {
-    CircleButton(
-        icon = ScanBarIcon,
-    )
+    NutrilightTheme {
+        CircleButton(
+            icon = ScanBarIcon,
+        )
+    }
 }

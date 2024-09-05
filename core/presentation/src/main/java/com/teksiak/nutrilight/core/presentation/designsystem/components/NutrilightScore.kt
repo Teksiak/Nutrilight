@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teksiak.nutrilight.core.presentation.designsystem.FjallaOne
+import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ScoreIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.ScoreSmallIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
@@ -62,14 +63,18 @@ fun NutrilightScore(
 @Preview(showBackground = true)
 @Composable
 fun NutrilightScorePreview() {
-    NutrilightScore(score = 4.6f)
+    NutrilightTheme {
+        NutrilightScore(score = 4.6f)
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun NutrilightScoreSmallPreview() {
-    NutrilightScore(
-        score = 4.6f,
-        size = NutrilightScoreSize.Small
-    )
+    NutrilightTheme {
+        NutrilightScore(
+            score = 4.6f,
+            size = NutrilightScoreSize.Small
+        )
+    }
 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.SearchIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
@@ -177,13 +178,15 @@ fun SearchInput(
 )
 @Composable
 fun SearchBarPreview() {
-    SearchBar(
-        searchValue = "",
-        onSearchValueChange = {},
-        onSearch = {},
-        onScanBarClick = {},
-        onClear = {}
-    )
+    NutrilightTheme {
+        SearchBar(
+            searchValue = "",
+            onSearchValueChange = {},
+            onSearch = {},
+            onScanBarClick = {},
+            onClear = {}
+        )
+    }
 }
 
 @Preview(
@@ -193,11 +196,13 @@ fun SearchBarPreview() {
 )
 @Composable
 fun SearchBarPreviewFilled() {
-    SearchBar(
-        searchValue = "Nutella",
-        onSearchValueChange = {},
-        onSearch = {},
-        onScanBarClick = {},
-        onClear = {}
-    )
+    NutrilightTheme {
+        SearchBar(
+            searchValue = "Nutella",
+            onSearchValueChange = {},
+            onSearch = {},
+            onScanBarClick = {},
+            onClear = {}
+        )
+    }
 }

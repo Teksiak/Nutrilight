@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.domain.product.Nutriments
 import com.teksiak.nutrilight.core.domain.product.Product
+import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.White
@@ -110,10 +111,12 @@ fun Product(
 )
 @Composable
 fun ProductPreview() {
-    Product(
-        product =  ProductDummy,
-        isFavourite = true
-    )
+    NutrilightTheme {
+        Product(
+            product =  ProductDummy,
+            isFavourite = true
+        )
+    }
 }
 
 private val ProductDummy =  Product(
