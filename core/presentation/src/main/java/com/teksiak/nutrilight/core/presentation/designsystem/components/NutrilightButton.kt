@@ -43,18 +43,19 @@ fun PrimaryButton(
 }
 
 @Composable
-fun SecondaryButton(
+fun OutlinedButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    color: Color = TintedBlack,
 ) {
     Button(
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = TintedBlack
+            contentColor = color
         ),
-        border = BorderStroke(1.dp, TintedBlack),
+        border = BorderStroke(1.dp, color),
         shape = RoundedCornerShape(20.dp),
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
         onClick = onClick
@@ -62,6 +63,7 @@ fun SecondaryButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
+            color = color
         )
     }
 }
@@ -72,6 +74,6 @@ fun ButtonsPreview() {
     Row {
         PrimaryButton(text = "Primary", onClick = { })
         Spacer(modifier = Modifier.width(8.dp))
-        SecondaryButton(text = "Secondary", onClick = { })
+        OutlinedButton(text = "Secondary", onClick = { })
     }
 }

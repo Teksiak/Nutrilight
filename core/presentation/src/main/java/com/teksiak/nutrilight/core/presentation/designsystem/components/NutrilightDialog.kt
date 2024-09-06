@@ -1,14 +1,11 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -80,7 +77,7 @@ fun NutrilightDialog(
                 }
             }
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -115,8 +112,7 @@ fun NutrilightDialog(
 
 @Preview(
     showBackground = true,
-    widthDp = 316,
-    heightDp = 240
+
 )
 @Composable
 fun NutrilightDialogPreview() {
@@ -124,7 +120,6 @@ fun NutrilightDialogPreview() {
         NutrilightDialog(
             title = "Whoops",
             description = "We were unable to find this product.",
-            modifier = Modifier.fillMaxSize(),
             icon = {
                 Icon(
                     imageVector = LogoRottenIcon,
@@ -137,7 +132,7 @@ fun NutrilightDialogPreview() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    SecondaryButton(
+                    OutlinedButton(
                         modifier = Modifier.weight(1f),
                         text = "Try again",
                         onClick = {  }

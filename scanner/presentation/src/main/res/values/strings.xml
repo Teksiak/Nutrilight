@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="camera_permission_rationale_title">Camera Access</string>
+    <string name="camera_permission_rationale_description">Nutrilight needs access to Your camera to scan product barcodes and give You instant information. We’ll only use it when You’re scanning!</string>
+    <string name="allow">Allow access</string>
+    <string name="camera_permission_denied_description">Looks like You\'ve permanently denied camera access. Nutrilight needs it to scan product barcodes and provide quick details. Don\'t worry, we’ll only use it when You’re scanning.</string>
+    <string name="go_to_settings">Go to Settings</string>
+</resources>

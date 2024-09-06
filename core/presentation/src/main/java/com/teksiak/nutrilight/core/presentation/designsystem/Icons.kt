@@ -73,6 +73,10 @@ val ScanBarIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.scan_bar)
 
+val CameraIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.camera)
+
 val SearchIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.search)
