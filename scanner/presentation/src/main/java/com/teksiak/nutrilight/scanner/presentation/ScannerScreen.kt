@@ -5,15 +5,14 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,9 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teksiak.nutrilight.core.presentation.HomeTab
+import com.teksiak.nutrilight.core.presentation.ScannerTab
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
+import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
 
@@ -145,6 +147,24 @@ private fun ScannerScreen(
                     onAction(ScannerAction.NavigateBack)
                 }
             )
+        }
+    }
+
+    NutrilightScaffold(
+        currentTab = ScannerTab,
+        onTabSelected = { tab ->
+            when(tab) {
+                HomeTab -> onAction(ScannerAction.NavigateBack)
+                else -> {}
+            }
+        }
+    ) { innerPadding ->
+
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+
         }
     }
 }

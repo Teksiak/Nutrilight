@@ -33,7 +33,7 @@ val HeartFilledIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.heart_filled)
 
-val Hearts: ImageVector
+val HeartsIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.hearts)
 

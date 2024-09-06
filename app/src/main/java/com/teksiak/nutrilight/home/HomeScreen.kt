@@ -23,9 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.ScannerScreen
+import com.teksiak.nutrilight.core.presentation.HomeTab
+import com.teksiak.nutrilight.core.presentation.ScannerTab
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.White
+import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 
 @Composable
@@ -45,18 +46,12 @@ fun HomeScreenRoot(
 
 @Composable
 private fun HomeScreen(
-    onAction: (HomeAction) -> Unit
+    onAction: (HomeAction) -> Unit,
 ) {
     var searchValue by remember { mutableStateOf("") }
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .systemBarsPadding()
-            .padding(24.dp)
-        ,
-        topBar = {
+    NutrilightScaffold(
+        topAppBar = {
             SearchBar(
                 searchValue = searchValue,
                 onSearchValueChange = { searchValue = it },
@@ -67,14 +62,24 @@ private fun HomeScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(24.dp)
                     .height(40.dp)
             )
+        },
+        currentTab = HomeTab,
+        onTabSelected = { tab ->
+            when(tab) {
+                ScannerTab -> {
+                    onAction(HomeAction.ScanBarcode)
+                }
+            }
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
