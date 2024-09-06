@@ -1,6 +1,8 @@
 package com.teksiak.nutrilight.scanner.presentation
 
 sealed interface ScannerAction {
+
+    data object NavigateBack : ScannerAction
     data class SubmitCameraPermissionInfo(
         val acceptedCameraPermission: Boolean,
         val showCameraPermissionRationale: Boolean
@@ -10,6 +12,4 @@ sealed interface ScannerAction {
         val acceptedCameraPermission: Boolean,
         val showCameraPermissionRationale: Boolean
     ) : ScannerAction
-
-    data object DismissRationaleDialog: ScannerAction
 }

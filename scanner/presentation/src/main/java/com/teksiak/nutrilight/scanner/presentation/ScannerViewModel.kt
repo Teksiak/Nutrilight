@@ -31,7 +31,7 @@ class ScannerViewModel: ViewModel() {
                     )
                 }
             }
-            ScannerAction.DismissRationaleDialog -> { }
+            else -> Unit
         }
     }
 }

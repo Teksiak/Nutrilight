@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,15 +42,20 @@ fun NutrilightDialog(
     onDismiss: () -> Unit = {},
     icon: @Composable () -> Unit = {},
     buttons: @Composable () -> Unit = {},
-    bottomText: String? = null
+    bottomText: String? = null,
+    onBackPressed: (() -> Unit)? = null
 ) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnClickOutside = isDismissible,
-            dismissOnBackPress = isDismissible
+            dismissOnBackPress = onBackPressed != null
         )
     ) {
+        BackHandler(enabled = onBackPressed != null) {
+            onBackPressed?.invoke()
+        }
+
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(16.dp))
