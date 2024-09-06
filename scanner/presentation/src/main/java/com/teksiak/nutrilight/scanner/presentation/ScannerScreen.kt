@@ -16,16 +16,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
-import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
-import com.teksiak.nutrilight.core.presentation.designsystem.components.OutlinedButton
+import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
+import java.util.Scanner
 
 
 @Composable
@@ -42,7 +40,7 @@ fun ScannerScreenRoot(
 }
 
 @Composable
-fun ScannerScreen(
+private fun ScannerScreen(
     state: ScannerState,
     onAction: (ScannerAction) -> Unit
 ) {
@@ -54,7 +52,7 @@ fun ScannerScreen(
             val showCameraRationale = activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
 
             onAction(
-                ScannerAction.SubmitCameraPermissionInfo(
+                ScannerAction.RequestCameraPermission(
                     acceptedCameraPermission = isGranted,
                     showCameraPermissionRationale = showCameraRationale
                 )
@@ -79,7 +77,7 @@ fun ScannerScreen(
         }
     }
 
-    if(!state.acceptedCameraPermission) {
+    if(!state.acceptedCameraPermission && state.requestedCameraPermission) {
         if(state.showCameraPermissionRationale) {
             NutrilightDialog(
                 title = stringResource(id = R.string.camera_permission_rationale_title),
@@ -94,7 +92,7 @@ fun ScannerScreen(
                     )
                 },
                 buttons = {
-                    OutlinedButton(
+                    SecondaryButton(
                         text = stringResource(id = R.string.allow),
                         onClick = {
                             permissionLauncher.launch(Manifest.permission.CAMERA)
@@ -117,7 +115,7 @@ fun ScannerScreen(
                     )
                 },
                 buttons = {
-                    OutlinedButton(
+                    SecondaryButton(
                         text = stringResource(id = R.string.go_to_settings),
                         onClick = {
                             (context as Activity).openAppSettings()

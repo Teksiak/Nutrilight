@@ -132,7 +132,7 @@ fun NutrilightDialogPreview() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    OutlinedButton(
+                    SecondaryButton(
                         modifier = Modifier.weight(1f),
                         text = "Try again",
                         onClick = {  }

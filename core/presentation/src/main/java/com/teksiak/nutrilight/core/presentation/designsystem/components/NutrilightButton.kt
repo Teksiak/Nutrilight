@@ -43,7 +43,7 @@ fun PrimaryButton(
 }
 
 @Composable
-fun OutlinedButton(
+fun SecondaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -74,6 +74,6 @@ fun ButtonsPreview() {
     Row {
         PrimaryButton(text = "Primary", onClick = { })
         Spacer(modifier = Modifier.width(8.dp))
-        OutlinedButton(text = "Secondary", onClick = { })
+        SecondaryButton(text = "Secondary", onClick = { })
     }
 }
