@@ -14,6 +14,11 @@ class ScannerViewModel: ViewModel() {
 
     fun onAction(action: ScannerAction) {
         when (action) {
+            is ScannerAction.ToggleFlash -> {
+                _state.update { state ->
+                    state.copy(isFlashOn = !state.isFlashOn)
+                }
+            }
             is ScannerAction.SubmitCameraPermissionInfo -> {
                 _state.update { state ->
                     state.copy(

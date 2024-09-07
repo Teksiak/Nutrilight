@@ -2,20 +2,34 @@ package com.teksiak.nutrilight.scanner.presentation
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.view.LifecycleCameraController
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,12 +39,17 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.HomeTab
 import com.teksiak.nutrilight.core.presentation.ScannerTab
+import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.FlashFilledIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
+import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
+import com.teksiak.nutrilight.scanner.presentation.components.CameraPreview
 
 
 @Composable
@@ -150,22 +169,71 @@ private fun ScannerScreen(
         }
     }
 
-    NutrilightScaffold(
-        currentTab = ScannerTab,
-        onTabSelected = { tab ->
-            when(tab) {
-                HomeTab -> onAction(ScannerAction.NavigateBack)
-                else -> {}
+    if(state.acceptedCameraPermission) {
+        val cameraController = remember { LifecycleCameraController(context) }
+
+        LaunchedEffect(lifecycleState) {
+            if(lifecycleState == Lifecycle.State.RESUMED && state.isFlashOn) {
+                cameraController.enableTorch(true)
             }
         }
-    ) { innerPadding ->
 
-        Column(
+        Scaffold(
             modifier = Modifier
-                .padding(innerPadding)
-        ) {
-
+                .fillMaxSize()
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(White)
+            ) {
+                CameraPreview(
+                    cameraController = cameraController
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues)
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(
+                        onClick = {
+                            onAction(ScannerAction.NavigateBack)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = BackIcon,
+                            contentDescription = "Back",
+                            tint = White
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            cameraController.enableTorch(!state.isFlashOn)
+                            onAction(ScannerAction.ToggleFlash)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if(state.isFlashOn) FlashFilledIcon else FlashIcon,
+                            contentDescription = if(state.isFlashOn) "Flash off" else "Flash on",
+                            tint = White
+                        )
+                    }
+                }
+            }
         }
+    }
+}
+
+private fun Activity.toggleFlash(isTurnedOn: Boolean) {
+    val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    val cameraId = cameraManager.cameraIdList.firstOrNull { cameraId ->
+        cameraManager.getCameraCharacteristics(cameraId).get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+    }
+    cameraId?.let {
+        cameraManager.setTorchMode(it, !isTurnedOn)
     }
 }
 
