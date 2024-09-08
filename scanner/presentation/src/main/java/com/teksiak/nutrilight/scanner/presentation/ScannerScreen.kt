@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.view.LifecycleCameraController
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,8 +32,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -43,6 +47,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
@@ -50,6 +55,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
 import com.teksiak.nutrilight.scanner.presentation.components.CameraPreview
+import com.teksiak.nutrilight.scanner.presentation.components.ScannerOverlay
 
 
 @Composable
@@ -185,11 +191,14 @@ private fun ScannerScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(White)
+                    .background(Color.Black)
             ) {
                 CameraPreview(
                     cameraController = cameraController
                 )
+
+                ScannerOverlay()
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -227,19 +236,22 @@ private fun ScannerScreen(
     }
 }
 
-private fun Activity.toggleFlash(isTurnedOn: Boolean) {
-    val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-    val cameraId = cameraManager.cameraIdList.firstOrNull { cameraId ->
-        cameraManager.getCameraCharacteristics(cameraId).get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
-    }
-    cameraId?.let {
-        cameraManager.setTorchMode(it, !isTurnedOn)
-    }
-}
-
 private fun Activity.openAppSettings() {
     Intent(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.fromParts("package", packageName, null)
     ).also(::startActivity)
+}
+
+@Preview
+@Composable
+fun ScannerScreenPreview() {
+    NutrilightTheme {
+        ScannerScreen(
+            state = ScannerState(
+                acceptedCameraPermission = true
+            ),
+            onAction = {}
+        )
+    }
 }

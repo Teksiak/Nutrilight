@@ -7,9 +7,7 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
@@ -28,11 +26,9 @@ fun CameraPreview(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
-                    setBackgroundColor(Color.WHITE)
+                    setBackgroundColor(Color.BLACK)
                     scaleType = PreviewView.ScaleType.FILL_START
-                }
-                .also { previewView ->
-                    previewView.controller = cameraController
+                    this.controller = cameraController
                     cameraController.bindToLifecycle(lifecycleOwner)
                 }
         }
