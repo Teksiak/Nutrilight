@@ -88,8 +88,8 @@ class ProductsApiServiceTest {
                         packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
                         novaGroup = 1,
                         nutriments = RemoteNutriments(
-                            energyKj = 2567,
-                            energyKcal = 621,
+                            energyKj = 2567f,
+                            energyKcal = 621f,
                             fat100g = 53.3f,
                             saturatedFat100g = 4.3f,
                             carbohydrates100g = 4.8f,
@@ -122,8 +122,8 @@ class ProductsApiServiceTest {
                         packaging = null,
                         novaGroup = 1,
                         nutriments = RemoteNutriments(
-                            energyKj = 2567,
-                            energyKcal = 621,
+                            energyKj = 2567f,
+                            energyKcal = 621f,
                             fat100g = 53.3f,
                             saturatedFat100g = 4.3f,
                             carbohydrates100g = 4.8f,
@@ -156,8 +156,8 @@ class ProductsApiServiceTest {
                         packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
                         novaGroup = 1,
                         nutriments = RemoteNutriments(
-                            energyKj = 2567,
-                            energyKcal = 621,
+                            energyKj = 2567f,
+                            energyKcal = 621f,
                             fat100g = 53.3f,
                             saturatedFat100g = 4.3f,
                             carbohydrates100g = 4.8f,

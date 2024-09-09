@@ -148,8 +148,8 @@ class ProductsRepositoryTest {
                             packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
                             novaGroup = 1,
                             nutriments = RemoteNutriments(
-                                energyKj = 2567,
-                                energyKcal = 621,
+                                energyKj = 2567f,
+                                energyKcal = 621f,
                                 fat100g = 53.3f,
                                 saturatedFat100g = 4.3f,
                                 carbohydrates100g = 4.8f,
@@ -178,8 +178,8 @@ class ProductsRepositoryTest {
                     packaging = "Andere Kunststoffe, Kunststoff, Tüte",
                     novaGroup = NovaGroup.NOVA_1,
                     nutriments = Nutriments(
-                        energyKj = 2567,
-                        energyKcal = 621,
+                        energyKj = 2567f,
+                        energyKcal = 621f,
                         fat = 53.3f,
                         saturatedFat = 4.3f,
                         carbohydrates = 4.8f,
