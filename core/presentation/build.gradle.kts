@@ -47,6 +47,9 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.activity.compose)
 
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+
     implementation(projects.core.domain)
 
 

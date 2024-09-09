@@ -45,6 +45,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.White
+import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
@@ -232,6 +233,11 @@ private fun ScannerScreen(
                     onAction(ScannerAction.DismissScannerError)
                 }
             )
+        } else if(state.isLoading) {
+            LoadingDialog(
+                modifier = Modifier.padding(48.dp),
+                text = stringResource(id = R.string.checking_the_ingredients)
+            )
         }
 
         Scaffold(
@@ -247,7 +253,9 @@ private fun ScannerScreen(
                     cameraController = cameraController
                 )
 
-                ScannerOverlay()
+                ScannerOverlay(
+                    paddingValues = paddingValues
+                )
 
                 Row(
                     modifier = Modifier

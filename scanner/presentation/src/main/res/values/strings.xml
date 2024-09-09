@@ -8,4 +8,5 @@
     <string name="whoops">Whoops!</string>
     <string name="something_went_wrong">Something went wrong with the scan. Please try again or check your connection.</string>
     <string name="try_again">Try again</string>
+    <string name="checking_the_ingredients">Hold on, we\'re checking the ingredients...</string>
 </resources>

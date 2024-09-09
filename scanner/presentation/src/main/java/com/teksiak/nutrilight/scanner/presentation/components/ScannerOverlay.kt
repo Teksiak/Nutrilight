@@ -9,8 +9,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -35,7 +37,9 @@ import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.scanner.presentation.R
 
 @Composable
-fun ScannerOverlay() {
+fun ScannerOverlay(
+    paddingValues: PaddingValues
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
     val lineOpacity by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -56,6 +60,9 @@ fun ScannerOverlay() {
                     topLeft = Offset(0f, 0f),
                     size = size,
                 )
+            }
+            .padding(paddingValues)
+            .drawBehind {
                 drawRoundRect(
                     color = Color.Transparent,
                     topLeft = Offset(
@@ -90,5 +97,7 @@ fun ScannerOverlay() {
 @Preview(showBackground = true)
 @Composable
 fun ScannerOverlayPreview() {
-    ScannerOverlay()
+    ScannerOverlay(
+        paddingValues = PaddingValues(0.dp)
+    )
 }
