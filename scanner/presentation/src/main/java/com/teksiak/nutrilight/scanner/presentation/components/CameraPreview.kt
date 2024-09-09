@@ -20,17 +20,16 @@ fun CameraPreview(
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { viewContext ->
-            PreviewView(viewContext)
-                .apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                    setBackgroundColor(Color.BLACK)
-                    scaleType = PreviewView.ScaleType.FILL_START
-                    this.controller = cameraController
-                    cameraController.bindToLifecycle(lifecycleOwner)
-                }
+            PreviewView(viewContext).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                setBackgroundColor(Color.BLACK)
+                scaleType = PreviewView.ScaleType.FILL_START
+                this.controller = cameraController
+                cameraController.bindToLifecycle(lifecycleOwner)
+            }
         }
     )
 }

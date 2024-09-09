@@ -2,21 +2,19 @@ package com.teksiak.nutrilight.scanner.presentation
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,26 +32,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.presentation.HomeTab
-import com.teksiak.nutrilight.core.presentation.ScannerTab
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
+import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
-import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
+import com.teksiak.nutrilight.scanner.presentation.analyzer.BarcodeImageAnalyzer
 import com.teksiak.nutrilight.scanner.presentation.components.CameraPreview
 import com.teksiak.nutrilight.scanner.presentation.components.ScannerOverlay
 
@@ -176,12 +171,67 @@ private fun ScannerScreen(
     }
 
     if(state.acceptedCameraPermission) {
-        val cameraController = remember { LifecycleCameraController(context) }
+        val imageAnalyzer = remember {
+            BarcodeImageAnalyzer(
+                onSuccess = { barcode ->
+                    onAction(ScannerAction.BarcodeDetected(barcode))
+                },
+                onFailure = {
+                    onAction(ScannerAction.ScannerError)
+                }
+            )
+        }
+        val cameraController = remember {
+            LifecycleCameraController(context).apply {
+                setEnabledUseCases(CameraController.IMAGE_ANALYSIS)
+                imageAnalysisBackpressureStrategy = ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
+                setImageAnalysisAnalyzer(
+                    ContextCompat.getMainExecutor(context),
+                    imageAnalyzer
+                )
+            }
+        }
 
         LaunchedEffect(lifecycleState) {
             if(lifecycleState == Lifecycle.State.RESUMED && state.isFlashOn) {
                 cameraController.enableTorch(true)
             }
+        }
+
+        LaunchedEffect(state.hasScannerFailed, state.isLoading) {
+            Log.d("BarcodeImageAnalyzer", "hasScannerFailed: ${state.hasScannerFailed}, isLoading: ${state.isLoading}")
+            if(state.hasScannerFailed || state.isLoading) {
+                imageAnalyzer.canProcessImage(false)
+            } else {
+                imageAnalyzer.canProcessImage(true)
+
+            }
+        }
+
+        if(state.hasScannerFailed) {
+            NutrilightDialog(
+                title = stringResource(id = R.string.whoops),
+                description = stringResource(id = R.string.something_went_wrong),
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(48.dp),
+                        imageVector = LogoRottenIcon,
+                        contentDescription = "Error icon",
+                        tint = Color.Unspecified
+                    )
+                },
+                buttons = {
+                    SecondaryButton(
+                        text = stringResource(id = R.string.try_again),
+                        onClick = {
+                            onAction(ScannerAction.DismissScannerError)
+                        },
+                    )
+                },
+                onDismiss = {
+                    onAction(ScannerAction.DismissScannerError)
+                }
+            )
         }
 
         Scaffold(
@@ -241,17 +291,4 @@ private fun Activity.openAppSettings() {
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.fromParts("package", packageName, null)
     ).also(::startActivity)
-}
-
-@Preview
-@Composable
-fun ScannerScreenPreview() {
-    NutrilightTheme {
-        ScannerScreen(
-            state = ScannerState(
-                acceptedCameraPermission = true
-            ),
-            onAction = {}
-        )
-    }
 }

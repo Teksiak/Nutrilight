@@ -5,4 +5,7 @@
     <string name="allow">Allow access</string>
     <string name="camera_permission_denied_description">Looks like You\'ve permanently denied camera access. Nutrilight needs it to scan product barcodes and provide quick details. Don\'t worry, we’ll only use it when You’re scanning.</string>
     <string name="go_to_settings">Go to Settings</string>
+    <string name="whoops">Whoops!</string>
+    <string name="something_went_wrong">Something went wrong with the scan. Please try again or check your connection.</string>
+    <string name="try_again">Try again</string>
 </resources>

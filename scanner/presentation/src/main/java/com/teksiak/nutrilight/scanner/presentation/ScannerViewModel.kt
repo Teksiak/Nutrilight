@@ -1,7 +1,6 @@
 package com.teksiak.nutrilight.scanner.presentation
 
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,6 +13,21 @@ class ScannerViewModel: ViewModel() {
 
     fun onAction(action: ScannerAction) {
         when (action) {
+            is ScannerAction.BarcodeDetected -> {
+                _state.update { state ->
+                    state.copy(isLoading = true)
+                }
+            }
+            is ScannerAction.ScannerError -> {
+                _state.update { state ->
+                    state.copy(hasScannerFailed = true)
+                }
+            }
+            is ScannerAction.DismissScannerError -> {
+                _state.update { state ->
+                    state.copy(hasScannerFailed = false)
+                }
+            }
             is ScannerAction.ToggleFlash -> {
                 _state.update { state ->
                     state.copy(isFlashOn = !state.isFlashOn)

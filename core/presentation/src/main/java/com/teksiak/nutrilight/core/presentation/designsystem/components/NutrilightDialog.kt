@@ -49,10 +49,11 @@ fun NutrilightDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnClickOutside = isDismissible,
-            dismissOnBackPress = onBackPressed != null
+            dismissOnBackPress = onBackPressed != null || isDismissible
         )
     ) {
         BackHandler(enabled = onBackPressed != null) {
+            onDismiss()
             onBackPressed?.invoke()
         }
 
