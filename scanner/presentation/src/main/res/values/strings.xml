@@ -9,4 +9,7 @@
     <string name="something_went_wrong">Something went wrong with the scan. Please try again or check your connection.</string>
     <string name="try_again">Try again</string>
     <string name="checking_the_ingredients">Hold on, we\'re checking the ingredients...</string>
+    <string name="hmm">Hmm...</string>
+    <string name="product_not_found">We couldn\'t find that product. Try searching for it instead!</string>
+    <string name="search">Search</string>
 </resources>

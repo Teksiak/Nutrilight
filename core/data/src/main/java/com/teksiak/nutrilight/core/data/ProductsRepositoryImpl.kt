@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.core.data
 
+import android.util.Log
 import com.teksiak.nutrilight.core.data.mapper.toProduct
 import com.teksiak.nutrilight.core.data.util.safeApiCall
 import com.teksiak.nutrilight.core.domain.ProductsRepository

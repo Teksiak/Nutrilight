@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.core.data.util
 
+import android.util.Log
 import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.Result
 import kotlinx.serialization.SerializationException

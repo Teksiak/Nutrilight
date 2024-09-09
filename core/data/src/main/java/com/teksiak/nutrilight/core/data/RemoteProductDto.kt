@@ -33,9 +33,9 @@ data class RemoteIngredient (
 @Serializable
 data class RemoteNutriments(
     @SerializedName("energy-kj_100g")
-    val energyKj: Int?,
+    val energyKj: Float?,
     @SerializedName("energy-kcal_100g")
-    val energyKcal: Int?,
+    val energyKcal: Float?,
     @SerializedName("fat_100g")
     val fat100g: Float?,
     @SerializedName("saturated-fat_100g")

@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -42,11 +44,14 @@ import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
+import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
+import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
 import com.teksiak.nutrilight.scanner.presentation.analyzer.BarcodeImageAnalyzer
@@ -199,9 +204,8 @@ private fun ScannerScreen(
             }
         }
 
-        LaunchedEffect(state.hasScannerFailed, state.isLoading) {
-            Log.d("BarcodeImageAnalyzer", "hasScannerFailed: ${state.hasScannerFailed}, isLoading: ${state.isLoading}")
-            if(state.hasScannerFailed || state.isLoading) {
+        LaunchedEffect(state.scannerError, state.isLoading, state.scannedId) {
+            if(state.scannerError || state.isLoading || state.scannedId != null) {
                 imageAnalyzer.canProcessImage(false)
             } else {
                 imageAnalyzer.canProcessImage(true)
@@ -209,7 +213,7 @@ private fun ScannerScreen(
             }
         }
 
-        if(state.hasScannerFailed) {
+        if(state.scannerError) {
             NutrilightDialog(
                 title = stringResource(id = R.string.whoops),
                 description = stringResource(id = R.string.something_went_wrong),
@@ -225,18 +229,67 @@ private fun ScannerScreen(
                     SecondaryButton(
                         text = stringResource(id = R.string.try_again),
                         onClick = {
-                            onAction(ScannerAction.DismissScannerError)
+                            onAction(ScannerAction.DismissError)
                         },
                     )
                 },
                 onDismiss = {
-                    onAction(ScannerAction.DismissScannerError)
+                    onAction(ScannerAction.DismissError)
+                }
+            )
+        } else if(state.productNotFound) {
+            NutrilightDialog(
+                title = stringResource(id = R.string.hmm),
+                description = stringResource(id = R.string.product_not_found),
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(48.dp),
+                        imageVector = LogoRottenIcon,
+                        contentDescription = "Error icon",
+                        tint = Color.Unspecified
+                    )
+                },
+                buttons = {
+                    PrimaryButton(
+                        text = stringResource(id = R.string.search),
+                        onClick = {
+                            onAction(ScannerAction.DismissError)
+                        },
+                    )
+                },
+                bottomText = "Scanned ID: ${state.scannedId ?: "-"}",
+                onDismiss = {
+                    onAction(ScannerAction.DismissError)
+                }
+            )
+        } else if (state.product != null) {
+            NutrilightDialog(
+                title = "Product found",
+                description = state.product.name,
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(48.dp),
+                        imageVector = LogoIcon,
+                        contentDescription = "Scanned",
+                        tint = Color.Unspecified
+                    )
+                },
+                bottomText = "Scanned ID: ${state.scannedId ?: "-"}",
+                onDismiss = {
+                    onAction(ScannerAction.DismissScan)
                 }
             )
         } else if(state.isLoading) {
             LoadingDialog(
-                modifier = Modifier.padding(48.dp),
-                text = stringResource(id = R.string.checking_the_ingredients)
+                modifier = Modifier
+                    .padding(48.dp)
+                    .width(230.dp)
+                    .height(144.dp)
+                ,
+                text = stringResource(id = R.string.checking_the_ingredients),
+                onBackPressed = {
+                    onAction(ScannerAction.NavigateBack)
+                }
             )
         }
 

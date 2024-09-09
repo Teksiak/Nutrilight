@@ -1,8 +1,8 @@
 package com.teksiak.nutrilight.core.domain.product
 
 data class Nutriments(
-    val energyKj: Int?,
-    val energyKcal: Int?,
+    val energyKj: Float?,
+    val energyKcal: Float?,
     val fat: Float?,
     val saturatedFat: Float?,
     val carbohydrates: Float?,

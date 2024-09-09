@@ -1,14 +1,11 @@
 package com.teksiak.nutrilight
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.home.HomeScreenRoot
 import com.teksiak.nutrilight.home.HomeViewModel
 import com.teksiak.nutrilight.scanner.presentation.ScannerScreenRoot
@@ -36,7 +33,7 @@ fun NavigationRoot(
             )
         }
         composable<ScannerScreen> {
-            val viewModel = viewModel<ScannerViewModel>()
+            val viewModel = hiltViewModel<ScannerViewModel>()
 
             ScannerScreenRoot(
                 onNavigateBack = {
