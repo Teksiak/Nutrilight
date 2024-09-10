@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.core.data.util
 
-import android.util.Log
 import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.Result
 import kotlinx.serialization.SerializationException
@@ -32,6 +31,14 @@ fun <T> responseToResult(response: Response<T>): Result<T, DataError.Remote> {
             val body = response.body()
             if(body != null) {
                 Result.Success(body)
+            } else {
+                Result.Error(DataError.Remote.UNKNOWN_ERROR)
+            }
+        }
+        404 -> {
+            val errorResponse = response.errorBody()?.string()
+            if(errorResponse != null && errorResponse.contains("product not found", ignoreCase = true)) {
+                Result.Error(DataError.Remote.PRODUCT_NOT_FOUND)
             } else {
                 Result.Error(DataError.Remote.UNKNOWN_ERROR)
             }

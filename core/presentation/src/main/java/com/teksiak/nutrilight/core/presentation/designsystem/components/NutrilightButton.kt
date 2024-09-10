@@ -38,6 +38,7 @@ fun PrimaryButton(
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
+            color = White
         )
     }
 }

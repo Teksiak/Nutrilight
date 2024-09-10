@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.scanner.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository
@@ -30,7 +29,6 @@ class ScannerViewModel @Inject constructor(
                 viewModelScope.launch {
                     when(val result = productsRepository.getProduct(action.barcode)) {
                         is Result.Success -> {
-                            Log.d("ScannerViewModel", "product: ${result.data}")
                             _state.update { state ->
                                 state.copy(
                                     isLoading = false,
@@ -61,6 +59,7 @@ class ScannerViewModel @Inject constructor(
             is ScannerAction.DismissError -> {
                 _state.update { state ->
                     state.copy(
+                        scannedId = null,
                         scannerError = false,
                         productNotFound = false
                     )

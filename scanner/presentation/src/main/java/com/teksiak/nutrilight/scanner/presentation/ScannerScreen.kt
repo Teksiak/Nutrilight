@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -47,7 +46,6 @@ import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
-import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
@@ -219,7 +217,7 @@ private fun ScannerScreen(
                 description = stringResource(id = R.string.something_went_wrong),
                 icon = {
                     Icon(
-                        modifier = Modifier.size(48.dp),
+                        modifier = Modifier.size(64.dp),
                         imageVector = LogoRottenIcon,
                         contentDescription = "Error icon",
                         tint = Color.Unspecified
@@ -243,7 +241,7 @@ private fun ScannerScreen(
                 description = stringResource(id = R.string.product_not_found),
                 icon = {
                     Icon(
-                        modifier = Modifier.size(48.dp),
+                        modifier = Modifier.size(64.dp),
                         imageVector = LogoRottenIcon,
                         contentDescription = "Error icon",
                         tint = Color.Unspecified
@@ -268,7 +266,7 @@ private fun ScannerScreen(
                 description = state.product.name,
                 icon = {
                     Icon(
-                        modifier = Modifier.size(48.dp),
+                        modifier = Modifier.size(64.dp),
                         imageVector = LogoIcon,
                         contentDescription = "Scanned",
                         tint = Color.Unspecified
@@ -284,7 +282,7 @@ private fun ScannerScreen(
                 modifier = Modifier
                     .padding(48.dp)
                     .width(230.dp)
-                    .height(144.dp)
+                    .height(152.dp)
                 ,
                 text = stringResource(id = R.string.checking_the_ingredients),
                 onBackPressed = {
