@@ -6,8 +6,10 @@ import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +21,9 @@ class ScannerViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ScannerState())
     val state = _state.asStateFlow()
+
+    private val eventChannel = Channel<ScannerEvent>()
+    val events = eventChannel.receiveAsFlow()
 
     fun onAction(action: ScannerAction) {
         when (action) {
@@ -32,10 +37,9 @@ class ScannerViewModel @Inject constructor(
                             _state.update { state ->
                                 state.copy(
                                     isLoading = false,
-                                    scannedId = action.barcode,
-                                    product = result.data
                                 )
                             }
+                            eventChannel.send(ScannerEvent.ProductFound(action.barcode))
                         }
                         is Result.Error -> {
                             val productNotFound = result.error == DataError.Remote.PRODUCT_NOT_FOUND
@@ -69,7 +73,6 @@ class ScannerViewModel @Inject constructor(
                 _state.update { state ->
                     state.copy(
                         scannedId = null,
-                        product = null,
                     )
                 }
             }

@@ -39,11 +39,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.White
@@ -51,6 +51,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingD
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
+import com.teksiak.nutrilight.core.presentation.util.ObserveAsEvents
 import com.teksiak.nutrilight.core.presentation.util.hasPermission
 import com.teksiak.nutrilight.scanner.presentation.analyzer.BarcodeImageAnalyzer
 import com.teksiak.nutrilight.scanner.presentation.components.CameraPreview
@@ -60,17 +61,27 @@ import com.teksiak.nutrilight.scanner.presentation.components.ScannerOverlay
 @Composable
 fun ScannerScreenRoot(
     onNavigateBack: () -> Unit,
+    onNavigateToProduct: (String) -> Unit,
     viewModel: ScannerViewModel
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            is ScannerEvent.ProductFound -> {
+                onNavigateToProduct(event.productId)
+            }
+        }
+    }
 
     ScannerScreen(
         state = state,
         onAction = { action ->
             when(action) {
                 ScannerAction.NavigateBack -> onNavigateBack()
-                else -> viewModel.onAction(action)
+                else -> Unit
             }
+            viewModel.onAction(action)
         }
     )
 }
@@ -258,23 +269,6 @@ private fun ScannerScreen(
                 bottomText = "Scanned ID: ${state.scannedId ?: "-"}",
                 onDismiss = {
                     onAction(ScannerAction.DismissError)
-                }
-            )
-        } else if (state.product != null) {
-            NutrilightDialog(
-                title = "Product found",
-                description = state.product.name,
-                icon = {
-                    Icon(
-                        modifier = Modifier.size(64.dp),
-                        imageVector = LogoIcon,
-                        contentDescription = "Scanned",
-                        tint = Color.Unspecified
-                    )
-                },
-                bottomText = "Scanned ID: ${state.scannedId ?: "-"}",
-                onDismiss = {
-                    onAction(ScannerAction.DismissScan)
                 }
             )
         } else if(state.isLoading) {

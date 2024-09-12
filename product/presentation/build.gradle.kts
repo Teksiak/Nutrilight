@@ -1,27 +1,20 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.dagger.hilt)
 }
 
 android {
-    namespace = "com.teksiak.nutrilight"
+    namespace = "com.teksiak.nutrilight.product.presentation"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.teksiak.nutrilight"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -40,38 +33,25 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization)
+
+    implementation(libs.mlkit.barcode.scanning)
 
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(projects.core.domain)
-    implementation(projects.core.data)
     implementation(projects.core.presentation)
-    implementation(projects.scanner.presentation)
-    implementation(projects.product.presentation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

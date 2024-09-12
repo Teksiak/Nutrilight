@@ -40,7 +40,7 @@ fun CircleButton(
 
 @Preview(showBackground = true)
 @Composable
-fun CircleButtonPreview() {
+private fun CircleButtonPreview() {
     NutrilightTheme {
         CircleButton(
             icon = ScanBarIcon,
