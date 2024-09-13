@@ -7,7 +7,6 @@ sealed interface ScannerAction {
     data class BarcodeDetected(val barcode: String) : ScannerAction
     data object ScannerError : ScannerAction
     data object DismissError : ScannerAction
-    data object DismissScan : ScannerAction
 
     data class SubmitCameraPermissionInfo(
         val acceptedCameraPermission: Boolean,

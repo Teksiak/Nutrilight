@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -66,9 +67,12 @@ fun ScannerScreenRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    ObserveAsEvents(viewModel.events) { event ->
+    ObserveAsEvents(
+        flow = viewModel.events
+    ) { event ->
         when(event) {
             is ScannerEvent.ProductFound -> {
+                Log.d("ScannerScreenRoot", "Product found: ${event.productId}")
                 onNavigateToProduct(event.productId)
             }
         }
@@ -213,13 +217,8 @@ private fun ScannerScreen(
             }
         }
 
-        LaunchedEffect(state.scannerError, state.isLoading, state.scannedId) {
-            if(state.scannerError || state.isLoading || state.scannedId != null) {
-                imageAnalyzer.canProcessImage(false)
-            } else {
-                imageAnalyzer.canProcessImage(true)
-
-            }
+        LaunchedEffect(state.shouldProcessImage) {
+            imageAnalyzer.canProcessImage(state.shouldProcessImage)
         }
 
         if(state.scannerError) {
