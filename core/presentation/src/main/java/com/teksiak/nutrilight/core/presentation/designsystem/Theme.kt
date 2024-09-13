@@ -41,14 +41,6 @@ fun NutrilightTheme(
         else -> LightColorScheme
     }
 
-    val activity = LocalView.current.context as Activity
-
-    WindowCompat.getInsetsController(activity.window, activity.window.decorView).apply {
-        isAppearanceLightStatusBars = true
-        isAppearanceLightNavigationBars = true
-    }
-
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
