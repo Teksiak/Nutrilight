@@ -10,9 +10,9 @@ import com.teksiak.nutrilight.core.domain.product.calculateScore
 
 fun RemoteProductDto.toProduct() = Product(
     code = code,
-    name = product!!.productName!!,
-    brands = product.brands,
-    quantity = product.quantity,
+    name = product!!.productName.formatName(product.brands, product.quantity, product.packaging),
+    brands = product.brands.formatIfBlank(),
+    quantity = product.quantity.formatIfBlank(),
     packaging = product.packaging.toFormattedPackaging(),
     novaGroup = product.novaGroup.toNovaGroup(),
     nutriments = product.nutriments.toNutriments(),
@@ -36,7 +36,7 @@ fun RemoteNutriments?.toNutriments(): Nutriments? {
     )
 }
 
-fun Int?.toNovaGroup(): NovaGroup? = when (this) {
+private fun Int?.toNovaGroup(): NovaGroup? = when (this) {
     1 -> NovaGroup.NOVA_1
     2 -> NovaGroup.NOVA_2
     3 -> NovaGroup.NOVA_3
@@ -44,8 +44,20 @@ fun Int?.toNovaGroup(): NovaGroup? = when (this) {
     else -> null
 }
 
-fun String?.toFormattedPackaging(): String {
-    if (this == null) return ""
+private fun String?.formatName(brands: String?, quantity: String?, packaging: String?): String {
+    if(isNullOrBlank()) {
+        return "${brands ?: ""} ${packaging ?: ""} ${quantity ?: ""}"
+    }
+    return this
+}
+
+private fun String?.formatIfBlank(): String {
+    if (isNullOrBlank()) return "-"
+    return this
+}
+
+private fun String?.toFormattedPackaging(): String {
+    if (isNullOrBlank()) return "-"
     return this.split(",").joinToString(", ") { packaging ->
         packaging
             .takeLastWhile {
@@ -57,8 +69,8 @@ fun String?.toFormattedPackaging(): String {
     }
 }
 
-fun String?.toAllergensList(): List<String> {
-    if (this == null) return emptyList()
+private fun String?.toAllergensList(): List<String> {
+    if (isNullOrBlank()) return emptyList()
     return this.split(",").map { allergen ->
         allergen
             .takeLastWhile {
@@ -70,7 +82,7 @@ fun String?.toAllergensList(): List<String> {
     }
 }
 
-fun List<RemoteIngredient>?.toIngredients(): List<String> {
+private fun List<RemoteIngredient>?.toIngredients(): List<String> {
     if(this == null) return emptyList()
     return this.map { it.text }
 }

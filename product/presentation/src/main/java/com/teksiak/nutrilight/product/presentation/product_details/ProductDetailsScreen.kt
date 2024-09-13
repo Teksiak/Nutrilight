@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,10 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,11 +33,10 @@ import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
-import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
-import com.teksiak.nutrilight.product.presentation.R
+import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 
 @Composable
 fun ProductDetailsScreenRoot(
@@ -117,23 +113,10 @@ private fun ProductDetailsScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        BasicInformation(
-                            label = stringResource(id = R.string.brands),
-                            value = product.brands ?: "Unknown"
-                        )
-                        BasicInformation(
-                            label = stringResource(id = R.string.quantity),
-                            value = product.quantity ?: "Unknown"
-                        )
-                        BasicInformation(
-                            label = stringResource(id = R.string.packaging),
-                            value = product.packaging ?: "Unknown"
-                        )
-                    }
+                    ProductBasicInformation(
+                        product = product,
+                        modifier = Modifier.weight(1f)
+                    )
                     Image(
                         modifier = Modifier
                             .fillMaxHeight()
@@ -149,25 +132,6 @@ private fun ProductDetailsScreen(
     }
 }
 
-@Composable
-private fun BasicInformation(
-    label: String,
-    value: String
-) {
-    Column {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Silver,
-            softWrap = true
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
