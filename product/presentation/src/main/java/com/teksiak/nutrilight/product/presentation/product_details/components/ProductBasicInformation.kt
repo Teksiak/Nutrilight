@@ -9,10 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.domain.product.Product
+import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.product.presentation.R
+import com.teksiak.nutrilight.product.presentation.product_details.util.DummyProduct
 
 @Composable
 fun ProductBasicInformation(
@@ -54,6 +57,16 @@ private fun BasicInformation(
             style = MaterialTheme.typography.bodyMedium,
             color = Silver,
             softWrap = true
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProductBasicInformationPreview() {
+    NutrilightTheme {
+        ProductBasicInformation(
+            product = DummyProduct
         )
     }
 }

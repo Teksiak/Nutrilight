@@ -36,7 +36,9 @@ import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
+import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
+import com.teksiak.nutrilight.product.presentation.product_details.util.DummyProduct
 
 @Composable
 fun ProductDetailsScreenRoot(
@@ -104,7 +106,8 @@ private fun ProductDetailsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -127,6 +130,9 @@ private fun ProductDetailsScreen(
                         colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                     )
                 }
+                NutrientContent(
+                    nutriments = product.nutriments,
+                )
             }
         }
     }
@@ -139,32 +145,7 @@ private fun ProductDetailsScreenPreview() {
     NutrilightTheme {
         ProductDetailsScreen(
             state = ProductDetailsState(
-                product = Product(
-                    code = "20724696",
-                    name = "Californian Almond test",
-                    brands = "Alesto,Lidl,Solent",
-                    quantity = "200g",
-                    packaging = "Andere Kunststoffe, Kunststoff, Tüte",
-                    novaGroup = NovaGroup.NOVA_1,
-                    nutriments = Nutriments(
-                        energyKj = 2567f,
-                        energyKcal = 621f,
-                        fat = 53.3f,
-                        saturatedFat = 4.3f,
-                        carbohydrates = 4.8f,
-                        sugars = 4.8f,
-                        fiber = 12.1f,
-                        protein = 24.5f,
-                        salt = 0.01f
-                    ),
-                    allergens = listOf(
-                        "Nuts"
-                    ),
-                    ingredients = listOf(
-                        "almonds"
-                    ),
-                    score = 4.6f
-                )
+                product = DummyProduct
             ),
             onAction = { }
         )
