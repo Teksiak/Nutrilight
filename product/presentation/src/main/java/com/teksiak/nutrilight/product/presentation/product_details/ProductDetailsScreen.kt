@@ -1,5 +1,9 @@
 package com.teksiak.nutrilight.product.presentation.product_details
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +41,7 @@ import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
+import com.teksiak.nutrilight.product.presentation.product_details.components.NutritionFacts
 
 @Composable
 fun ProductDetailsScreenRoot(
@@ -130,7 +135,25 @@ private fun ProductDetailsScreen(
                 }
                 NutrientContent(
                     nutrimentsUi = productUi.nutrimentsUi,
+                    showNutritionFacts = state.showNutritionFacts,
+                    onToggleNutritionFacts = { onAction(ProductDetailsAction.ToggleNutritionFacts) }
                 )
+                AnimatedVisibility(
+                    visible = state.showNutritionFacts,
+                    modifier = Modifier.fillMaxWidth(),
+                    enter = expandVertically(
+                        expandFrom = Alignment.Top,
+                        animationSpec = tween(300)
+                    ),
+                    exit = shrinkVertically(
+                        shrinkTowards = Alignment.Top,
+                        animationSpec = tween(300)
+                    )
+                ) {
+                    NutritionFacts(
+                        nutrimentsUi = productUi.nutrimentsUi
+                    )
+                }
             }
         }
     }

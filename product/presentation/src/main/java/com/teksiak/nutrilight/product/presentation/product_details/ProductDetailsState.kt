@@ -4,6 +4,7 @@ import com.teksiak.nutrilight.core.presentation.product.ProductUi
 
 data class ProductDetailsState(
     val productUi: ProductUi? = null,
+    val showNutritionFacts: Boolean = false,
     val isLoading: Boolean = true,
     val error: String? = null
 )

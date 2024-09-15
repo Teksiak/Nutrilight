@@ -68,12 +68,20 @@ private fun Float?.roundNutrimentToGrams(): String {
 
 private fun formatEnergy(energyKj: Float?, energyKcal: Float?): String {
     return if (energyKj != null && energyKcal != null) {
-        "$(${"%,d".format(energyKj.toInt())} kj ($energyKcal kcal)"
+        "${"%,d".format(energyKj.toInt())} kj (${energyKcal.formatNumber()} kcal)"
     } else {
         "- kcal"
     }
 }
 
 private fun Float?.formatToGrams(): String {
-    return this?.let { "${(it * 10).roundToInt() / 10f} g" } ?: "- g"
+    return this?.let { "${it.formatNumber() } g" } ?: "- g"
+}
+
+private fun Float.formatNumber(): String {
+    return if (this % 1 == 0f) {
+        this.toInt().toString()
+    } else {
+        this.toString()
+    }
 }

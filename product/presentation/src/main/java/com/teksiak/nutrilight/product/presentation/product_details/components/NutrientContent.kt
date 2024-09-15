@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
@@ -38,7 +39,6 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.core.presentation.designsystem.ChevronDownIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.ChevronUpIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
@@ -52,7 +52,7 @@ fun NutrientContent(
     nutrimentsUi: NutrimentsUi?,
     modifier: Modifier = Modifier,
     showNutritionFacts: Boolean = false,
-    toggleNutritionFacts: () -> Unit = {},
+    onToggleNutritionFacts: () -> Unit = {},
 ) {
     var startAnimation: Boolean by remember { mutableStateOf(false) }
 
@@ -77,6 +77,14 @@ fun NutrientContent(
         label = ""
     )
 
+    val rotateChevron: Float by animateFloatAsState(
+        targetValue = if(showNutritionFacts) 180f else 0f,
+        animationSpec = tween(
+            durationMillis = 300
+        ),
+        label = ""
+    )
+
     LaunchedEffect(Unit) {
         startAnimation = true
     }
@@ -89,7 +97,7 @@ fun NutrientContent(
                     Modifier.pointerInput(Unit) {
                         detectTapGestures(
                             onTap = {
-                                toggleNutritionFacts()
+                                onToggleNutritionFacts()
                             }
                         )
                     }
@@ -152,12 +160,10 @@ fun NutrientContent(
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = if(showNutritionFacts) {
-                    ChevronUpIcon
-                } else {
-                    ChevronDownIcon
-                },
+                modifier = Modifier
+                    .size(24.dp)
+                    .rotate(rotateChevron),
+                imageVector = ChevronUpIcon,
                 tint = Silver,
                 contentDescription = null
             )

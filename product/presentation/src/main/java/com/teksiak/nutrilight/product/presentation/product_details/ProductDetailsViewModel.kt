@@ -27,6 +27,11 @@ class ProductDetailsViewModel @Inject constructor(
             is ProductDetailsAction.LoadProduct -> {
                 loadProduct(action.productId)
             }
+            is ProductDetailsAction.ToggleNutritionFacts -> {
+                _state.update { state ->
+                    state.copy(showNutritionFacts = !state.showNutritionFacts)
+                }
+            }
             else -> Unit
         }
     }
