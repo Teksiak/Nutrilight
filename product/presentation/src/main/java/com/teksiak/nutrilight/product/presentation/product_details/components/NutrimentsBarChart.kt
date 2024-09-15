@@ -31,36 +31,35 @@ import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 @Composable
 fun NutrimentsBarChart(
     nutrimentsUi: NutrimentsUi?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    proteinFraction: Float? = null,
+    fatFraction: Float? = null,
+    carbohydratesFraction: Float? = null
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        val proteinFraction: Float = nutrimentsUi?.proteinFraction ?: 0f
-        val fatFraction: Float = nutrimentsUi?.fatFraction ?: 0f
-        val carbohydratesFraction: Float = nutrimentsUi?.carbohydratesFraction ?: 0f
-
         NutrimentBar(
             modifier = Modifier.width(IntrinsicSize.Max),
             label = stringResource(R.string.protein),
             value = nutrimentsUi?.roundedProtein ?: "-",
             color = Protein,
-            part = proteinFraction
+            part = proteinFraction ?: nutrimentsUi?.proteinFraction ?: 0f
         )
         NutrimentBar(
             modifier = Modifier.width(IntrinsicSize.Max),
             label = stringResource(R.string.fat),
             value = nutrimentsUi?.roundedFat ?: "-",
             color = Fat,
-            part = fatFraction
+            part = fatFraction ?: nutrimentsUi?.fatFraction ?: 0f
         )
         NutrimentBar(
             modifier = Modifier.width(IntrinsicSize.Max),
             label = stringResource(R.string.carbs),
             value = nutrimentsUi?.roundedCarbohydrates ?: "-",
             color = Carbs,
-            part = carbohydratesFraction
+            part = carbohydratesFraction ?: nutrimentsUi?.carbohydratesFraction ?: 0f
         )
     }
 }

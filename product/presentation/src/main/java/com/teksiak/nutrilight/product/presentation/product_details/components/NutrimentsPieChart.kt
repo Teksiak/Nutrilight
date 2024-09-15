@@ -25,6 +25,9 @@ import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 @Composable
 fun NutrimentsPieChart(
     nutrimentsUi: NutrimentsUi?,
+    proteinFraction: Float? = null,
+    fatFraction: Float? = null,
+    carbohydratesFraction: Float? = null
 ) {
     Box(
         modifier = Modifier.size(64.dp),
@@ -42,16 +45,16 @@ fun NutrimentsPieChart(
                 style = circleStyle
             )
             if(nutrimentsUi?.areNutrimentsComplete == true) {
-                val proteinFraction: Pair<Float, Float> = -90f to 360f * nutrimentsUi.proteinFraction
-                val fatFraction: Pair<Float, Float> = proteinFraction.second - 90f to 360f * nutrimentsUi.fatFraction
-                val carbohydratesFraction: Pair<Float, Float> = fatFraction.second + fatFraction.first to 360f * nutrimentsUi.carbohydratesFraction
+                val proteinChartData: Pair<Float, Float> = -90f to 360f * (proteinFraction ?: nutrimentsUi.proteinFraction)
+                val fatChartData: Pair<Float, Float> = proteinChartData.second - 90f to 360f * (fatFraction ?: nutrimentsUi.fatFraction)
+                val carbohydratesChartData: Pair<Float, Float> = fatChartData.second + fatChartData.first to 360f * (carbohydratesFraction ?: nutrimentsUi.carbohydratesFraction)
 
                 drawArc(
                     color = Protein,
                     size = Size(circleRadius * 2, circleRadius * 2),
                     topLeft = Offset(4.dp.toPx(), 4.dp.toPx()),
-                    startAngle = proteinFraction.first,
-                    sweepAngle = proteinFraction.second,
+                    startAngle = proteinChartData.first,
+                    sweepAngle = proteinChartData.second,
                     useCenter = false,
                     style = circleStyle
                 )
@@ -59,8 +62,8 @@ fun NutrimentsPieChart(
                     color = Fat,
                     size = Size(circleRadius * 2, circleRadius * 2),
                     topLeft = Offset(4.dp.toPx(), 4.dp.toPx()),
-                    startAngle = fatFraction.first,
-                    sweepAngle = fatFraction.second,
+                    startAngle = fatChartData.first,
+                    sweepAngle = fatChartData.second,
                     useCenter = false,
                     style = circleStyle
                 )
@@ -68,8 +71,8 @@ fun NutrimentsPieChart(
                     color = Carbs,
                     size = Size(circleRadius * 2, circleRadius * 2),
                     topLeft = Offset(4.dp.toPx(), 4.dp.toPx()),
-                    startAngle = carbohydratesFraction.first,
-                    sweepAngle = carbohydratesFraction.second,
+                    startAngle = carbohydratesChartData.first,
+                    sweepAngle = carbohydratesChartData.second,
                     useCenter = false,
                     style = circleStyle
                 )
@@ -82,7 +85,7 @@ fun NutrimentsPieChart(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun NutrimentsPieChartPreview() {
     NutrilightTheme {

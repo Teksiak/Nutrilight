@@ -1,5 +1,9 @@
 package com.teksiak.nutrilight.product.presentation.product_details.components
 
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -14,6 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
@@ -45,6 +54,33 @@ fun NutrientContent(
     showNutritionFacts: Boolean = false,
     toggleNutritionFacts: () -> Unit = {},
 ) {
+    var startAnimation: Boolean by remember { mutableStateOf(false) }
+
+    val animationSpec: AnimationSpec<Float> = tween(
+        durationMillis = 600,
+        easing = EaseOut
+    )
+
+    val proteinFraction: Float by animateFloatAsState(
+        targetValue = if(startAnimation) nutrimentsUi?.proteinFraction ?: 0f else 0f,
+        animationSpec = animationSpec,
+        label = ""
+    )
+    val fatFraction: Float by animateFloatAsState(
+        targetValue = if(startAnimation) nutrimentsUi?.fatFraction ?: 0f else 0f,
+        animationSpec = animationSpec,
+        label = ""
+    )
+    val carbohydratesFraction: Float by animateFloatAsState(
+        targetValue = if(startAnimation) nutrimentsUi?.carbohydratesFraction ?: 0f else 0f,
+        animationSpec = animationSpec,
+        label = ""
+    )
+
+    LaunchedEffect(Unit) {
+        startAnimation = true
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -102,10 +138,16 @@ fun NutrientContent(
         ) {
             NutrimentsPieChart(
                 nutrimentsUi = nutrimentsUi,
+                proteinFraction = proteinFraction,
+                fatFraction = fatFraction,
+                carbohydratesFraction = carbohydratesFraction
             )
             Spacer(modifier = Modifier.size(16.dp))
             NutrimentsBarChart(
                 nutrimentsUi = nutrimentsUi,
+                proteinFraction = proteinFraction,
+                fatFraction = fatFraction,
+                carbohydratesFraction = carbohydratesFraction,
                 modifier = Modifier.fillMaxHeight()
             )
             Spacer(modifier = Modifier.weight(1f))
