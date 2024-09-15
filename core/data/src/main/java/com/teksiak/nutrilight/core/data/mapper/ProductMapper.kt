@@ -13,13 +13,20 @@ fun RemoteProductDto.toProduct() = Product(
     name = product!!.productName ?: "",
     brands = product.brands,
     quantity = product.quantity,
-    packaging = product.packaging,
+    packaging = product.packaging.removeLc(),
     novaGroup = product.novaGroup.toNovaGroup(),
     nutriments = product.nutriments.toNutriments(),
     score = calculateScore(product.nutriscoreScore, product.ecoscoreScore),
-    allergens = product.allergens,
+    allergens = product.allergens.removeLc(),
     ingredients = product.ingredients.toIngredients(),
 )
+
+private fun String?.removeLc(): String? {
+    if (this == null) return null
+    return this.split(",").joinToString(separator = ", ") { packaging ->
+        packaging.takeLastWhile { it != ':' }
+    }
+}
 
 private fun Int?.toNovaGroup(): NovaGroup? = when (this) {
     1 -> NovaGroup.NOVA_1

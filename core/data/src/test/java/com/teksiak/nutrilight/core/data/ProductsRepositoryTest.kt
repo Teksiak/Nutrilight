@@ -188,9 +188,7 @@ class ProductsRepositoryTest {
                         protein = 24.5f,
                         salt = 0.01f
                     ),
-                    allergens = listOf(
-                        "Nuts"
-                    ),
+                    allergens = "nuts",
                     ingredients = listOf(
                         "almonds"
                     ),
@@ -224,9 +222,7 @@ class ProductsRepositoryTest {
                     packaging = "Andere Kunststoffe, Kunststoff, Tüte",
                     novaGroup = null,
                     nutriments = null,
-                    allergens = listOf(
-                        "Nuts"
-                    ),
+                    allergens = "nuts",
                     ingredients = listOf(),
                     score = 4.6f
                 )
@@ -258,7 +254,7 @@ class ProductsRepositoryTest {
                     packaging = "Andere Kunststoffe, Kunststoff, Tüte",
                     novaGroup = null,
                     nutriments = null,
-                    allergens = listOf(),
+                    allergens = null,
                     ingredients = listOf(),
                     score = null
                 )

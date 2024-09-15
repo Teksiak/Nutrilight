@@ -26,7 +26,7 @@ fun Product.toProductUi() = ProductUi(
     novaGroup = novaGroup,
     nutrimentsUi = nutriments?.toNutrimentsUi(),
     score = score,
-    allergens = allergens,
+    allergens = allergens?.replaceFirstChar { it.uppercase() },
     ingredients = ingredients.joinToString(", "),
     ingredientsAmount = ingredients.size
 )
