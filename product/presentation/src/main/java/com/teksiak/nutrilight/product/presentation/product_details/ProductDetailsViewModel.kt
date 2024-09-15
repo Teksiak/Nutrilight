@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.util.Result
+import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +42,7 @@ class ProductDetailsViewModel @Inject constructor(
                         _state.update { state ->
                             state.copy(
                                 isLoading = false,
-                                product = result.data
+                                productUi = result.data.toProductUi()
                             )
                         }
                     }

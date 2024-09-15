@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.product.presentation.product_details.util
+package com.teksiak.nutrilight.core.presentation.util
 
 import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.domain.product.Nutriments
@@ -22,9 +22,7 @@ val DummyProduct = Product(
         protein = 24.5f,
         salt = 0.01f
     ),
-    allergens = listOf(
-        "Nuts"
-    ),
+    allergens = "Nuts",
     ingredients = listOf(
         "almonds"
     ),

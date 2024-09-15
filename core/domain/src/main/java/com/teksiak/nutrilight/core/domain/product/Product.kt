@@ -9,6 +9,6 @@ data class Product(
     val novaGroup: NovaGroup?,
     val nutriments: Nutriments?,
     val score: Float?,
-    val allergens: List<String>,
+    val allergens: String?,
     val ingredients: List<String>,
 )

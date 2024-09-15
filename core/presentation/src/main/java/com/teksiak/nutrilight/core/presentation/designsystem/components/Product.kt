@@ -29,6 +29,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.White
+import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 
 @Composable
 fun Product(
@@ -113,35 +114,8 @@ fun Product(
 fun ProductPreview() {
     NutrilightTheme {
         Product(
-            product =  ProductDummy,
+            product =  DummyProduct,
             isFavourite = true
         )
     }
 }
-
-private val ProductDummy =  Product(
-    code = "20724696",
-    name = "Californian Almond test",
-    brands = "Alesto,Lidl,Solent",
-    quantity = "200g",
-    packaging = "Andere Kunststoffe, Kunststoff, Tüte",
-    novaGroup = NovaGroup.NOVA_1,
-    nutriments = Nutriments(
-        energyKj = 2567f,
-        energyKcal = 621f,
-        fat = 53.3f,
-        saturatedFat = 4.3f,
-        carbohydrates = 4.8f,
-        sugars = 4.8f,
-        fiber = 12.1f,
-        protein = 24.5f,
-        salt = 0.01f
-    ),
-    allergens = listOf(
-        "Nuts"
-    ),
-    ingredients = listOf(
-        "almonds"
-    ),
-    score = 4.6f
-)

@@ -26,9 +26,6 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.domain.product.NovaGroup
-import com.teksiak.nutrilight.core.domain.product.Nutriments
-import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
@@ -36,9 +33,10 @@ import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
+import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
-import com.teksiak.nutrilight.product.presentation.product_details.util.DummyProduct
+import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 
 @Composable
 fun ProductDetailsScreenRoot(
@@ -69,7 +67,7 @@ private fun ProductDetailsScreen(
     state: ProductDetailsState,
     onAction: (ProductDetailsAction) -> Unit
 ) {
-    state.product?.let { product ->
+    state.productUi?.let { productUi ->
         NutrilightScaffold(
             topAppBar = {
                 Row(
@@ -91,7 +89,7 @@ private fun ProductDetailsScreen(
                     }
                     Text(
                         modifier = Modifier.weight(1f),
-                        text = product.name,
+                        text = productUi.name,
                         style = MaterialTheme.typography.titleMedium,
                         softWrap = true,
                     )
@@ -117,7 +115,7 @@ private fun ProductDetailsScreen(
                     verticalAlignment = Alignment.Top
                 ) {
                     ProductBasicInformation(
-                        product = product,
+                        productUi = productUi,
                         modifier = Modifier.weight(1f)
                     )
                     Image(
@@ -131,7 +129,7 @@ private fun ProductDetailsScreen(
                     )
                 }
                 NutrientContent(
-                    nutriments = product.nutriments,
+                    nutrimentsUi = productUi.nutrimentsUi,
                 )
             }
         }
@@ -145,7 +143,7 @@ private fun ProductDetailsScreenPreview() {
     NutrilightTheme {
         ProductDetailsScreen(
             state = ProductDetailsState(
-                product = DummyProduct
+                productUi = DummyProduct.toProductUi()
             ),
             onAction = { }
         )

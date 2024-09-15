@@ -11,15 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
+import com.teksiak.nutrilight.core.presentation.product.ProductUi
+import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.product.presentation.R
-import com.teksiak.nutrilight.product.presentation.product_details.util.DummyProduct
+import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 
 @Composable
 fun ProductBasicInformation(
-    product: Product,
+    productUi: ProductUi,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -28,15 +29,15 @@ fun ProductBasicInformation(
     ) {
         BasicInformation(
             label = stringResource(id = R.string.brands),
-            value = product.brands ?: "Unknown"
+            value = productUi.brands
         )
         BasicInformation(
             label = stringResource(id = R.string.quantity),
-            value = product.quantity ?: "Unknown"
+            value = productUi.quantity
         )
         BasicInformation(
             label = stringResource(id = R.string.packaging),
-            value = product.packaging ?: "Unknown"
+            value = productUi.packaging
         )
     }
 }
@@ -66,7 +67,7 @@ private fun BasicInformation(
 private fun ProductBasicInformationPreview() {
     NutrilightTheme {
         ProductBasicInformation(
-            product = DummyProduct
+            productUi = DummyProduct.toProductUi()
         )
     }
 }
