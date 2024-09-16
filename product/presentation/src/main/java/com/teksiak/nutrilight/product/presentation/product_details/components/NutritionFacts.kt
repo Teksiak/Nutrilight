@@ -23,9 +23,10 @@ import com.teksiak.nutrilight.product.presentation.R
 @Composable
 fun NutritionFacts(
     nutrimentsUi: NutrimentsUi?,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         LabelRow(

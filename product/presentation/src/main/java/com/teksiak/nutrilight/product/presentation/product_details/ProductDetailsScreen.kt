@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -135,7 +136,6 @@ private fun ProductDetailsScreen(
                     .padding(paddingValues)
                     .padding(horizontal = 24.dp, vertical = 16.dp)
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -162,11 +162,13 @@ private fun ProductDetailsScreen(
                         })
                     )
                 }
+                Spacer(modifier = Modifier.height(24.dp))
                 NutrientContent(
                     nutrimentsUi = productUi.nutrimentsUi,
                     showNutritionFacts = state.showNutritionFacts,
                     onToggleNutritionFacts = { onAction(ProductDetailsAction.ToggleNutritionFacts) }
                 )
+                Spacer(modifier = Modifier.height(24.dp))
                 AnimatedVisibility(
                     visible = state.showNutritionFacts,
                     modifier = Modifier.fillMaxWidth(),
@@ -176,18 +178,22 @@ private fun ProductDetailsScreen(
                     ),
                     exit = shrinkVertically(
                         shrinkTowards = Alignment.Top,
-                        animationSpec = tween(300)
+                        animationSpec = tween(300),
                     )
                 ) {
                     NutritionFacts(
-                        nutrimentsUi = productUi.nutrimentsUi
+                        nutrimentsUi = productUi.nutrimentsUi,
+                        modifier = Modifier.padding(bottom = 24.dp)
                     )
+
                 }
                 productUi.novaGroup?.let {
                     NovaGroup(
                         novaGroup = it
                     )
                 }
+                Spacer(modifier = Modifier.height(24.dp))
+
                 TextFlow(
                     modifier = Modifier.fillMaxWidth(),
                     text = buildAnnotatedString {
