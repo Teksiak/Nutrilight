@@ -39,6 +39,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.teksiak.nutrilight.core.presentation.designsystem.ChevronDownIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.ChevronUpIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
@@ -163,7 +164,7 @@ fun NutrientContent(
                 modifier = Modifier
                     .size(24.dp)
                     .rotate(rotateChevron),
-                imageVector = ChevronUpIcon,
+                imageVector = ChevronDownIcon,
                 tint = Silver,
                 contentDescription = null
             )
