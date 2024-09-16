@@ -9,6 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +30,7 @@ enum class NutrilightScoreSize {
 
 @Composable
 fun NutrilightScore(
-    score: Float,
+    score: Float?,
     size: NutrilightScoreSize = NutrilightScoreSize.Default
 ) {
     val width = if(size == NutrilightScoreSize.Default) 76.dp else 36.dp
@@ -42,14 +45,21 @@ fun NutrilightScore(
         contentAlignment = Alignment.BottomCenter
     ) {
         Image(
+            modifier = Modifier.alpha(if(score != null) 1f else 0.1f),
             imageVector = icon,
-            contentDescription = "Rating"
+            contentDescription = "Rating",
+            colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                setToSaturation(
+                    if(score != null) 1f else 0f
+                )
+            })
         )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = startPadding),
-            text = score.toString(),
+                .padding(start = startPadding)
+                .alpha(if(score != null) 1f else 0.1f),
+            text = score?.toString() ?: "0.0",
             style = TextStyle(
                 fontSize = fontSize,
                 fontFamily = FjallaOne,
@@ -65,6 +75,14 @@ fun NutrilightScore(
 private fun NutrilightScorePreview() {
     NutrilightTheme {
         NutrilightScore(score = 4.6f)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NutrilightNoScorePreview() {
+    NutrilightTheme {
+        NutrilightScore(score = null)
     }
 }
 

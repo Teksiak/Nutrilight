@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
@@ -59,6 +60,7 @@ import com.teksiak.nutrilight.product.presentation.product_details.components.Pr
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.core.presentation.util.bottomBorder
 import com.teksiak.nutrilight.core.presentation.util.topBorder
+import com.teksiak.nutrilight.product.presentation.product_details.components.NovaGroup
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutritionFacts
 import eu.wewox.textflow.material3.TextFlow
 import eu.wewox.textflow.material3.TextFlowObstacleAlignment
@@ -100,7 +102,7 @@ private fun ProductDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .bottomBorder(1.dp, ShadedWhite)
-                        .padding(horizontal = 24.dp, vertical = 12.dp),
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -131,8 +133,7 @@ private fun ProductDetailsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 12.dp)
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
@@ -154,7 +155,11 @@ private fun ProductDetailsScreen(
                             .alpha(0.1f),
                         imageVector = LogoRottenIcon,
                         contentDescription = "No image",
-                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
+                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                            setToSaturation(
+                                0f
+                            )
+                        })
                     )
                 }
                 NutrientContent(
@@ -178,37 +183,48 @@ private fun ProductDetailsScreen(
                         nutrimentsUi = productUi.nutrimentsUi
                     )
                 }
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TextFlow(
-                        text = buildAnnotatedString {
-                            val style = MaterialTheme.typography.bodyLarge.toSpanStyle()
+                productUi.novaGroup?.let {
+                    NovaGroup(
+                        novaGroup = it
+                    )
+                }
+                TextFlow(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = buildAnnotatedString {
+                        val style = MaterialTheme.typography.bodyLarge.toSpanStyle()
+                        withStyle(
+                            style = ParagraphStyle(
+                                lineHeight = 12.sp,
+                            )
+                        ) {
                             withStyle(
-                                style = ParagraphStyle(
-                                    lineHeight = 12.sp,
+                                style = style
+                            ) {
+                                appendLine(
+                                    if (productUi.ingredientsAmount != 0)
+                                        "${productUi.ingredientsAmount} Ingredients"
+                                    else "Ingredients"
                                 )
-                            ) {
-                                withStyle(
-                                    style = style) {
-                                    appendLine("${productUi.ingredientsAmount} Ingredients")
-                                }
                             }
+                        }
 
-                            withStyle(
-                                style = MaterialTheme.typography.bodyMedium
-                                    .toSpanStyle()
-                                    .copy(color = Silver)
-                            ) {
-                                append(productUi.ingredients)
-                            }
-                        },
-                        obstacleAlignment = TextFlowObstacleAlignment.TopEnd,
-                    ) {
-                        NutrilightScore(
-                            score = productUi.score ?: 0f,
-                        )
-                    }
+                        withStyle(
+                            style = MaterialTheme.typography.bodyMedium
+                                .toSpanStyle()
+                                .copy(color = Silver)
+                        ) {
+                            append(
+                                if (productUi.ingredientsAmount != 0)
+                                    productUi.ingredients
+                                else "No available data"
+                            )
+                        }
+                    },
+                    obstacleAlignment = TextFlowObstacleAlignment.TopEnd,
+                ) {
+                    NutrilightScore(
+                        score = productUi.score,
+                    )
                 }
             }
         }

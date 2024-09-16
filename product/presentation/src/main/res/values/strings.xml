@@ -15,4 +15,12 @@
     <string name="sugars">Sugars</string>
     <string name="fiber">Fiber</string>
     <string name="salt">Salt</string>
+    <string name="nova_1_title">Unprocessed or Minimally Processed Foods</string>
+    <string name="nova_1_description">Pure and simple - these are your go-to foods that haven’t been messed with much.</string>
+    <string name="nova_2_title">Processed Culinary Ingredients</string>
+    <string name="nova_2_description">Cooking essentials - things like salt and flour that help bring your recipes to life.</string>
+    <string name="nova_3_title">Processed Foods</string>
+    <string name="nova_3_description">Everyday favorites that are a bit processed, like your morning toast or a jar of pickles.</string>
+    <string name="nova_4_title">Ultra-Processed Foods</string>
+    <string name="nova_4_description">Quick and easy treats or meals that have been through a lot of processing, with extra flavors and preservatives.</string>
 </resources>

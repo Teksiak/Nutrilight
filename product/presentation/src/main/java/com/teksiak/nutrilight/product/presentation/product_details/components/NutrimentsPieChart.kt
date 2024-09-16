@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.AlmostWhite
@@ -29,6 +30,7 @@ fun NutrimentsPieChart(
     fatFraction: Float? = null,
     carbohydratesFraction: Float? = null
 ) {
+
     Box(
         modifier = Modifier.size(64.dp),
         contentAlignment = Alignment.Center

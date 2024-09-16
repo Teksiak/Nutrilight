@@ -6,3 +6,5 @@ enum class NovaGroup {
     NOVA_3,
     NOVA_4
 }
+
+
