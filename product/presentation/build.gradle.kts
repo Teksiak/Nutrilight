@@ -45,7 +45,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
 
-    implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.textflow)
 
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)

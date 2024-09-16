@@ -62,7 +62,7 @@ fun NutrilightScore(
 
 @Preview(showBackground = true)
 @Composable
-fun NutrilightScorePreview() {
+private fun NutrilightScorePreview() {
     NutrilightTheme {
         NutrilightScore(score = 4.6f)
     }
@@ -70,7 +70,7 @@ fun NutrilightScorePreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun NutrilightScoreSmallPreview() {
+private fun NutrilightScoreSmallPreview() {
     NutrilightTheme {
         NutrilightScore(
             score = 4.6f,

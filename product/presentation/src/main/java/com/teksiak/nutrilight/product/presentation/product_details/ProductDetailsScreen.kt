@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.teksiak.nutrilight.product.presentation.product_details
 
 import androidx.compose.animation.AnimatedVisibility
@@ -15,10 +17,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,21 +34,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
+import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
+import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
+import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScore
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
+import com.teksiak.nutrilight.core.presentation.util.bottomBorder
+import com.teksiak.nutrilight.core.presentation.util.topBorder
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutritionFacts
+import eu.wewox.textflow.material3.TextFlow
+import eu.wewox.textflow.material3.TextFlowObstacleAlignment
 
 @Composable
 fun ProductDetailsScreenRoot(
@@ -72,13 +92,15 @@ private fun ProductDetailsScreen(
     state: ProductDetailsState,
     onAction: (ProductDetailsAction) -> Unit
 ) {
+
     state.productUi?.let { productUi ->
         NutrilightScaffold(
             topAppBar = {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp),
+                        .bottomBorder(1.dp, ShadedWhite)
+                        .padding(horizontal = 24.dp, vertical = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -109,7 +131,9 @@ private fun ProductDetailsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 12.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 Row(
@@ -154,6 +178,38 @@ private fun ProductDetailsScreen(
                         nutrimentsUi = productUi.nutrimentsUi
                     )
                 }
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextFlow(
+                        text = buildAnnotatedString {
+                            val style = MaterialTheme.typography.bodyLarge.toSpanStyle()
+                            withStyle(
+                                style = ParagraphStyle(
+                                    lineHeight = 12.sp,
+                                )
+                            ) {
+                                withStyle(
+                                    style = style) {
+                                    appendLine("${productUi.ingredientsAmount} Ingredients")
+                                }
+                            }
+
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium
+                                    .toSpanStyle()
+                                    .copy(color = Silver)
+                            ) {
+                                append(productUi.ingredients)
+                            }
+                        },
+                        obstacleAlignment = TextFlowObstacleAlignment.TopEnd,
+                    ) {
+                        NutrilightScore(
+                            score = productUi.score ?: 0f,
+                        )
+                    }
+                }
             }
         }
     }
@@ -166,7 +222,10 @@ private fun ProductDetailsScreenPreview() {
     NutrilightTheme {
         ProductDetailsScreen(
             state = ProductDetailsState(
-                productUi = DummyProduct.toProductUi()
+                productUi = DummyProduct.toProductUi().copy(
+                    ingredients = "Cereal 50.7% (wheat flour 35%, _whole_wheat_ flour 15.7%), sugar, vegetable oils (palm, rapeseed), low-fat cocoa powder 4.5%, glucose syrup, wheat starch, raising agents (ammonium bicarbonate, baking soda, disodium diphosphate), emulsifier (soy lecithin, sunflower lecithin), salt, skimmed milk powder, lactose and milk protein, flavourings. May contain egg.",
+                    ingredientsAmount = 20
+                )
             ),
             onAction = { }
         )
