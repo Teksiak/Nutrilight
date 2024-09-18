@@ -22,7 +22,7 @@ class RoomLocalProductsDataSource @Inject constructor(
         }
     }
 
-    override suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local> {
+    override suspend fun upsertProduct(product: Product): Result<Unit, DataError.Local> {
         return try {
             productsDao.upsertProduct(product.toProductEntity())
             Result.Success(Unit)

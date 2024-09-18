@@ -9,6 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,30 +42,16 @@ class ProductDetailsViewModel @Inject constructor(
         _state.update { state ->
             state.copy(isLoading = true)
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            when(val result = productsRepository.getProduct(barcode)) {
-                is Result.Success -> {
-                    withContext(Dispatchers.Main.immediate) {
-                        _state.update { state ->
-                            state.copy(
-                                isLoading = false,
-                                productUi = result.data.toProductUi()
-                            )
-                        }
-                    }
-                }
-                is Result.Error -> {
-                    withContext(Dispatchers.Main.immediate) {
-                        _state.update { state ->
-                            state.copy(
-                                isLoading = false,
-                                error = "Something went wrong" // TODO: parse error message
-                            )
-                        }
-                    }
+        productsRepository.getProduct(barcode)
+            .onEach {
+                _state.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        productUi = it?.toProductUi()
+                    )
                 }
             }
-        }
+            .launchIn(viewModelScope)
     }
 
 }

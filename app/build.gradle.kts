@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(projects.core.domain)
+    implementation(projects.core.database)
     implementation(projects.core.data)
     implementation(projects.core.presentation)
     implementation(projects.scanner.presentation)

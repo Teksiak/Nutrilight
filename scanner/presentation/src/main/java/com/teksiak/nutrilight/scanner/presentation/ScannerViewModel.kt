@@ -7,12 +7,10 @@ import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -40,7 +38,7 @@ class ScannerViewModel @Inject constructor(
                     )
                 }
                 viewModelScope.launch(Dispatchers.IO) {
-                    when(val result = productsRepository.getProduct(action.barcode)) {
+                    when(val result = productsRepository.scanProduct(action.barcode)) {
                         is Result.Success -> {
                             withContext(Dispatchers.Main.immediate) {
                                 _state.update { state ->
@@ -50,7 +48,6 @@ class ScannerViewModel @Inject constructor(
                                 }
                             }
                             launch(Dispatchers.Main) {
-                                Log.d("ScannerViewModel", "Product found: ${action.barcode}, ${Thread.currentThread().name}")
                                 eventChannel.send(ScannerEvent.ProductFound(action.barcode))
                             }
                         }

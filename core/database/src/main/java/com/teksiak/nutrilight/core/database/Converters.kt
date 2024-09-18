@@ -14,4 +14,14 @@ class Converters {
         return novaGroup?.name
     }
 
+    @TypeConverter
+    fun ingredientsToString(ingredients: List<String>): String {
+        return ingredients.joinToString(",")
+    }
+
+    @TypeConverter
+    fun stringToIngredients(ingredients: String): List<String> {
+        return ingredients.split(",")
+    }
+
 }

@@ -56,7 +56,7 @@ class ProductsRepositoryTest {
         }
         productsRepository = ProductsRepositoryImpl(apiService)
 
-        val result = productsRepository.getProduct("20724696")
+        val result = productsRepository.scanProduct("20724696")
 
         assertThat(result).isInstanceOf(Result.Success::class)
         val resultProduct = (result as Result.Success).data
@@ -77,7 +77,7 @@ class ProductsRepositoryTest {
         }
         productsRepository = ProductsRepositoryImpl(apiService)
 
-        val result = productsRepository.getProduct("20724696")
+        val result = productsRepository.scanProduct("20724696")
         assertThat(result).isInstanceOf(Result.Error::class)
         val error = (result as Result.Error).error
 
@@ -113,7 +113,7 @@ class ProductsRepositoryTest {
         }
         productsRepository = ProductsRepositoryImpl(apiService)
 
-        val result = productsRepository.getProduct("20724696")
+        val result = productsRepository.scanProduct("20724696")
         assertThat(result).isInstanceOf(Result.Error::class)
         val error = (result as Result.Error).error
 
