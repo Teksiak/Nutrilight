@@ -17,18 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,33 +29,27 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.domain.product.NovaGroup
-import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
-import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
+import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScore
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
-import com.teksiak.nutrilight.core.presentation.util.bottomBorder
-import com.teksiak.nutrilight.core.presentation.util.topBorder
 import com.teksiak.nutrilight.product.presentation.product_details.components.NovaGroup
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutritionFacts
 import eu.wewox.textflow.material3.TextFlow
@@ -70,13 +57,12 @@ import eu.wewox.textflow.material3.TextFlowObstacleAlignment
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProductDetailsScreen(
+data class ProductDetailsRoute(
     val productId: String
 )
 
 @Composable
 fun ProductDetailsScreenRoot(
-    productId: String,
     onNavigateBack: () -> Unit,
     viewModel: ProductDetailsViewModel
 ) {
@@ -103,36 +89,17 @@ private fun ProductDetailsScreen(
     state.productUi?.let { productUi ->
         NutrilightScaffold(
             topAppBar = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .bottomBorder(1.dp, ShadedWhite)
-                        .padding(horizontal = 24.dp, vertical = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        modifier = Modifier.size(24.dp),
-                        onClick = { onAction(ProductDetailsAction.NavigateBack) }
-                    ) {
-                        Icon(
-                            imageVector = BackIcon,
-                            contentDescription = "Back",
-                            tint = TintedBlack
+                NutrilightAppBar(
+                    title = productUi.name,
+                    onNavigateBack = { onAction(ProductDetailsAction.NavigateBack) },
+                    actionButtons = {
+                        CircleButton(
+                            onClick = { onAction(ProductDetailsAction.ToggleFavourite) },
+                            iconTint = if(productUi.isFavourite) Color.Unspecified else TintedBlack,
+                            icon = if(productUi.isFavourite) HeartFilledIcon else HeartIcon,
                         )
                     }
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = productUi.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        softWrap = true,
-                    )
-                    CircleButton(
-                        onClick = { onAction(ProductDetailsAction.ToggleFavourite) },
-                        iconTint = if(productUi.isFavourite) Color.Unspecified else TintedBlack,
-                        icon = if(productUi.isFavourite) HeartFilledIcon else HeartIcon,
-                    )
-                }
+                )
             }
         ) { paddingValues ->
             Column(

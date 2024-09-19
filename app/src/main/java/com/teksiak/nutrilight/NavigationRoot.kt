@@ -6,17 +6,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import com.teksiak.nutrilight.home.HomeScreen
+import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.home.HomeRoute
 import com.teksiak.nutrilight.home.HomeScreenRoot
 import com.teksiak.nutrilight.home.HomeViewModel
-import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsScreen
+import com.teksiak.nutrilight.product.presentation.favourites.FavouritesRoute
+import com.teksiak.nutrilight.product.presentation.favourites.FavouritesScreenRoot
+import com.teksiak.nutrilight.product.presentation.favourites.FavouritesViewModel
+import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsRoute
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsScreenRoot
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsViewModel
-import com.teksiak.nutrilight.scanner.presentation.ScannerScreen
+import com.teksiak.nutrilight.scanner.presentation.ScannerRoute
 import com.teksiak.nutrilight.scanner.presentation.ScannerScreenRoot
 import com.teksiak.nutrilight.scanner.presentation.ScannerViewModel
-import kotlinx.serialization.Serializable
 
 @Composable
 fun NavigationRoot(
@@ -25,20 +27,30 @@ fun NavigationRoot(
 
     NavHost(
         navController = navController,
-        startDestination = HomeScreen
+        startDestination = HomeRoute
     ) {
 
-        composable<HomeScreen> {
+        composable<HomeRoute> {
             val homeViewModel = viewModel<HomeViewModel>()
 
             HomeScreenRoot(
                 homeViewModel = homeViewModel,
                 onScanBarcode = {
-                    navController.navigate(ScannerScreen)
+                    navController.navigate(ScannerRoute)
+                },
+                navigateWithTab = { tab ->
+                    navController.navigate(tab.toRoute()) {
+                        popUpTo(HomeRoute) {
+                            inclusive = false
+                        }
+                        if(tab == NavigationTab.Home) {
+                            launchSingleTop = true
+                        }
+                    }
                 }
             )
         }
-        composable<ScannerScreen> {
+        composable<ScannerRoute> {
             val viewModel = hiltViewModel<ScannerViewModel>()
 
             ScannerScreenRoot(
@@ -46,22 +58,58 @@ fun NavigationRoot(
                     navController.navigateUp()
                 },
                 onNavigateToProduct = { productId ->
-                    navController.navigate(ProductDetailsScreen(productId))
+                    navController.navigate(ProductDetailsRoute(productId))
                 },
                 viewModel = viewModel
             )
         }
-        composable<ProductDetailsScreen> {
+        composable<ProductDetailsRoute> {
             val viewModel = hiltViewModel<ProductDetailsViewModel>()
-            val productId = it.toRoute<ProductDetailsScreen>().productId
 
             ProductDetailsScreenRoot(
-                productId = productId,
                 onNavigateBack = {
                     navController.navigateUp()
                 },
                 viewModel = viewModel
             )
         }
+        composable<FavouritesRoute> {
+            val viewModel = hiltViewModel<FavouritesViewModel>()
+
+            FavouritesScreenRoot(
+                viewModel = viewModel,
+                onNavigateToProduct = { code ->
+                    navController.navigate(ProductDetailsRoute(code))
+                },
+                onNavigateBack = {
+                    navController.navigate(HomeRoute) {
+                        popUpTo(FavouritesRoute) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                navigateWithTab = { tab ->
+                    navController.navigate(tab.toRoute()) {
+                        popUpTo(HomeRoute) {
+                            inclusive = false
+                        }
+                        if(tab == NavigationTab.Home) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
+
+private fun NavigationTab.toRoute(): Any {
+    return when (this) {
+        NavigationTab.Home -> HomeRoute
+        NavigationTab.History -> HomeRoute
+        NavigationTab.Scanner -> ScannerRoute
+        NavigationTab.Favorites -> FavouritesRoute
+        NavigationTab.More -> HomeRoute
     }
 }

@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,34 +20,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.core.presentation.HomeTab
-import com.teksiak.nutrilight.core.presentation.ScannerTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeScreen
+object HomeRoute
 
 @Composable
 fun HomeScreenRoot(
     homeViewModel: HomeViewModel,
-    onScanBarcode: () -> Unit
+    onScanBarcode: () -> Unit,
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
     HomeScreen(
         onAction = { action ->
             when(action) {
                 HomeAction.ScanBarcode -> onScanBarcode()
-                else -> homeViewModel.onAction(action)
+                else -> Unit
             }
-        }
+            homeViewModel.onAction(action)
+        },
+        navigateWithTab = navigateWithTab
     )
 }
 
 @Composable
 private fun HomeScreen(
     onAction: (HomeAction) -> Unit,
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
     var searchValue by remember { mutableStateOf("") }
 
@@ -70,14 +70,8 @@ private fun HomeScreen(
                     .height(40.dp)
             )
         },
-        currentTab = HomeTab,
-        onTabSelected = { tab ->
-            when(tab) {
-                ScannerTab -> {
-                    onAction(HomeAction.ScanBarcode)
-                }
-            }
-        }
+        currentTab = NavigationTab.Home,
+        onTabSelected = navigateWithTab
     ) { innerPadding ->
         Column(
             modifier = Modifier

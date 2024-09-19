@@ -7,20 +7,17 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.teksiak.nutrilight.core.presentation.NavTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.White
-import com.teksiak.nutrilight.core.presentation.navigationTabs
 
 @Composable
 fun NutrilightScaffold(
     modifier : Modifier = Modifier,
     topAppBar: @Composable () -> Unit = {},
-    currentTab: NavTab? = null,
-    onTabSelected: (NavTab) -> Unit = {},
+    currentTab: NavigationTab? = null,
+    onTabSelected: (NavigationTab) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val navigationTabs = navigationTabs()
-
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -30,7 +27,6 @@ fun NutrilightScaffold(
         bottomBar = {
             currentTab?.let { currentTab ->
                 NutrilightNavBar(
-                    navTabs = navigationTabs,
                     currentTab = currentTab,
                     onTabSelected = onTabSelected
                 )

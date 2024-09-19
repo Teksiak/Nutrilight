@@ -40,7 +40,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.FlashFilledIcon
@@ -60,7 +59,7 @@ import com.teksiak.nutrilight.scanner.presentation.components.ScannerOverlay
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ScannerScreen
+object ScannerRoute
 
 @Composable
 fun ScannerScreenRoot(

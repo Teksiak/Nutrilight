@@ -45,6 +45,8 @@ class ProductsRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getFavouriteProducts(): Flow<List<Product>> = localProductsDataSource.getFavouriteProducts()
+
     override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> = localProductsDataSource.toggleFavourite(code)
 
     override suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote> {

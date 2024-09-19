@@ -1,8 +1,10 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,43 +15,60 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.core.domain.product.NovaGroup
-import com.teksiak.nutrilight.core.domain.product.Nutriments
-import com.teksiak.nutrilight.core.domain.product.Product
+import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.White
+import com.teksiak.nutrilight.core.presentation.product.ProductUi
+import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 
 @Composable
-fun Product(
-    product: Product,
+fun ProductCard(
+    productUi: ProductUi,
     modifier: Modifier = Modifier,
-    isFavourite: Boolean = false,
-    onFavouriteToggle: () -> Unit = {}
+    onFavouriteToggle: (String) -> Unit = {},
+    onNavigate: (String) -> Unit = {}
 ) {
     Row(
         modifier = modifier
+            .height(97.dp)
             .clip(RoundedCornerShape(16.dp))
-            .border(width = 1.dp, color = ShadedWhite)
+            .border(width = 1.dp, color = ShadedWhite, shape = RoundedCornerShape(16.dp))
             .background(color = White)
-            .padding(12.dp)
+            .clickable { onNavigate(productUi.code) }
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
+        Image(
             modifier = Modifier
                 .size(72.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(color = ShadedWhite)
+                .alpha(0.1f),
+            imageVector = LogoRottenIcon,
+            contentDescription = "No image",
+            colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                setToSaturation(
+                    0f
+                )
+            })
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(
@@ -58,13 +77,13 @@ fun Product(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = product.name,
+                text = productUi.name,
                 style = MaterialTheme.typography.bodyLarge,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 2
             )
             Spacer(modifier = Modifier.height(2.dp))
-            product.brands?.let { brands ->
+            productUi.brands.takeIf { it.isNotBlank() }?.let { brands ->
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = brands,
@@ -75,7 +94,7 @@ fun Product(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            product.nutriments?.energyKcal?.let { energyKcal ->
+            productUi.nutrimentsUi?.roundedEnergyKcal?.let { energyKcal ->
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "$energyKcal kcal / 100g",
@@ -91,12 +110,22 @@ fun Product(
                 .width(60.dp),
             horizontalAlignment = Alignment.End
         ) {
-            FavouriteButton(
-                isFavourite = isFavourite,
-                onToggle = onFavouriteToggle
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        onFavouriteToggle(productUi.code)
+                    }
+                ,
+                imageVector = if(productUi.isFavourite) HeartFilledIcon else HeartIcon,
+                contentDescription = if(productUi.isFavourite) "Remove from favourites" else "Add to favourites",
+                tint = if(productUi.isFavourite) Color.Unspecified else Silver
             )
             Spacer(modifier = Modifier.weight(1f))
-            product.score?.let { score ->
+            productUi.score?.let { score ->
                 NutrilightScore(
                     size = NutrilightScoreSize.Small,
                      score = score
@@ -107,15 +136,13 @@ fun Product(
 }
 
 @Preview(
-    heightDp = 96,
     widthDp = 344
 )
 @Composable
 fun ProductPreview() {
     NutrilightTheme {
-        Product(
-            product =  DummyProduct,
-            isFavourite = true
+        ProductCard(
+            productUi =  DummyProduct.toProductUi(),
         )
     }
 }

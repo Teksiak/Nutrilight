@@ -21,20 +21,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.core.presentation.NavTab
-import com.teksiak.nutrilight.core.presentation.designsystem.AlmostWhite
+import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.R
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.White
-import com.teksiak.nutrilight.core.presentation.navigationTabs
+import com.teksiak.nutrilight.core.presentation.getIcon
 import com.teksiak.nutrilight.core.presentation.util.topBorder
 
 @Composable
 fun NutrilightNavBar(
-    navTabs: List<NavTab>,
-    currentTab: NavTab,
-    onTabSelected: (NavTab) -> Unit = {}
+    currentTab: NavigationTab,
+    onTabSelected: (NavigationTab) -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -45,7 +44,7 @@ fun NutrilightNavBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        navTabs.forEach { navTab ->
+        NavigationTab.entries.forEach { navTab ->
             NavigationTab(
                 navTab = navTab,
                 isSelected = navTab == currentTab,
@@ -57,7 +56,7 @@ fun NutrilightNavBar(
 
 @Composable
 private fun NavigationTab(
-    navTab: NavTab,
+    navTab: NavigationTab,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
@@ -82,12 +81,14 @@ private fun NavigationTab(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(navTab.icon),
-            contentDescription = navTab.title,
+            imageVector = ImageVector.vectorResource(
+                id = navTab.getIcon()
+            ),
+            contentDescription = navTab.toString(),
             tint = if (isSelected) Primary else Silver
         )
         Text(
-            text = navTab.title,
+            text = navTab.toString(),
             style = MaterialTheme.typography.bodySmall,
             color = if (isSelected) Primary else Silver
         )
@@ -97,10 +98,7 @@ private fun NavigationTab(
 @Preview
 @Composable
 private fun NutrilightNavBarPreview() {
-    val navTabs = navigationTabs()
-
     NutrilightNavBar(
-        navTabs = navTabs,
-        currentTab = navTabs.first()
+        currentTab = NavigationTab.Home
     )
 }

@@ -21,7 +21,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val productsRepository: ProductsRepository
 ): ViewModel()  {
 
-    private val productDetails = savedStateHandle.toRoute<ProductDetailsScreen>()
+    private val productDetails = savedStateHandle.toRoute<ProductDetailsRoute>()
 
     private val _state = MutableStateFlow(ProductDetailsState())
     val state = _state.asStateFlow()

@@ -10,6 +10,7 @@ import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.EmptyResult
 import com.teksiak.nutrilight.core.domain.util.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,6 +22,17 @@ class RoomLocalProductsDataSource @Inject constructor(
         return productsDao.getProduct(code).map {
             it?.toProduct()
         }
+    }
+
+    override fun getFavouriteProducts(): Flow<List<Product>> {
+        return productsDao.getProducts()
+            .map { productsList ->
+                productsList
+                    .filter { it.isFavourite }
+                    .map { productEntity ->
+                        productEntity.toProduct()
+                    }
+            }
     }
 
     override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> {

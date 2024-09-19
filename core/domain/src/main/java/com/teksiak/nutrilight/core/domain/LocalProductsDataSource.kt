@@ -10,6 +10,8 @@ interface LocalProductsDataSource {
 
     fun getProduct(code: String): Flow<Product?>
 
+    fun getFavouriteProducts(): Flow<List<Product>>
+
     suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local>
 
     suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local>
