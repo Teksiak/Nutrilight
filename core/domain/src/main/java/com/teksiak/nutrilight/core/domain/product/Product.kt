@@ -11,5 +11,5 @@ data class Product(
     val score: Float?,
     val allergens: String?,
     val ingredients: List<String>,
-    val isFavourite: Boolean = false,
+    val isFavourite: Boolean? = null,
 )

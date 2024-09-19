@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,15 +27,7 @@ class ProductDetailsViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        productsRepository.getProduct(productDetails.productId)
-            .onEach {
-                _state.update { state ->
-                    state.copy(
-                        productUi = it?.toProductUi()
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
+        loadProduct(productDetails.productId)
     }
 
     fun onAction(action: ProductDetailsAction) {
@@ -44,8 +37,25 @@ class ProductDetailsViewModel @Inject constructor(
                     state.copy(showNutritionFacts = !state.showNutritionFacts)
                 }
             }
+            is ProductDetailsAction.ToggleFavourite -> {
+                viewModelScope.launch {
+                    productsRepository.toggleFavourite(productDetails.productId)
+                }
+            }
             else -> Unit
         }
+    }
+
+    private fun loadProduct(productId: String) {
+        productsRepository.getProduct(productId)
+            .onEach {
+                _state.update { state ->
+                    state.copy(
+                        productUi = it?.toProductUi()
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
 }

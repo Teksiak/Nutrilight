@@ -10,6 +10,7 @@ import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.EmptyResult
 import com.teksiak.nutrilight.core.domain.util.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -22,9 +23,25 @@ class RoomLocalProductsDataSource @Inject constructor(
         }
     }
 
-    override suspend fun upsertProduct(product: Product): Result<Unit, DataError.Local> {
+    override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> {
         return try {
-            productsDao.upsertProduct(product.toProductEntity())
+            productsDao.toggleFavourite(code)
+            Result.Success(Unit)
+        } catch (e: SQLiteFullException) {
+            Result.Error(DataError.Local.DISK_FULL)
+        }
+    }
+
+    override suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local> {
+        return try {
+            val existingProduct = productsDao.getProduct(product.code).first()
+            val updatedProduct = if(existingProduct != null) {
+                product.copy(
+                    isFavourite = existingProduct.isFavourite
+                )
+            } else product
+
+            productsDao.upsertProduct(updatedProduct.toProductEntity())
             Result.Success(Unit)
         } catch (e: SQLiteFullException) {
             Result.Error(DataError.Local.DISK_FULL)

@@ -28,5 +28,5 @@ fun Product.toProductEntity() = ProductEntity(
     score = score,
     allergens = allergens,
     ingredients = ingredients,
-    isFavourite = isFavourite
+    isFavourite = isFavourite ?: false
 )

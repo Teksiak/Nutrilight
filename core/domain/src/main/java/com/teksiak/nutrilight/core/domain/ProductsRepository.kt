@@ -12,5 +12,7 @@ interface ProductsRepository {
 
     fun getProduct(code: String): Flow<Product?>
 
+    suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local>
+
     suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote>
 }

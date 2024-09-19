@@ -14,7 +14,8 @@ data class ProductUi(
     val score: Float?,
     val allergens: String?,
     val ingredients: String,
-    val ingredientsAmount: Int
+    val ingredientsAmount: Int,
+    val isFavourite: Boolean
 )
 
 fun Product.toProductUi() = ProductUi(
@@ -28,7 +29,8 @@ fun Product.toProductUi() = ProductUi(
     score = score,
     allergens = allergens?.replaceFirstChar { it.uppercase() },
     ingredients = ingredients.joinToString(", "),
-    ingredientsAmount = ingredients.size
+    ingredientsAmount = ingredients.size,
+    isFavourite = isFavourite ?: false
 )
 
 private fun String?.formatName(brands: String?, quantity: String?, packaging: String?): String {

@@ -27,7 +27,7 @@ class ProductsRepositoryImpl @Inject constructor(
             is Result.Error -> result.asEmptyDataResult()
             is Result.Success -> {
                 applicationScope.launch {
-                    localProductsDataSource.upsertProduct(result.data)
+                    localProductsDataSource.upsertProduct(result.data).asEmptyDataResult()
                 }.join()
                 result.asEmptyDataResult()
             }
@@ -44,6 +44,8 @@ class ProductsRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> = localProductsDataSource.toggleFavourite(code)
 
     override suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote> {
         return Result.Success(emptyList())

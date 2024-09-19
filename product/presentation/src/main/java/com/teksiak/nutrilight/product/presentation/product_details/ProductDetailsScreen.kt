@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.text.AnnotatedString
@@ -46,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
@@ -126,8 +128,9 @@ private fun ProductDetailsScreen(
                         softWrap = true,
                     )
                     CircleButton(
-                        onClick = { },
-                        icon = HeartIcon
+                        onClick = { onAction(ProductDetailsAction.ToggleFavourite) },
+                        iconTint = if(productUi.isFavourite) Color.Unspecified else TintedBlack,
+                        icon = if(productUi.isFavourite) HeartFilledIcon else HeartIcon,
                     )
                 }
             }
