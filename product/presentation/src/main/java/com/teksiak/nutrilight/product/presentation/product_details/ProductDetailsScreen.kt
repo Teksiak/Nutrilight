@@ -65,6 +65,12 @@ import com.teksiak.nutrilight.product.presentation.product_details.components.No
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutritionFacts
 import eu.wewox.textflow.material3.TextFlow
 import eu.wewox.textflow.material3.TextFlowObstacleAlignment
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ProductDetailsScreen(
+    val productId: String
+)
 
 @Composable
 fun ProductDetailsScreenRoot(
@@ -73,10 +79,6 @@ fun ProductDetailsScreenRoot(
     viewModel: ProductDetailsViewModel
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.onAction(ProductDetailsAction.LoadProduct(productId))
-    }
 
     ProductDetailsScreen(
         state = state,

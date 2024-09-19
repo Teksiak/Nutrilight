@@ -57,7 +57,10 @@ import com.teksiak.nutrilight.core.presentation.util.hasPermission
 import com.teksiak.nutrilight.scanner.presentation.analyzer.BarcodeImageAnalyzer
 import com.teksiak.nutrilight.scanner.presentation.components.CameraPreview
 import com.teksiak.nutrilight.scanner.presentation.components.ScannerOverlay
+import kotlinx.serialization.Serializable
 
+@Serializable
+object ScannerScreen
 
 @Composable
 fun ScannerScreenRoot(

@@ -28,6 +28,10 @@ import com.teksiak.nutrilight.core.presentation.ScannerTab
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
+import kotlinx.serialization.Serializable
+
+@Serializable
+object HomeScreen
 
 @Composable
 fun HomeScreenRoot(
