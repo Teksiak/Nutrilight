@@ -1,5 +1,8 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,12 +46,14 @@ fun NutrilightAppBar(
                 tint = TintedBlack
             )
         }
-        Text(
-            modifier = Modifier.weight(1f),
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            softWrap = true,
-        )
+        if(title.isNotBlank()) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                softWrap = true,
+            )
+        }
         actionButtons()
     }
 }

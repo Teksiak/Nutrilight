@@ -1,9 +1,12 @@
 package com.teksiak.nutrilight.product.presentation.favourites
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -14,6 +17,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -37,6 +43,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
+import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
+import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchInput
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
@@ -77,6 +85,11 @@ private fun FavouritesScreen(
     onAction: (FavouritesAction) -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
+    BackHandler(state.isSearchActive) {
+        onAction(FavouritesAction.ToggleSearchbar)
+        onAction(FavouritesAction.ClearSearch)
+    }
+
     state.productToRemove?.let {
         NutrilightDialog(
             title = stringResource(id = R.string.oh_no),
@@ -117,20 +130,41 @@ private fun FavouritesScreen(
     NutrilightScaffold(
         topAppBar = {
             NutrilightAppBar(
-                title = stringResource(id = R.string.favourites_title),
-                onNavigateBack = { onAction(FavouritesAction.NavigateBack) },
+                title = if(state.isSearchActive.not()) stringResource(id = R.string.favourites_title) else "",
+                onNavigateBack = {
+                    if(state.isSearchActive) {
+                        onAction(FavouritesAction.ToggleSearchbar)
+                        onAction(FavouritesAction.ClearSearch)
+                    } else {
+                        onAction(FavouritesAction.NavigateBack)
+                    }
+                },
                 actionButtons = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ){
-                        CircleButton(
-                            icon = SearchIcon,
-                            onClick = { /*TODO*/ }
+                    if (state.isSearchActive) {
+                        SearchBar(
+                            searchValue = state.searchQuery,
+                            onSearchValueChange = { onAction(FavouritesAction.SearchProducts(it)) },
+                            onSearch = { },
+                            onClear = { onAction(FavouritesAction.ClearSearch) },
+                            onScanBarClick = { onAction(FavouritesAction.ScanBarcode) },
+                            focusOnComposition = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(40.dp)
                         )
-                        CircleButton(
-                            icon = ScanBarIcon,
-                            onClick = { onAction(FavouritesAction.ScanBarcode) }
-                        )
+                    } else {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CircleButton(
+                                icon = SearchIcon,
+                                onClick = { onAction(FavouritesAction.ToggleSearchbar) }
+                            )
+                            CircleButton(
+                                icon = ScanBarIcon,
+                                onClick = { onAction(FavouritesAction.ScanBarcode) }
+                            )
+                        }
                     }
                 }
             )
@@ -145,7 +179,10 @@ private fun FavouritesScreen(
                 .padding(vertical = 16.dp, horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(state.favouriteProducts) { productUi ->
+            items(
+                state.favouriteProducts,
+                key = { it.code }
+            ) { productUi ->
                 ProductCard(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -169,7 +206,11 @@ private fun FavouritesScreen(
                                 withStyle(
                                     style = SpanStyle(color = Silver)
                                 ) {
-                                    append(stringResource(id = R.string.no_favourites_added))
+                                    if(state.searchQuery.isNotBlank()) {
+                                        append(stringResource(id = R.string.no_favourite_matches))
+                                    } else {
+                                        append(stringResource(id = R.string.no_favourites_added))
+                                    }
                                 }
                                 append("\n")
                                 withStyle(

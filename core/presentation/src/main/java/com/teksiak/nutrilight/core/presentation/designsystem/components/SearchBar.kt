@@ -24,14 +24,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,10 +56,13 @@ fun SearchBar(
     onSearchValueChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onClear: () -> Unit,
-    onScanBarClick: () -> Unit
+    onScanBarClick: () -> Unit,
+    focusOnComposition: Boolean = false,
 ) {
     var isSearchFocused by remember { mutableStateOf(false) }
-    val isTyping = searchValue.isNotEmpty() && isSearchFocused
+    val isTyping = if(isSearchFocused) {
+        searchValue.isNotEmpty() && isSearchFocused
+    } else searchValue.isNotEmpty()
 
     Row(
         modifier = modifier
@@ -72,7 +79,8 @@ fun SearchBar(
             onClear = onClear,
             onFocusChanged = { isFocused ->
                 isSearchFocused = isFocused
-            }
+            },
+            focusOnComposition = focusOnComposition
         )
         AnimatedVisibility(
             visible = !isTyping,
@@ -101,8 +109,18 @@ fun SearchInput(
     modifier: Modifier = Modifier,
     onSearch: (String) -> Unit,
     onClear: () -> Unit,
-    onFocusChanged: (Boolean) -> Unit = { }
+    onFocusChanged: (Boolean) -> Unit = { },
+    focusOnComposition: Boolean = false
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        if(focusOnComposition) {
+            focusRequester.requestFocus()
+        }
+    }
+
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
@@ -111,6 +129,7 @@ fun SearchInput(
             .background(color = White)
             .border(width = 1.dp, color = ShadedWhite, shape = RoundedCornerShape(size = 20.dp))
             .padding(8.dp)
+            .focusRequester(focusRequester)
             .onFocusChanged { onFocusChanged(it.isFocused) },
         textStyle = MaterialTheme.typography.bodyLarge,
         cursorBrush = SolidColor(TintedBlack),
@@ -122,6 +141,7 @@ fun SearchInput(
         keyboardActions = KeyboardActions(
             onSearch = {
                 onSearch(value)
+                focusManager.clearFocus()
             }
         ),
         decorationBox = { innerTextField ->

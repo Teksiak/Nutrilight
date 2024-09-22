@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -19,13 +20,17 @@ import javax.inject.Inject
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
     private val productsRepository: ProductsRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(FavouritesState())
     val state = _state.asStateFlow()
 
     init {
-        productsRepository.getFavouriteProducts()
+        productsRepository.getFavouriteProducts().combine(
+            _state.map { it.searchQuery }
+        ) { products, searchQuery ->
+            products.filter { it.name.contains(searchQuery, ignoreCase = true) }
+        }
             .onEach { products ->
                 _state.update { state ->
                     state.copy(favouriteProducts = products.map { it.toProductUi() })
@@ -49,6 +54,15 @@ class FavouritesViewModel @Inject constructor(
             }
             is FavouritesAction.RemoveFavouriteCancellation -> {
                 _state.update { it.copy(productToRemove = null) }
+            }
+            is FavouritesAction.ToggleSearchbar -> {
+                _state.update { it.copy(isSearchActive = !it.isSearchActive) }
+            }
+            is FavouritesAction.SearchProducts -> {
+                _state.update { it.copy(searchQuery = action.query) }
+            }
+            is FavouritesAction.ClearSearch -> {
+                _state.update { it.copy(searchQuery = "") }
             }
 
             else -> Unit
