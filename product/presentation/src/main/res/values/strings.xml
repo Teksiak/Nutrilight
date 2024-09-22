@@ -24,4 +24,6 @@
     <string name="nova_4_title">Ultra-Processed Foods</string>
     <string name="nova_4_description">Quick and easy treats or meals that have been through a lot of processing, with extra flavors and preservatives.</string>
     <string name="favourites_title">Your Favourites</string>
+    <string name="no_favourites_added">No favorites added yet!</string>
+    <string name="save_your_top_picks">Save your top picks by tapping the Heart Icon.</string>
 </resources>

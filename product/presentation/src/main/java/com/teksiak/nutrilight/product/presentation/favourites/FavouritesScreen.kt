@@ -8,17 +8,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
+import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.SearchIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
@@ -101,6 +109,31 @@ private fun FavouritesScreen(
                     onNavigate = { onAction(FavouritesAction.NavigateToProduct(it)) }
                 )
             }
+            if(favouriteProducts.isEmpty()) {
+                item {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Silver)
+                                ) {
+                                    append(stringResource(id = R.string.no_favourites_added))
+                                }
+                                append("\n")
+                                withStyle(
+                                    style = SpanStyle(color = Primary)
+                                ) {
+                                    append(stringResource(id = R.string.save_your_top_picks))
+                                }
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -114,6 +147,18 @@ private fun FavouritesScreenPreview() {
                 DummyProduct.toProductUi().copy(isFavourite = true),
                 DummyProduct.toProductUi().copy(isFavourite = true),
             ),
+            onAction = {},
+            navigateWithTab = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FavouritesEmptyScreenPreview() {
+    NutrilightTheme {
+        FavouritesScreen(
+            favouriteProducts = listOf(),
             onAction = {},
             navigateWithTab = {}
         )
