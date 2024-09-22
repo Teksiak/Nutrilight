@@ -58,7 +58,11 @@ fun NavigationRoot(
                     navController.navigateUp()
                 },
                 onNavigateToProduct = { productId ->
-                    navController.navigate(ProductDetailsRoute(productId))
+                    navController.navigate(ProductDetailsRoute(productId)) {
+                        popUpTo(ScannerRoute) {
+                            inclusive = true
+                        }
+                    }
                 },
                 viewModel = viewModel
             )
@@ -88,6 +92,9 @@ fun NavigationRoot(
                         }
                         launchSingleTop = true
                     }
+                },
+                onScanBarcode = {
+                    navController.navigate(ScannerRoute)
                 },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {

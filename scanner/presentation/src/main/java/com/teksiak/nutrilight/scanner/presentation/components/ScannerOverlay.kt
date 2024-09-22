@@ -56,7 +56,7 @@ fun ScannerOverlay(
             .fillMaxSize()
             .drawBehind {
                 drawRect(
-                    color = TintedBlack.copy(alpha = 0.4f),
+                    color = Color.Black.copy(alpha = 0.4f),
                     topLeft = Offset(0f, 0f),
                     size = size,
                 )

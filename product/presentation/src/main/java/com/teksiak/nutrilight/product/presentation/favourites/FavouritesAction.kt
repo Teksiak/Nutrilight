@@ -5,5 +5,6 @@ sealed interface FavouritesAction {
     data object RemoveFavouriteConfirmation: FavouritesAction
     data object RemoveFavouriteCancellation : FavouritesAction
     data class NavigateToProduct(val code: String): FavouritesAction
+    data object ScanBarcode: FavouritesAction
     data object NavigateBack: FavouritesAction
 }

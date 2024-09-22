@@ -1,11 +1,9 @@
 package com.teksiak.nutrilight.product.presentation.favourites
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.NavigationTab
-import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartXIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
@@ -41,7 +38,6 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
-import com.teksiak.nutrilight.core.presentation.product.ProductUi
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.product.presentation.R
@@ -54,6 +50,7 @@ data object FavouritesRoute
 fun FavouritesScreenRoot(
     viewModel: FavouritesViewModel,
     onNavigateToProduct: (String) -> Unit,
+    onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
@@ -65,6 +62,7 @@ fun FavouritesScreenRoot(
             when (action) {
                 is FavouritesAction.NavigateToProduct -> onNavigateToProduct(action.code)
                 is FavouritesAction.NavigateBack -> onNavigateBack()
+                is FavouritesAction.ScanBarcode -> onScanBarcode()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -131,7 +129,7 @@ private fun FavouritesScreen(
                         )
                         CircleButton(
                             icon = ScanBarIcon,
-                            onClick = { /*TODO*/ }
+                            onClick = { onAction(FavouritesAction.ScanBarcode) }
                         )
                     }
                 }
