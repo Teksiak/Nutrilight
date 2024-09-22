@@ -1,13 +1,17 @@
 package com.teksiak.nutrilight.product.presentation.favourites
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,15 +26,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.designsystem.CameraIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.HeartXIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.SearchIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
+import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
+import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
+import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
+import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.product.ProductUi
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
@@ -47,10 +57,10 @@ fun FavouritesScreenRoot(
     onNavigateBack: () -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
-    val favouriteProducts by viewModel.favouriteProducts.collectAsStateWithLifecycle(emptyList())
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     FavouritesScreen(
-        favouriteProducts = favouriteProducts,
+        state = state,
         onAction = { action ->
             when (action) {
                 is FavouritesAction.NavigateToProduct -> onNavigateToProduct(action.code)
@@ -65,10 +75,47 @@ fun FavouritesScreenRoot(
 
 @Composable
 private fun FavouritesScreen(
-    favouriteProducts: List<ProductUi>,
+    state: FavouritesState,
     onAction: (FavouritesAction) -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
+    state.productToRemove?.let {
+        NutrilightDialog(
+            title = stringResource(id = R.string.oh_no),
+            description = stringResource(id = R.string.remove_favourite_confirmation),
+            onDismiss = { onAction(FavouritesAction.RemoveFavouriteCancellation) },
+            icon = {
+                Icon(
+                    modifier = Modifier.size(48.dp),
+                    imageVector = HeartXIcon,
+                    contentDescription = null,
+                    tint = Primary
+                )
+            },
+            buttons = {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    SecondaryButton(
+                        modifier = Modifier.width(128.dp),
+                        text = stringResource(id = R.string.cancel),
+                        onClick = {
+                            onAction(FavouritesAction.RemoveFavouriteCancellation)
+                        },
+                        color = TintedBlack
+                    )
+                    PrimaryButton(
+                        modifier = Modifier.width(128.dp),
+                        text = stringResource(id = R.string.remove),
+                        onClick = {
+                            onAction(FavouritesAction.RemoveFavouriteConfirmation)
+                        },
+                    )
+                }
+            }
+        )
+    }
+
     NutrilightScaffold(
         topAppBar = {
             NutrilightAppBar(
@@ -100,19 +147,22 @@ private fun FavouritesScreen(
                 .padding(vertical = 16.dp, horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(favouriteProducts) { productUi ->
+            items(state.favouriteProducts) { productUi ->
                 ProductCard(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .animateItem(),
                     productUi = productUi,
                     onFavouriteToggle = { onAction(FavouritesAction.RemoveFavourite(it)) },
                     onNavigate = { onAction(FavouritesAction.NavigateToProduct(it)) }
                 )
             }
-            if(favouriteProducts.isEmpty()) {
+            if(state.favouriteProducts.isEmpty()) {
                 item {
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
                         textAlign = TextAlign.Center,
                         text = buildAnnotatedString {
                             withStyle(
@@ -143,10 +193,13 @@ private fun FavouritesScreen(
 private fun FavouritesScreenPreview() {
     NutrilightTheme {
         FavouritesScreen(
-            favouriteProducts = listOf(
-                DummyProduct.toProductUi().copy(isFavourite = true),
-                DummyProduct.toProductUi().copy(isFavourite = true),
-            ),
+            state = FavouritesState()
+                .copy(
+                    favouriteProducts = listOf(
+                        DummyProduct.toProductUi().copy(isFavourite = true),
+                        DummyProduct.toProductUi().copy(isFavourite = true),
+                    )
+                ),
             onAction = {},
             navigateWithTab = {}
         )
@@ -158,7 +211,7 @@ private fun FavouritesScreenPreview() {
 private fun FavouritesEmptyScreenPreview() {
     NutrilightTheme {
         FavouritesScreen(
-            favouriteProducts = listOf(),
+            state = FavouritesState(),
             onAction = {},
             navigateWithTab = {}
         )

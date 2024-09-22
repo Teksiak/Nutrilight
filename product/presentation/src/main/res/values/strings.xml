@@ -26,4 +26,8 @@
     <string name="favourites_title">Your Favourites</string>
     <string name="no_favourites_added">No favorites added yet!</string>
     <string name="save_your_top_picks">Save your top picks by tapping the Heart Icon.</string>
+    <string name="oh_no">Oh no...</string>
+    <string name="remove_favourite_confirmation">Are you sure you want to remove this product from your favorites?</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
 </resources>

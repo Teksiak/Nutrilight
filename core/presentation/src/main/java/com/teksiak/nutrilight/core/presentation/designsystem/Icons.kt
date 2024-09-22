@@ -37,6 +37,10 @@ val HeartsIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.hearts)
 
+val HeartXIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.heart_x)
+
 val HelpCircleIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.help_circle)
