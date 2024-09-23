@@ -29,7 +29,7 @@ fun Product.toProductUi() = ProductUi(
     score = score,
     allergens = allergens?.replaceFirstChar { it.uppercase() },
     ingredients = ingredients.joinToString(", "),
-    ingredientsAmount = ingredients.size,
+    ingredientsAmount = ingredients.filter { it.isNotBlank() }.size,
     isFavourite = isFavourite ?: false
 )
 

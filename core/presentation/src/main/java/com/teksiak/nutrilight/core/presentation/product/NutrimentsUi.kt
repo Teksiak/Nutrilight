@@ -26,15 +26,15 @@ fun Nutriments.toNutrimentsUi(): NutrimentsUi {
     val areNutrimentsComplete =
         energyKcal != null && protein != null && fat != null && carbohydrates != null
 
-    val proteinFraction = if (areNutrimentsComplete) {
+    val proteinFraction = if (areNutrimentsComplete && this.energyKcal != 0f) {
         protein!! * 4f / (this.energyKcal!!)
     } else 0f
 
-    val fatFraction = if (areNutrimentsComplete) {
+    val fatFraction = if (areNutrimentsComplete && this.energyKcal != 0f) {
         fat!! * 9f / (this.energyKcal!!)
     } else 0f
 
-    val carbohydratesFraction = if (areNutrimentsComplete) {
+    val carbohydratesFraction = if (areNutrimentsComplete && this.energyKcal != 0f) {
         carbohydrates!! * 4f / (this.energyKcal!!)
     } else 0f
 
@@ -69,6 +69,8 @@ private fun Float?.roundNutrimentToGrams(): String {
 private fun formatEnergy(energyKj: Float?, energyKcal: Float?): String {
     return if (energyKj != null && energyKcal != null) {
         "${"%,d".format(energyKj.toInt())} kj (${energyKcal.formatNumber()} kcal)"
+    } else if(energyKcal != null) {
+        "${energyKcal.formatNumber()} kcal"
     } else {
         "- kcal"
     }
