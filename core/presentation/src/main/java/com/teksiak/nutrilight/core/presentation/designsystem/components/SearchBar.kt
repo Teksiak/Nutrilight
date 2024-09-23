@@ -96,7 +96,7 @@ fun SearchBar(
             CircleButton(
                 icon = ScanBarIcon,
                 onClick = onScanBarClick,
-                modifier = Modifier.padding(start = 12.dp)
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
     }
