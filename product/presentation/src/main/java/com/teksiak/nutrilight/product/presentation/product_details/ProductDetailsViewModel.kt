@@ -65,8 +65,7 @@ class ProductDetailsViewModel @Inject constructor(
         state.value.productUi?.let {
             if(!it.isFavourite) {
                 applicationScope.launch {
-                    // TODO: Check if the product is in history
-                    productsRepository.removeProduct(productDetails.productId)
+                    productsRepository.removeProduct(productDetails.productId, ignoreHistory = false)
                 }
             }
         }

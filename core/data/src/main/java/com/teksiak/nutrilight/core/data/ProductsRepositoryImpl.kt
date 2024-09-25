@@ -49,14 +49,7 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> = localProductsDataSource.toggleFavourite(code)
 
-    override suspend fun removeFavourite(code: String): EmptyResult<DataError.Local> {
-        // TODO: If the product is in history just toggle the favourite status
-        return localProductsDataSource.removeProduct(code)
-    }
-
-    override suspend fun removeProduct(code: String): EmptyResult<DataError.Local> {
-        return localProductsDataSource.removeProduct(code)
-    }
+    override suspend fun removeProduct(code: String, ignoreHistory: Boolean): EmptyResult<DataError.Local> = localProductsDataSource.removeProduct(code, ignoreHistory)
 
     override suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote> {
         return Result.Success(emptyList())

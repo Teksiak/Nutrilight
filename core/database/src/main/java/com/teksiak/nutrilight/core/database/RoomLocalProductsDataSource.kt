@@ -10,9 +10,10 @@ import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.EmptyResult
 import com.teksiak.nutrilight.core.domain.util.Result
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
 class RoomLocalProductsDataSource @Inject constructor(
@@ -35,6 +36,15 @@ class RoomLocalProductsDataSource @Inject constructor(
             }
     }
 
+    override fun getProductsHistory(): Flow<List<Product>> {
+        return productsDao.getProductsHistory()
+            .combine(productsDao.getProducts()) { history, products ->
+                history.mapNotNull { code ->
+                    products.find { it.code == code }?.toProduct()
+                }
+            }
+    }
+
     override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> {
         return try {
             productsDao.toggleFavourite(code)
@@ -53,15 +63,21 @@ class RoomLocalProductsDataSource @Inject constructor(
                 )
             } else product
 
-            productsDao.upsertProduct(updatedProduct.toProductEntity())
+            productsDao.addProduct(updatedProduct.toProductEntity())
             Result.Success(Unit)
         } catch (e: SQLiteFullException) {
             Result.Error(DataError.Local.DISK_FULL)
         }
     }
 
-    override suspend fun removeProduct(code: String): EmptyResult<DataError.Local> {
+    override suspend fun removeProduct(code: String, ignoreHistory: Boolean): EmptyResult<DataError.Local> {
         return try {
+            if(!ignoreHistory) {
+                val isInHistory = productsDao.getProductsHistory().first().contains(code)
+                if(isInHistory) {
+                    return Result.Success(Unit)
+                }
+            }
             productsDao.deleteProduct(code)
             Result.Success(Unit)
         } catch (e: Exception) {

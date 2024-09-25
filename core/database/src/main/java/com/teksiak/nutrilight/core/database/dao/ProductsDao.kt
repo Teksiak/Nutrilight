@@ -2,15 +2,23 @@ package com.teksiak.nutrilight.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.teksiak.nutrilight.core.database.entity.ProductEntity
+import com.teksiak.nutrilight.core.database.mapper.asHistoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ProductsDao {
+interface ProductsDao: HistoryDao {
 
     @Upsert
     suspend fun upsertProduct(product: ProductEntity)
+
+    @Transaction
+    suspend fun addProduct(product: ProductEntity) {
+        upsertProduct(product)
+        addToHistory(product.code.asHistoryEntity())
+    }
 
     @Query("SELECT * FROM Products WHERE code = :code")
     fun getProduct(code: String): Flow<ProductEntity?>

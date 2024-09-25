@@ -4,11 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.teksiak.nutrilight.core.database.dao.ProductsDao
+import com.teksiak.nutrilight.core.database.entity.HistoryEntity
 import com.teksiak.nutrilight.core.database.entity.ProductEntity
 
 @Database(
     entities = [
-        ProductEntity::class
+        ProductEntity::class,
+        HistoryEntity::class
     ],
     version = 1
 )
