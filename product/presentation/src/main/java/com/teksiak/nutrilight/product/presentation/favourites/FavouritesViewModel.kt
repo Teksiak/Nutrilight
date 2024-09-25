@@ -47,7 +47,7 @@ class FavouritesViewModel @Inject constructor(
             is FavouritesAction.RemoveFavouriteConfirmation -> {
                 _state.value.productToRemove?.let { code ->
                     viewModelScope.launch {
-                        productsRepository.toggleFavourite(code)
+                        productsRepository.removeFavourite(code)
                         _state.update { it.copy(productToRemove = null) }
                     }
                 }

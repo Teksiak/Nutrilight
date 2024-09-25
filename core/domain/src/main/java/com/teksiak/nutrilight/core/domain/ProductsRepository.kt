@@ -16,5 +16,9 @@ interface ProductsRepository {
 
     suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local>
 
+    suspend fun removeFavourite(code: String): EmptyResult<DataError.Local>
+
+    suspend fun removeProduct(code: String): EmptyResult<DataError.Local>
+
     suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote>
 }

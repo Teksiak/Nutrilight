@@ -16,4 +16,6 @@ interface LocalProductsDataSource {
 
     suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local>
 
+    suspend fun removeProduct(code: String): EmptyResult<DataError.Local>
+
 }

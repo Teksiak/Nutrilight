@@ -59,4 +59,13 @@ class RoomLocalProductsDataSource @Inject constructor(
             Result.Error(DataError.Local.DISK_FULL)
         }
     }
+
+    override suspend fun removeProduct(code: String): EmptyResult<DataError.Local> {
+        return try {
+            productsDao.deleteProduct(code)
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(DataError.Local.UNKNOWN_ERROR)
+        }
+    }
 }

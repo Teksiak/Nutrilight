@@ -7,6 +7,7 @@ import androidx.navigation.toRoute
 import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val productsRepository: ProductsRepository
+    private val productsRepository: ProductsRepository,
+    private val applicationScope: CoroutineScope
 ): ViewModel()  {
 
     private val productDetails = savedStateHandle.toRoute<ProductDetailsRoute>()
@@ -56,6 +58,19 @@ class ProductDetailsViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        state.value.productUi?.let {
+            if(!it.isFavourite) {
+                applicationScope.launch {
+                    // TODO: Check if the product is in history
+                    productsRepository.removeProduct(productDetails.productId)
+                }
+            }
+        }
+
     }
 
 }
