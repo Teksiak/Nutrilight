@@ -17,6 +17,9 @@ interface ProductsDao: HistoryDao {
     @Transaction
     suspend fun addProduct(product: ProductEntity) {
         upsertProduct(product)
+        if(getHistoryCount() >= 10) {
+            deleteLastHistory()
+        }
         addToHistory(product.code.asHistoryEntity())
     }
 

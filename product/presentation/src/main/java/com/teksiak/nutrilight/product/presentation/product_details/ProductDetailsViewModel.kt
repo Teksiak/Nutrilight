@@ -65,7 +65,7 @@ class ProductDetailsViewModel @Inject constructor(
         state.value.productUi?.let {
             if(!it.isFavourite) {
                 applicationScope.launch {
-                    productsRepository.removeProduct(productDetails.productId, ignoreHistory = false)
+                    productsRepository.removeProduct(productDetails.productId)
                 }
             }
         }

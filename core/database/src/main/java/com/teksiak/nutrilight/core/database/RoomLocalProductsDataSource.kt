@@ -54,6 +54,20 @@ class RoomLocalProductsDataSource @Inject constructor(
         }
     }
 
+    override suspend fun removeFavourite(code: String): EmptyResult<DataError.Local> {
+        return try {
+            val isInHistory = productsDao.getProductsHistory().first().contains(code)
+            if(isInHistory) {
+                toggleFavourite(code)
+            } else {
+                productsDao.deleteProduct(code)
+            }
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(DataError.Local.UNKNOWN_ERROR)
+        }
+    }
+
     override suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local> {
         return try {
             val existingProduct = productsDao.getProduct(product.code).first()
@@ -74,9 +88,7 @@ class RoomLocalProductsDataSource @Inject constructor(
         return try {
             if(!ignoreHistory) {
                 val isInHistory = productsDao.getProductsHistory().first().contains(code)
-                if(isInHistory) {
-                    return Result.Success(Unit)
-                }
+                if(isInHistory) return Result.Success(Unit)
             }
             productsDao.deleteProduct(code)
             Result.Success(Unit)

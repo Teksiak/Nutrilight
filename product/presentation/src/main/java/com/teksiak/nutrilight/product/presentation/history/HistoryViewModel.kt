@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.product.presentation.favourites
+package com.teksiak.nutrilight.product.presentation.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,19 +16,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavouritesViewModel @Inject constructor(
+class HistoryViewModel @Inject constructor(
     private val productsRepository: ProductsRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(FavouritesState())
+    private val _state = MutableStateFlow(HistoryState())
     val state = _state.asStateFlow()
 
     init {
-        productsRepository.getFavouriteProducts().combine(
-            _state.map { it.searchQuery }
-        ) { products, searchQuery ->
-            products.filter { it.name.contains(searchQuery, ignoreCase = true) }
-        }
+        productsRepository.getProductsHistory()
             .onEach { products ->
                 _state.update { state ->
                     state.copy(favouriteProducts = products.map { it.toProductUi() })
@@ -37,12 +33,21 @@ class FavouritesViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun onAction(action: FavouritesAction) {
+    fun onAction(action: HistoryAction) {
         when (action) {
-            is FavouritesAction.RemoveFavourite -> {
-                _state.update { it.copy(productToRemove = action.code) }
+            is HistoryAction.ToggleFavourite -> {
+                _state.update { state ->
+                    if(!state.favouriteProducts.first { it.code == action.code }.isFavourite) {
+                        viewModelScope.launch {
+                            productsRepository.toggleFavourite(action.code)
+                        }
+                        state
+                    } else {
+                        state.copy(productToRemove = action.code)
+                    }
+                }
             }
-            is FavouritesAction.ConfirmRemoveFavourite -> {
+            is HistoryAction.ConfirmRemoveFavourite -> {
                 _state.value.productToRemove?.let { code ->
                     viewModelScope.launch {
                         productsRepository.removeFavorite(code)
@@ -50,19 +55,9 @@ class FavouritesViewModel @Inject constructor(
                     }
                 }
             }
-            is FavouritesAction.CancelRemoveFavourite -> {
+            is HistoryAction.CancelRemoveFavourite -> {
                 _state.update { it.copy(productToRemove = null) }
             }
-            is FavouritesAction.ToggleSearchbar -> {
-                _state.update { it.copy(isSearchActive = !it.isSearchActive) }
-            }
-            is FavouritesAction.SearchProducts -> {
-                _state.update { it.copy(searchQuery = action.query) }
-            }
-            is FavouritesAction.ClearSearch -> {
-                _state.update { it.copy(searchQuery = "") }
-            }
-
             else -> Unit
         }
     }

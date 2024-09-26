@@ -31,4 +31,7 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="no_favourite_matches">We couldn’t find that in Your favourites!</string>
+    <string name="history">Products History</string>
+    <string name="try_scanning_something">Try Scanning something tasty to get started!</string>
+    <string name="empty_history">Your history is looking a bit empty.</string>
 </resources>

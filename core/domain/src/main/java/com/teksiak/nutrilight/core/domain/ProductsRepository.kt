@@ -14,9 +14,13 @@ interface ProductsRepository {
 
     fun getFavouriteProducts(): Flow<List<Product>>
 
+    fun getProductsHistory(): Flow<List<Product>>
+
     suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local>
 
-    suspend fun removeProduct(code: String, ignoreHistory: Boolean = true): EmptyResult<DataError.Local>
+    suspend fun removeFavorite(code: String): EmptyResult<DataError.Local>
+
+    suspend fun removeProduct(code: String, ignoreHistory: Boolean = false): EmptyResult<DataError.Local>
 
     suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote>
 }

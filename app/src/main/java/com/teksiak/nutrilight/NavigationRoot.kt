@@ -13,6 +13,9 @@ import com.teksiak.nutrilight.home.HomeViewModel
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesRoute
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesScreenRoot
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesViewModel
+import com.teksiak.nutrilight.product.presentation.history.HistoryRoute
+import com.teksiak.nutrilight.product.presentation.history.HistoryScreenRoot
+import com.teksiak.nutrilight.product.presentation.history.HistoryViewModel
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsRoute
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsScreenRoot
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsViewModel
@@ -43,9 +46,7 @@ fun NavigationRoot(
                         popUpTo(HomeRoute) {
                             inclusive = false
                         }
-                        if(tab == NavigationTab.Home) {
-                            launchSingleTop = true
-                        }
+                        launchSingleTop = true
                     }
                 }
             )
@@ -77,6 +78,36 @@ fun NavigationRoot(
                 viewModel = viewModel
             )
         }
+        composable<HistoryRoute> {
+            val viewModel = hiltViewModel<HistoryViewModel>()
+
+            HistoryScreenRoot(
+                viewModel = viewModel,
+                onNavigateToProduct = { code ->
+                    navController.navigate(ProductDetailsRoute(code))
+                },
+                onNavigateBack = {
+                    navController.navigate(HomeRoute) {
+                        popUpTo(HistoryRoute) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                onSearchProduct = { },
+                onScanBarcode = {
+                    navController.navigate(ScannerRoute)
+                },
+                navigateWithTab = { tab ->
+                    navController.navigate(tab.toRoute()) {
+                        popUpTo(HomeRoute) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
         composable<FavouritesRoute> {
             val viewModel = hiltViewModel<FavouritesViewModel>()
 
@@ -101,9 +132,7 @@ fun NavigationRoot(
                         popUpTo(HomeRoute) {
                             inclusive = false
                         }
-                        if(tab == NavigationTab.Home) {
-                            launchSingleTop = true
-                        }
+                        launchSingleTop = true
                     }
                 }
             )
@@ -114,7 +143,7 @@ fun NavigationRoot(
 private fun NavigationTab.toRoute(): Any {
     return when (this) {
         NavigationTab.Home -> HomeRoute
-        NavigationTab.History -> HomeRoute
+        NavigationTab.History -> HistoryRoute
         NavigationTab.Scanner -> ScannerRoute
         NavigationTab.Favorites -> FavouritesRoute
         NavigationTab.More -> HomeRoute
