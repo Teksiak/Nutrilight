@@ -28,9 +28,10 @@ import com.teksiak.nutrilight.product.presentation.product_details.util.details
 @Composable
 fun NovaGroup(
     novaGroup: NovaGroup,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,

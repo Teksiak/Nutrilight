@@ -34,4 +34,7 @@
     <string name="history">Products History</string>
     <string name="try_scanning_something">Try Scanning something tasty to get started!</string>
     <string name="empty_history">Your history is looking a bit empty.</string>
+    <string name="data_resources">Data from Open Food Facts, under ODbL and CC BY-SA licenses.</string>
+    <string name="show_more">Show more</string>
+    <string name="allergens">Allergens</string>
 </resources>

@@ -9,7 +9,6 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,14 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.HeartXIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
@@ -50,12 +45,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
-import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
-import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
-import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchInput
-import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.core.presentation.util.bottomBorder
@@ -73,7 +64,7 @@ fun FavouritesScreenRoot(
     onNavigateToProduct: (String) -> Unit,
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

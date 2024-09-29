@@ -1,6 +1,7 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding

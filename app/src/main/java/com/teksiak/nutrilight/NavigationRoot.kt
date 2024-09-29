@@ -1,5 +1,7 @@
 package com.teksiak.nutrilight
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,7 +32,9 @@ fun NavigationRoot(
 
     NavHost(
         navController = navController,
-        startDestination = HomeRoute
+        startDestination = HomeRoute,
+        enterTransition = { EnterTransition.None},
+        exitTransition = { ExitTransition.None }
     ) {
 
         composable<HomeRoute> {
