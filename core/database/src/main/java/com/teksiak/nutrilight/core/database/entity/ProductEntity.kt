@@ -11,6 +11,7 @@ data class ProductEntity(
     @PrimaryKey val code: String,
     val name: String,
     val brands: String?,
+    val fullImageUrl: String?,
     val quantity: String?,
     val packaging: String?,
     val novaGroup: NovaGroup?,

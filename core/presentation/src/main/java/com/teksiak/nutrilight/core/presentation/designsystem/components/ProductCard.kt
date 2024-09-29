@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -58,17 +59,12 @@ fun ProductCard(
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        ProductImage(
+            imageUrl = productUi.fullImageUrl,
             modifier = Modifier
-                .size(72.dp)
-                .alpha(0.1f),
-            imageVector = LogoRottenIcon,
-            contentDescription = "No image",
-            colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
-                setToSaturation(
-                    0f
-                )
-            })
+                .sizeIn(maxHeight = 72.dp, maxWidth = 72.dp)
+                .clip(RoundedCornerShape(4.dp)),
+            loadingSize = 24.dp
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(

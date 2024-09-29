@@ -3,6 +3,8 @@ package com.teksiak.nutrilight.core.domain.product
 data class Product(
     val code: String,
     val name: String,
+    val fullImageUrl: String? = null,
+    val smallImageUrl: String? = null,
     val brands: String?,
     val quantity: String?,
     val packaging: String?,

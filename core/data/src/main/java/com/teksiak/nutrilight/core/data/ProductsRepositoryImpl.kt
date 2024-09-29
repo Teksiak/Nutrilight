@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.core.data
 
+import android.util.Log
 import com.teksiak.nutrilight.core.data.mapper.toProduct
 import com.teksiak.nutrilight.core.data.util.safeApiCall
 import com.teksiak.nutrilight.core.domain.LocalProductsDataSource
@@ -26,6 +27,7 @@ class ProductsRepositoryImpl @Inject constructor(
         return when (val result = fetchProduct(barcode)) {
             is Result.Error -> result.asEmptyDataResult()
             is Result.Success -> {
+                Log.d("ProductsRepositoryImpl", "scanProduct: ${result.data}")
                 applicationScope.launch {
                     localProductsDataSource.upsertProduct(result.data).asEmptyDataResult()
                 }.join()

@@ -6,6 +6,7 @@ import com.teksiak.nutrilight.core.domain.product.Product
 fun ProductEntity.toProduct() = Product(
     code = code,
     name = name,
+    fullImageUrl = fullImageUrl,
     brands = brands,
     quantity = quantity,
     packaging = packaging,
@@ -20,6 +21,7 @@ fun ProductEntity.toProduct() = Product(
 fun Product.toProductEntity() = ProductEntity(
     code = code,
     name = name,
+    fullImageUrl = fullImageUrl,
     brands = brands,
     quantity = quantity,
     packaging = packaging,

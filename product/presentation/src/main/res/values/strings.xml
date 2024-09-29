@@ -37,4 +37,5 @@
     <string name="data_resources">Data from Open Food Facts, under ODbL and CC BY-SA licenses.</string>
     <string name="show_more">Show more</string>
     <string name="allergens">Allergens</string>
+    <string name="product_image">Product image</string>
 </resources>

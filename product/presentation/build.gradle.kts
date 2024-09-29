@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.bundles.compose)
 
     implementation(libs.textflow)
+    implementation(libs.coil.compose)
 
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)

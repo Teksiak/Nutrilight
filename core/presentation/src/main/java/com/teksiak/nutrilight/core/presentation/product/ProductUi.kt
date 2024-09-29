@@ -6,6 +6,8 @@ import com.teksiak.nutrilight.core.domain.product.Product
 data class ProductUi(
     val code: String,
     val name: String,
+    val fullImageUrl: String?,
+    val smallImageUrl: String?,
     val brands: String,
     val quantity: String,
     val packaging: String,
@@ -21,6 +23,8 @@ data class ProductUi(
 fun Product.toProductUi() = ProductUi(
     code = code,
     name = name.formatName(brands, quantity, packaging),
+    fullImageUrl = fullImageUrl,
+    smallImageUrl = smallImageUrl,
     brands = brands.formatIfBlank(),
     quantity = quantity.formatIfBlank(),
     packaging = packaging.toFormattedPackaging(),

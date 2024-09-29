@@ -13,6 +13,7 @@ data class RemoteProductDto(
 @Serializable
 data class RemoteProduct(
     val productName: String?,
+    val selectedImages: RemoteSelectedImages?,
     val brands: String?,
     val quantity: String?,
     val packaging: String?,
@@ -22,7 +23,28 @@ data class RemoteProduct(
     val nutriscoreScore: Int?,
     val allergens: String?,
     val ingredients: List<RemoteIngredient>?
-    )
+)
+
+@Serializable
+data class RemoteSelectedImages(
+    val front: RemoteImagesCategory?
+)
+
+@Serializable
+data class RemoteImagesCategory(
+    val display: RemoteImages,
+    val small: RemoteImages
+)
+
+@Serializable
+data class RemoteImages(
+    val de: String?,
+    val en: String?,
+    val fr: String?,
+    val pl: String?,
+    val es: String?,
+    val it: String?,
+)
 
 @Serializable
 data class RemoteIngredient (

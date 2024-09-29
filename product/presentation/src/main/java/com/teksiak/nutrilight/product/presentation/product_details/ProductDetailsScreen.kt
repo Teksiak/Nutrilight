@@ -6,6 +6,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,9 +30,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
@@ -39,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.SubcomposeAsyncImage
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
@@ -48,9 +55,11 @@ import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
+import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScore
+import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductImage
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
@@ -119,8 +128,7 @@ private fun ProductDetailsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                        .height(IntrinsicSize.Max),
+                        .padding(horizontal = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.Top
                 ) {
@@ -128,18 +136,11 @@ private fun ProductDetailsScreen(
                         productUi = productUi,
                         modifier = Modifier.weight(1f)
                     )
-                    Image(
+                    ProductImage(
+                        imageUrl = productUi.fullImageUrl,
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .alpha(0.1f),
-                        imageVector = LogoRottenIcon,
-                        contentDescription = "No image",
-                        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
-                            setToSaturation(
-                                0f
-                            )
-                        })
+                            .sizeIn(maxWidth = 164.dp, maxHeight = 164.dp)
+                            .clip(RoundedCornerShape(16.dp)),
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
