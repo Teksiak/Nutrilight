@@ -79,7 +79,13 @@ fun FavouritesScreenRoot(
             }
             viewModel.onAction(action)
         },
-        navigateWithTab = navigateWithTab
+        navigateWithTab = {
+            if(state.isSearchActive) {
+                viewModel.onAction(FavouritesAction.ToggleSearchbar)
+                viewModel.onAction(FavouritesAction.ClearSearch)
+            }
+            navigateWithTab(it)
+        }
     )
 }
 

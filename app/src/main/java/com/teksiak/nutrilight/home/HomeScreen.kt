@@ -31,7 +31,7 @@ object HomeRoute
 
 @Composable
 fun HomeScreenRoot(
-    homeViewModel: HomeViewModel,
+    viewModel: HomeViewModel,
     onScanBarcode: () -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
@@ -41,7 +41,7 @@ fun HomeScreenRoot(
                 HomeAction.ScanBarcode -> onScanBarcode()
                 else -> Unit
             }
-            homeViewModel.onAction(action)
+            viewModel.onAction(action)
         },
         navigateWithTab = navigateWithTab
     )

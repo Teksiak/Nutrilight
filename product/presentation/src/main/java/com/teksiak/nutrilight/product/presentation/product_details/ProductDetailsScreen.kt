@@ -68,8 +68,8 @@ data class ProductDetailsRoute(
 
 @Composable
 fun ProductDetailsScreenRoot(
-    onNavigateBack: () -> Unit,
-    viewModel: ProductDetailsViewModel
+    viewModel: ProductDetailsViewModel,
+    onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

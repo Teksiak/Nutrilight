@@ -63,9 +63,9 @@ object ScannerRoute
 
 @Composable
 fun ScannerScreenRoot(
+    viewModel: ScannerViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToProduct: (String) -> Unit,
-    viewModel: ScannerViewModel
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

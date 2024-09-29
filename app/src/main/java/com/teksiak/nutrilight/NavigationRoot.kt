@@ -4,6 +4,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -29,6 +30,9 @@ import com.teksiak.nutrilight.scanner.presentation.ScannerViewModel
 fun NavigationRoot(
     navController: NavHostController,
 ) {
+    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    }
 
     NavHost(
         navController = navController,
@@ -38,10 +42,9 @@ fun NavigationRoot(
     ) {
 
         composable<HomeRoute> {
-            val homeViewModel = viewModel<HomeViewModel>()
 
             HomeScreenRoot(
-                homeViewModel = homeViewModel,
+                viewModel = viewModel<HomeViewModel>(viewModelStoreOwner),
                 onScanBarcode = {
                     navController.navigate(ScannerRoute)
                 },
@@ -56,9 +59,8 @@ fun NavigationRoot(
             )
         }
         composable<ScannerRoute> {
-            val viewModel = hiltViewModel<ScannerViewModel>()
-
             ScannerScreenRoot(
+                viewModel = hiltViewModel<ScannerViewModel>(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
@@ -69,24 +71,19 @@ fun NavigationRoot(
                         }
                     }
                 },
-                viewModel = viewModel
             )
         }
         composable<ProductDetailsRoute> {
-            val viewModel = hiltViewModel<ProductDetailsViewModel>()
-
             ProductDetailsScreenRoot(
+                viewModel = hiltViewModel<ProductDetailsViewModel>(),
                 onNavigateBack = {
                     navController.navigateUp()
-                },
-                viewModel = viewModel
+                }
             )
         }
         composable<HistoryRoute> {
-            val viewModel = hiltViewModel<HistoryViewModel>()
-
             HistoryScreenRoot(
-                viewModel = viewModel,
+                viewModel = hiltViewModel<HistoryViewModel>(viewModelStoreOwner),
                 onNavigateToProduct = { code ->
                     navController.navigate(ProductDetailsRoute(code))
                 },
@@ -113,10 +110,8 @@ fun NavigationRoot(
             )
         }
         composable<FavouritesRoute> {
-            val viewModel = hiltViewModel<FavouritesViewModel>()
-
             FavouritesScreenRoot(
-                viewModel = viewModel,
+                viewModel = hiltViewModel<FavouritesViewModel>(viewModelStoreOwner),
                 onNavigateToProduct = { code ->
                     navController.navigate(ProductDetailsRoute(code))
                 },

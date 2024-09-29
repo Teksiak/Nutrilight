@@ -48,7 +48,9 @@ fun NutrilightNavBar(
             NavigationTab(
                 navTab = navTab,
                 isSelected = navTab == currentTab,
-                onClick = { onTabSelected(navTab) }
+                onClick = {
+                    onTabSelected(navTab)
+                }
             )
         }
     }
@@ -66,16 +68,20 @@ private fun NavigationTab(
     Column(
         modifier = modifier
             .width(60.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = ripple(
-                    color = Silver,
-                    bounded = true,
-                    radius = 30.dp
-                )
-            ) {
-                onClick()
-            }
+            .then(
+                if (!isSelected)
+                    Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = ripple(
+                            color = Silver,
+                            bounded = true,
+                            radius = 30.dp
+                        )
+                    ) {
+                        onClick()
+                    }
+                else Modifier
+            )
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp)
