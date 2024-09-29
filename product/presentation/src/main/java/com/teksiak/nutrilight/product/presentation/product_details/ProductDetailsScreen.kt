@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -139,8 +140,12 @@ private fun ProductDetailsScreen(
                     ProductImage(
                         imageUrl = productUi.fullImageUrl,
                         modifier = Modifier
-                            .sizeIn(maxWidth = 164.dp, maxHeight = 164.dp)
-                            .clip(RoundedCornerShape(16.dp)),
+                            .sizeIn(maxWidth = 164.dp, maxHeight = 164.dp, minWidth = 164.dp, minHeight = 164.dp)
+                            .then(
+                                if (state.productUi.fullImageUrl != null) Modifier.wrapContentSize()
+                                else Modifier
+                            )
+                            .clip(RoundedCornerShape(12.dp)),
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))

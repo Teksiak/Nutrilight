@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,7 +63,8 @@ fun ProductCard(
         ProductImage(
             imageUrl = productUi.fullImageUrl,
             modifier = Modifier
-                .sizeIn(maxHeight = 72.dp, maxWidth = 72.dp)
+                .sizeIn(maxWidth = 72.dp, minWidth = 72.dp, maxHeight = 72.dp, minHeight = 72.dp)
+                .wrapContentSize()
                 .clip(RoundedCornerShape(4.dp)),
             loadingSize = 24.dp
         )
