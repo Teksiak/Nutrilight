@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.product.presentation.history
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +45,10 @@ fun HistoryScreenRoot(
     navigateWithTab: (NavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    BackHandler {
+        onNavigateBack()
+    }
 
     HistoryScreen(
         state = state,

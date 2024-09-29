@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,8 +34,13 @@ object HomeRoute
 fun HomeScreenRoot(
     viewModel: HomeViewModel,
     onScanBarcode: () -> Unit,
+    onNavigateBack: () -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
+    BackHandler {
+        onNavigateBack()
+    }
+
     HomeScreen(
         onAction = { action ->
             when(action) {

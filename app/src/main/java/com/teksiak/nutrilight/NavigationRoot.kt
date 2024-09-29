@@ -29,6 +29,7 @@ import com.teksiak.nutrilight.scanner.presentation.ScannerViewModel
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
+    closeApp: () -> Unit
 ) {
     val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
@@ -48,11 +49,11 @@ fun NavigationRoot(
                 onScanBarcode = {
                     navController.navigate(ScannerRoute)
                 },
+                onNavigateBack = {
+                    closeApp()
+                },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
-                        popUpTo(HomeRoute) {
-                            inclusive = false
-                        }
                         launchSingleTop = true
                     }
                 }
@@ -89,9 +90,6 @@ fun NavigationRoot(
                 },
                 onNavigateBack = {
                     navController.navigate(HomeRoute) {
-                        popUpTo(HistoryRoute) {
-                            inclusive = true
-                        }
                         launchSingleTop = true
                     }
                 },
@@ -101,9 +99,6 @@ fun NavigationRoot(
                 },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
-                        popUpTo(HomeRoute) {
-                            inclusive = false
-                        }
                         launchSingleTop = true
                     }
                 }
@@ -117,9 +112,6 @@ fun NavigationRoot(
                 },
                 onNavigateBack = {
                     navController.navigate(HomeRoute) {
-                        popUpTo(FavouritesRoute) {
-                            inclusive = true
-                        }
                         launchSingleTop = true
                     }
                 },
@@ -128,9 +120,6 @@ fun NavigationRoot(
                 },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
-                        popUpTo(HomeRoute) {
-                            inclusive = false
-                        }
                         launchSingleTop = true
                     }
                 }

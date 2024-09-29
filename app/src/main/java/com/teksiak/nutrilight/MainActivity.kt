@@ -36,7 +36,10 @@ class MainActivity : ComponentActivity() {
 
             NutrilightTheme {
                 Surface {
-                    NavigationRoot(navController = navController)
+                    NavigationRoot(
+                        navController = navController,
+                        closeApp = { finish() }
+                    )
                 }
             }
         }

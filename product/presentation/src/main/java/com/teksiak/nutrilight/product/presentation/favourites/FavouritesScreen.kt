@@ -68,6 +68,15 @@ fun FavouritesScreenRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    BackHandler {
+        if(state.isSearchActive) {
+            viewModel.onAction(FavouritesAction.ToggleSearchbar)
+            viewModel.onAction(FavouritesAction.ClearSearch)
+        } else {
+            onNavigateBack()
+        }
+    }
+
     FavouritesScreen(
         state = state,
         onAction = { action ->
@@ -95,10 +104,6 @@ private fun FavouritesScreen(
     onAction: (FavouritesAction) -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
-    BackHandler(state.isSearchActive) {
-        onAction(FavouritesAction.ToggleSearchbar)
-        onAction(FavouritesAction.ClearSearch)
-    }
 
     state.productToRemove?.let {
         RemoveFavouriteDialog(
