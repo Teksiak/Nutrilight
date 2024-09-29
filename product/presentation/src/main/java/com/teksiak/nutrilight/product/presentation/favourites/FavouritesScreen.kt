@@ -224,7 +224,7 @@ private fun FavouritesScreen(
             productsList = state.favouriteProducts,
             onFavouriteToggle = { onAction(FavouritesAction.RemoveFavourite(it)) },
             onNavigateToProduct = { onAction(FavouritesAction.NavigateToProduct(it)) },
-            emptyInformationText = buildAnnotatedString {
+            emptyInformationText = if(!state.isLoading) buildAnnotatedString {
                 withStyle(
                     style = MaterialTheme.typography.bodyMedium.toSpanStyle()
                 ) {
@@ -244,7 +244,7 @@ private fun FavouritesScreen(
                         append(stringResource(id = R.string.save_your_top_picks))
                     }
                 }
-            }
+            } else null
         )
     }
 }

@@ -106,7 +106,7 @@ private fun HistoryScreen(
             productsList = state.favouriteProducts,
             onFavouriteToggle = { onAction(HistoryAction.ToggleFavourite(it)) },
             onNavigateToProduct = { onAction(HistoryAction.NavigateToProduct(it)) },
-            emptyInformationText = buildAnnotatedString {
+            emptyInformationText = if(!state.isLoading) buildAnnotatedString {
                 withStyle(
                     style = MaterialTheme.typography.bodyMedium.toSpanStyle()
                 ) {
@@ -122,7 +122,7 @@ private fun HistoryScreen(
                         append(stringResource(id = R.string.try_scanning_something))
                     }
                 }
-            }
+            } else null
         )
     }
 }

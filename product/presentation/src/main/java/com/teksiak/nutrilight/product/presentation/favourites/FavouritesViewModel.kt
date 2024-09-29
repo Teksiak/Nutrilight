@@ -24,6 +24,7 @@ class FavouritesViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        _state.update { it.copy(isLoading = true) }
         productsRepository.getFavouriteProducts().combine(
             _state.map { it.searchQuery }
         ) { products, searchQuery ->
@@ -31,7 +32,10 @@ class FavouritesViewModel @Inject constructor(
         }
             .onEach { products ->
                 _state.update { state ->
-                    state.copy(favouriteProducts = products.map { it.toProductUi() })
+                    state.copy(
+                        favouriteProducts = products.map { it.toProductUi() },
+                        isLoading = false
+                    )
                 }
             }
             .launchIn(viewModelScope)

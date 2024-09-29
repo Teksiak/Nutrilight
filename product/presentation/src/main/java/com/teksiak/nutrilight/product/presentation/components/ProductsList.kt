@@ -19,7 +19,7 @@ fun ProductsList(
     productsList: List<ProductUi>,
     onFavouriteToggle: (String) -> Unit,
     onNavigateToProduct: (String) -> Unit,
-    emptyInformationText: AnnotatedString
+    emptyInformationText: AnnotatedString? = null
 ) {
     LazyColumn(
         modifier = modifier,
@@ -39,14 +39,16 @@ fun ProductsList(
             )
         }
         if (productsList.isEmpty()) {
-            item {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                    textAlign = TextAlign.Center,
-                    text = emptyInformationText
-                )
+            emptyInformationText?.let { item ->
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        textAlign = TextAlign.Center,
+                        text = item
+                    )
+                }
             }
         }
     }

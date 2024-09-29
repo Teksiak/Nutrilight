@@ -24,10 +24,14 @@ class HistoryViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        _state.update { it.copy(isLoading = true) }
         productsRepository.getProductsHistory()
             .onEach { products ->
                 _state.update { state ->
-                    state.copy(favouriteProducts = products.map { it.toProductUi() })
+                    state.copy(
+                        favouriteProducts = products.map { it.toProductUi() },
+                        isLoading = false
+                    )
                 }
             }
             .launchIn(viewModelScope)
