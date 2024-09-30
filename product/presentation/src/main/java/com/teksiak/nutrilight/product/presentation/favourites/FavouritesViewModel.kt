@@ -28,7 +28,10 @@ class FavouritesViewModel @Inject constructor(
         productsRepository.getFavouriteProducts().combine(
             _state.map { it.searchQuery }
         ) { products, searchQuery ->
-            products.filter { it.name.contains(searchQuery, ignoreCase = true) }
+            products.filter {
+                it.name.contains(searchQuery, ignoreCase = true)
+                        || it.brands?.contains(searchQuery, ignoreCase = true) == true
+            }
         }
             .onEach { products ->
                 _state.update { state ->
@@ -46,6 +49,7 @@ class FavouritesViewModel @Inject constructor(
             is FavouritesAction.RemoveFavourite -> {
                 _state.update { it.copy(productToRemove = action.code) }
             }
+
             is FavouritesAction.ConfirmRemoveFavourite -> {
                 _state.value.productToRemove?.let { code ->
                     viewModelScope.launch {
@@ -54,15 +58,19 @@ class FavouritesViewModel @Inject constructor(
                     }
                 }
             }
+
             is FavouritesAction.CancelRemoveFavourite -> {
                 _state.update { it.copy(productToRemove = null) }
             }
+
             is FavouritesAction.ToggleSearchbar -> {
                 _state.update { it.copy(isSearchActive = !it.isSearchActive) }
             }
+
             is FavouritesAction.SearchProducts -> {
                 _state.update { it.copy(searchQuery = action.query) }
             }
+
             is FavouritesAction.ClearSearch -> {
                 _state.update { it.copy(searchQuery = "") }
             }
