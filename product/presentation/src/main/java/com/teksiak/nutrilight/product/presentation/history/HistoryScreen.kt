@@ -106,8 +106,7 @@ private fun HistoryScreen(
         ProductsList(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(vertical = 16.dp, horizontal = 24.dp),
+                .padding(paddingValues),
             productsList = state.favouriteProducts,
             onFavouriteToggle = { onAction(HistoryAction.ToggleFavourite(it)) },
             onNavigateToProduct = { onAction(HistoryAction.NavigateToProduct(it)) },

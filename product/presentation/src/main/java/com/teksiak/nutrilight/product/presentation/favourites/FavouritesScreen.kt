@@ -230,8 +230,7 @@ private fun FavouritesScreen(
         ProductsList(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(vertical = 16.dp, horizontal = 24.dp),
+                .padding(paddingValues),
             productsList = state.favouriteProducts,
             onFavouriteToggle = { onAction(FavouritesAction.RemoveFavourite(it)) },
             onNavigateToProduct = { onAction(FavouritesAction.NavigateToProduct(it)) },
