@@ -24,18 +24,18 @@ data class NutrimentsUi(
 
 fun Nutriments.toNutrimentsUi(): NutrimentsUi {
     val areNutrimentsComplete =
-        energyKcal != null && protein != null && fat != null && carbohydrates != null
+        energyKcal != null && (protein != null || fat != null || carbohydrates != null)
 
     val proteinFraction = if (areNutrimentsComplete && this.energyKcal != 0f) {
-        protein!! * 4f / (this.energyKcal!!)
+        (protein ?: 0f) * 4f / (this.energyKcal!!)
     } else 0f
 
     val fatFraction = if (areNutrimentsComplete && this.energyKcal != 0f) {
-        fat!! * 9f / (this.energyKcal!!)
+        (fat ?: 0f) * 9f / (this.energyKcal!!)
     } else 0f
 
     val carbohydratesFraction = if (areNutrimentsComplete && this.energyKcal != 0f) {
-        carbohydrates!! * 4f / (this.energyKcal!!)
+        (carbohydrates ?: 0f) * 4f / (this.energyKcal!!)
     } else 0f
 
     return NutrimentsUi(
@@ -48,12 +48,12 @@ fun Nutriments.toNutrimentsUi(): NutrimentsUi {
         fatFraction = fatFraction,
         carbohydratesFraction = carbohydratesFraction,
         energy = formatEnergy(energyKj, energyKcal),
-        fat = fat.formatToGrams(),
+        fat = (fat ?: 0f).formatToGrams(),
         saturatedFat = saturatedFat.formatToGrams(),
-        carbohydrates = carbohydrates.formatToGrams(),
+        carbohydrates = (carbohydrates ?: 0f).formatToGrams(),
         sugars = sugars.formatToGrams(),
         fiber = fiber.formatToGrams(),
-        protein = protein.formatToGrams(),
+        protein = (protein ?: 0f).formatToGrams(),
         salt = salt.formatToGrams(),
     )
 }
@@ -63,7 +63,7 @@ private fun Float?.roundNutrimentToString(): String {
 }
 
 private fun Float?.roundNutrimentToGrams(): String {
-    return this?.let { "${it.roundToInt()} g" } ?: "- g"
+    return this?.let { "${it.roundToInt()} g" } ?: "0 g"
 }
 
 private fun formatEnergy(energyKj: Float?, energyKcal: Float?): String {

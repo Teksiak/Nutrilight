@@ -8,6 +8,7 @@ import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -20,7 +21,6 @@ import javax.inject.Inject
 class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val productsRepository: ProductsRepository,
-    private val applicationScope: CoroutineScope
 ): ViewModel()  {
 
     private val productDetails = savedStateHandle.toRoute<ProductDetailsRoute>()
@@ -64,7 +64,7 @@ class ProductDetailsViewModel @Inject constructor(
         super.onCleared()
         state.value.productUi?.let {
             if(!it.isFavourite) {
-                applicationScope.launch {
+                viewModelScope.launch(NonCancellable) {
                     productsRepository.removeProduct(productDetails.productId)
                 }
             }
