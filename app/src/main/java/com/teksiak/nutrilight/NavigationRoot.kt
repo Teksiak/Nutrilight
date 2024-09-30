@@ -13,6 +13,9 @@ import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.home.HomeRoute
 import com.teksiak.nutrilight.home.HomeScreenRoot
 import com.teksiak.nutrilight.home.HomeViewModel
+import com.teksiak.nutrilight.more.MoreRoute
+import com.teksiak.nutrilight.more.MoreScreenRoot
+import com.teksiak.nutrilight.more.MoreViewModel
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesRoute
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesScreenRoot
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesViewModel
@@ -125,6 +128,19 @@ fun NavigationRoot(
                 }
             )
         }
+        composable<MoreRoute> {
+            MoreScreenRoot(
+                viewModel = viewModel<MoreViewModel>(),
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                navigateWithTab = { tab ->
+                    navController.navigate(tab.toRoute()) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -134,6 +150,6 @@ private fun NavigationTab.toRoute(): Any {
         NavigationTab.History -> HistoryRoute
         NavigationTab.Scanner -> ScannerRoute
         NavigationTab.Favorites -> FavouritesRoute
-        NavigationTab.More -> HomeRoute
+        NavigationTab.More -> MoreRoute
     }
 }
