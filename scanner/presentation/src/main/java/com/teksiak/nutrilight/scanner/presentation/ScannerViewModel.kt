@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.scanner.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository

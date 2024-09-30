@@ -3,4 +3,15 @@
     <string name="nutrilight">Nutrilight</string>
     <string name="shining_light">Shining a light on what You eat</string>
     <string name="logo">Logo</string>
+    <string name="france">France</string>
+    <string name="spain">Spain</string>
+    <string name="poland">Poland</string>
+    <string name="italy">Italy</string>
+    <string name="germany">Germany</string>
+    <string name="select_country">Select your country</string>
+    <string name="app_settings">App Settings</string>
+    <string name="your_country">Your country</string>
+    <string name="show_explaination">Show explaination</string>
+    <string name="show_product_images">Show product images</string>
+    <string name="country_explanation">The country is used to filter searched products. It ensures that the search results will be as close to your expectations as they can.</string>
 </resources>

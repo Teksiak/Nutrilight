@@ -45,6 +45,11 @@ fun NutrilightDialog(
     bottomText: String? = null,
     onBackPressed: (() -> Unit)? = null
 ) {
+    BackHandler(enabled = onBackPressed != null) {
+        onDismiss()
+        onBackPressed?.invoke()
+    }
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -52,11 +57,6 @@ fun NutrilightDialog(
             dismissOnBackPress = onBackPressed != null || isDismissible
         )
     ) {
-        BackHandler(enabled = onBackPressed != null) {
-            onDismiss()
-            onBackPressed?.invoke()
-        }
-
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(16.dp))
