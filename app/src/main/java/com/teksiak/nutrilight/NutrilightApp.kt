@@ -6,8 +6,4 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
 @HiltAndroidApp
-class NutrilightApp: Application() {
-
-    val applicationScope = CoroutineScope(SupervisorJob())
-
-}
+class NutrilightApp: Application() { }

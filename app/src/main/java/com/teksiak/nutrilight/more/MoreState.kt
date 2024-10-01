@@ -7,4 +7,5 @@ data class MoreState(
     val showCountrySelectDialog: Boolean = false,
     val showCountryExplanation: Boolean = false,
     val showProductImages: Boolean = true,
+    val areSettingsLoaded: Boolean = false
 )

@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
 
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(projects.core.domain)
 
     testImplementation(libs.junit5.api)

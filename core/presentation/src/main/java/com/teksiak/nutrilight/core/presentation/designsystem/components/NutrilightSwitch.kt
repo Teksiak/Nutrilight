@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +32,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.Secondary
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
@@ -38,26 +42,34 @@ fun NutrilightSwitch(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var composed by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        launch {
+            delay(1000)
+            composed = true
+        }
+    }
 
     val thumbColor by animateColorAsState(
         if (checked) Secondary else ShadedWhite,
         animationSpec = tween(
-            durationMillis = 300,
+            durationMillis = if(composed) 300 else 0,
             easing = FastOutSlowInEasing
         )
     )
     val trackColor by animateColorAsState(
         if (checked) Primary else Silver,
         animationSpec = tween(
-            durationMillis = 200,
-            delayMillis = 100,
+            durationMillis = if(composed) 200 else 0,
+            delayMillis = if(composed) 100 else 0,
             easing = FastOutSlowInEasing
         )
     )
     val thumbOffset by animateFloatAsState(
         if (checked) 1f else 0f,
         animationSpec = tween(
-            durationMillis = 300,
+            durationMillis = if(composed) 300 else 0,
             easing = FastOutSlowInEasing
         )
     )

@@ -2,22 +2,17 @@ package com.teksiak.nutrilight.more
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -123,6 +118,7 @@ private fun HomeScreen(
         currentTab = NavigationTab.More,
         onTabSelected = navigateWithTab
     ) { innerPadding ->
+        if(!state.areSettingsLoaded) return@NutrilightScaffold
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -148,12 +144,12 @@ private fun AppSettings(
     Column(
         modifier = modifier
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = stringResource(R.string.app_settings),
             style = MaterialTheme.typography.titleMedium
         )
+        Spacer(modifier = Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -169,7 +165,7 @@ private fun AppSettings(
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onTap = {
-                                onAction(MoreAction.ShowCountryExplanation)
+                                onAction(MoreAction.ToggleCountryExplanation)
                             }
                         )
                     },
@@ -184,11 +180,12 @@ private fun AppSettings(
                 }
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
         AnimatedVisibility(
             visible = state.showCountryExplanation,
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                 text = stringResource(R.string.country_explanation),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Silver

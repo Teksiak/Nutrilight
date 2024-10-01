@@ -130,7 +130,7 @@ fun NavigationRoot(
         }
         composable<MoreRoute> {
             MoreScreenRoot(
-                viewModel = viewModel<MoreViewModel>(),
+                viewModel = hiltViewModel<MoreViewModel>(viewModelStoreOwner),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
