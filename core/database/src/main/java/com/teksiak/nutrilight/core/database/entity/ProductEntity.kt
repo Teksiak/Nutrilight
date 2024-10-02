@@ -12,6 +12,7 @@ data class ProductEntity(
     val name: String,
     val brands: String?,
     val fullImageUrl: String?,
+    val smallImageUrl: String?,
     val quantity: String?,
     val packaging: String?,
     val novaGroup: NovaGroup?,

@@ -46,7 +46,7 @@ fun NutrilightSwitch(
 
     LaunchedEffect(Unit) {
         launch {
-            delay(1000)
+            delay(100)
             composed = true
         }
     }

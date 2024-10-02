@@ -3,6 +3,7 @@ package com.teksiak.nutrilight.product.presentation.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository
+import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val productsRepository: ProductsRepository
+    private val productsRepository: ProductsRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HistoryState())
@@ -25,16 +27,7 @@ class HistoryViewModel @Inject constructor(
 
     init {
         _state.update { it.copy(isLoading = true) }
-        productsRepository.getProductsHistory()
-            .onEach { products ->
-                _state.update { state ->
-                    state.copy(
-                        favouriteProducts = products.map { it.toProductUi() },
-                        isLoading = false
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
+        loadProducts()
     }
 
     fun onAction(action: HistoryAction) {
@@ -64,6 +57,22 @@ class HistoryViewModel @Inject constructor(
             }
             else -> Unit
         }
+    }
+
+    private fun loadProducts() {
+        productsRepository.getProductsHistory()
+            .combine(settingsRepository.getShowProductImages()) { products, showImages ->
+                products.map { it.toProductUi(showImages) }
+            }
+            .onEach { products ->
+                _state.update { state ->
+                    state.copy(
+                        favouriteProducts = products,
+                        isLoading = false
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
 }

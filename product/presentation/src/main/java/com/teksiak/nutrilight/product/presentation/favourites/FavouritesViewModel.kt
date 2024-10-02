@@ -1,13 +1,16 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 package com.teksiak.nutrilight.product.presentation.favourites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository
+import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -17,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val productsRepository: ProductsRepository
+    private val productsRepository: ProductsRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(FavouritesState())
@@ -25,23 +29,7 @@ class FavouritesViewModel @Inject constructor(
 
     init {
         _state.update { it.copy(isLoading = true) }
-        productsRepository.getFavouriteProducts().combine(
-            _state.map { it.searchQuery }
-        ) { products, searchQuery ->
-            products.filter {
-                it.name.contains(searchQuery, ignoreCase = true)
-                        || it.brands?.contains(searchQuery, ignoreCase = true) == true
-            }
-        }
-            .onEach { products ->
-                _state.update { state ->
-                    state.copy(
-                        favouriteProducts = products.map { it.toProductUi() },
-                        isLoading = false
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
+        loadProducts()
     }
 
     fun onAction(action: FavouritesAction) {
@@ -77,6 +65,29 @@ class FavouritesViewModel @Inject constructor(
 
             else -> Unit
         }
+    }
+
+    private fun loadProducts() {
+        _state.map { it.searchQuery }
+            .flatMapLatest { searchQuery ->
+                productsRepository.getFavouriteProducts().combine(settingsRepository.getShowProductImages()) { products, showImages ->
+                    products
+                        .filter {
+                            it.name.contains(searchQuery, ignoreCase = true)
+                                    || it.brands?.contains(searchQuery, ignoreCase = true) == true
+                        }
+                        .map { it.toProductUi(showImages) }
+                }
+            }
+            .onEach { products ->
+                _state.update { state ->
+                    state.copy(
+                        favouriteProducts = products,
+                        isLoading = false
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
 }

@@ -13,7 +13,7 @@ fun RemoteProductDto.toProduct() = Product(
     code = code,
     name = product!!.productName ?: "",
     fullImageUrl = product.selectedImages.toFullImageUrl(),
-    smallImageUrl = product.selectedImages.toThumbImageUrl(),
+    smallImageUrl = product.selectedImages.toSmallImageUrl(),
     brands = product.brands,
     quantity = product.quantity,
     packaging = product.packaging.removeLanguage(),
@@ -32,7 +32,7 @@ private fun RemoteSelectedImages?.toFullImageUrl(): String? {
     }
 }
 
-private fun RemoteSelectedImages?.toThumbImageUrl(): String? {
+private fun RemoteSelectedImages?.toSmallImageUrl(): String? {
     if (this == null) return null
     return front?.small?.run {
         pl ?: en ?: de ?: fr ?: es ?: it

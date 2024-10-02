@@ -4,21 +4,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -30,12 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
@@ -46,29 +35,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.SubcomposeAsyncImage
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
-import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScore
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductImage
 import com.teksiak.nutrilight.core.presentation.product.toProductUi
-import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
-import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.core.presentation.util.topBorder
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.product.presentation.product_details.components.NovaGroup
+import com.teksiak.nutrilight.product.presentation.product_details.components.NutrientContent
 import com.teksiak.nutrilight.product.presentation.product_details.components.NutritionFacts
+import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 import eu.wewox.textflow.material3.TextFlow
 import eu.wewox.textflow.material3.TextFlowObstacleAlignment
 import kotlinx.serialization.Serializable
@@ -138,7 +124,7 @@ private fun ProductDetailsScreen(
                         modifier = Modifier.weight(1f)
                     )
                     ProductImage(
-                        imageUrl = productUi.fullImageUrl,
+                        imageUrl = if(productUi.showImage) productUi.fullImageUrl else null,
                         modifier = Modifier
                             .sizeIn(maxWidth = 164.dp, maxHeight = 164.dp, minWidth = 164.dp, minHeight = 164.dp)
                             .then(

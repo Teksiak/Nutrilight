@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,17 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
@@ -61,7 +56,7 @@ fun ProductCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ProductImage(
-            imageUrl = productUi.fullImageUrl,
+            imageUrl = if(productUi.showImage) productUi.smallImageUrl else null,
             modifier = Modifier
                 .sizeIn(maxWidth = 72.dp, minWidth = 72.dp, maxHeight = 72.dp, minHeight = 72.dp)
                 .wrapContentSize()

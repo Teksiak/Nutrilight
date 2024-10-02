@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "38e6ca85c9fd2b8c8d6f3dbb558b84ad",
+    "identityHash": "b6ccb3695fc79c4638ddc9ea8a1bf4c1",
     "entities": [
       {
         "tableName": "Products",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `name` TEXT NOT NULL, `brands` TEXT, `fullImageUrl` TEXT, `quantity` TEXT, `packaging` TEXT, `novaGroup` TEXT, `score` REAL, `allergens` TEXT, `ingredients` TEXT NOT NULL, `isFavourite` INTEGER NOT NULL, `energyKj` REAL, `energyKcal` REAL, `fat` REAL, `saturatedFat` REAL, `carbohydrates` REAL, `sugars` REAL, `fiber` REAL, `protein` REAL, `salt` REAL, PRIMARY KEY(`code`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `name` TEXT NOT NULL, `brands` TEXT, `fullImageUrl` TEXT, `smallImageUrl` TEXT, `quantity` TEXT, `packaging` TEXT, `novaGroup` TEXT, `score` REAL, `allergens` TEXT, `ingredients` TEXT NOT NULL, `isFavourite` INTEGER NOT NULL, `energyKj` REAL, `energyKcal` REAL, `fat` REAL, `saturatedFat` REAL, `carbohydrates` REAL, `sugars` REAL, `fiber` REAL, `protein` REAL, `salt` REAL, PRIMARY KEY(`code`))",
         "fields": [
           {
             "fieldPath": "code",
@@ -29,6 +29,12 @@
           {
             "fieldPath": "fullImageUrl",
             "columnName": "fullImageUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "smallImageUrl",
+            "columnName": "smallImageUrl",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -180,7 +186,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38e6ca85c9fd2b8c8d6f3dbb558b84ad')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6ccb3695fc79c4638ddc9ea8a1bf4c1')"
     ]
   }
 }

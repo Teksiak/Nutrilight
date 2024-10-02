@@ -17,10 +17,11 @@ data class ProductUi(
     val allergens: String?,
     val ingredients: String,
     val ingredientsAmount: Int,
-    val isFavourite: Boolean
+    val isFavourite: Boolean,
+    val showImage: Boolean
 )
 
-fun Product.toProductUi() = ProductUi(
+fun Product.toProductUi(showImage: Boolean = true) = ProductUi(
     code = code,
     name = name.formatName(brands, quantity, packaging),
     fullImageUrl = fullImageUrl,
@@ -34,7 +35,8 @@ fun Product.toProductUi() = ProductUi(
     allergens = allergens?.replaceFirstChar { it.uppercase() },
     ingredients = ingredients.joinToString(", "),
     ingredientsAmount = ingredients.filter { it.isNotBlank() }.size,
-    isFavourite = isFavourite ?: false
+    isFavourite = isFavourite ?: false,
+    showImage = showImage
 )
 
 private fun String?.formatName(brands: String?, quantity: String?, packaging: String?): String {
