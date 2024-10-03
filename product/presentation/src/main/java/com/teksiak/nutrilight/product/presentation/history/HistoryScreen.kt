@@ -45,6 +45,7 @@ fun HistoryScreenRoot(
     navigateWithTab: (NavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    viewModel.productsHistory.collectAsStateWithLifecycle()
 
     BackHandler {
         onNavigateBack()
@@ -107,7 +108,7 @@ private fun HistoryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            productsList = state.favouriteProducts,
+            productsList = state.productsHistory,
             onFavouriteToggle = { onAction(HistoryAction.ToggleFavourite(it)) },
             onNavigateToProduct = { onAction(HistoryAction.NavigateToProduct(it)) },
             emptyInformationText = if(!state.isLoading) buildAnnotatedString {
@@ -138,7 +139,7 @@ private fun FavouritesScreenPreview() {
         HistoryScreen(
             state = HistoryState()
                 .copy(
-                    favouriteProducts = listOf(
+                    productsHistory = listOf(
                         DummyProduct.toProductUi().copy(isFavourite = true),
                         DummyProduct.toProductUi().copy(isFavourite = true),
                     )

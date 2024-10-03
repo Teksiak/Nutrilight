@@ -67,6 +67,7 @@ fun FavouritesScreenRoot(
     navigateWithTab: (NavigationTab) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    viewModel.favouriteProducts.collectAsStateWithLifecycle()
 
     BackHandler {
         if(state.isSearchActive) {
