@@ -225,7 +225,7 @@ private fun FavouritesScreen(
                 }
             }
         },
-        currentTab = NavigationTab.Favorites,
+        currentTab = NavigationTab.Favourites,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         ProductsList(

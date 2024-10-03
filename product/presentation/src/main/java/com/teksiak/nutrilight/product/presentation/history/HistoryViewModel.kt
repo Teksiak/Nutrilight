@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -46,7 +48,6 @@ class HistoryViewModel @Inject constructor(
 
     init {
         _state.update { it.copy(isLoading = true) }
-        loadProducts()
     }
 
     fun onAction(action: HistoryAction) {
@@ -80,21 +81,4 @@ class HistoryViewModel @Inject constructor(
             else -> Unit
         }
     }
-
-    private fun loadProducts() {
-        productsRepository.getProductsHistory()
-            .combine(settingsRepository.getShowProductImages()) { products, showImages ->
-                products.map { it.toProductUi(showImages) }
-            }
-            .onEach { products ->
-                _state.update { state ->
-                    state.copy(
-                        productsHistory = products,
-                        isLoading = false
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
 }

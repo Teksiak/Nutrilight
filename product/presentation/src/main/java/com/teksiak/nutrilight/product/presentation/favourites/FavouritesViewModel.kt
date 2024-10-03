@@ -58,7 +58,6 @@ class FavouritesViewModel @Inject constructor(
 
     init {
         _state.update { it.copy(isLoading = true) }
-        loadProducts()
     }
 
     fun onAction(action: FavouritesAction) {
@@ -95,32 +94,4 @@ class FavouritesViewModel @Inject constructor(
             else -> Unit
         }
     }
-
-    private fun loadProducts() {
-        _state.map { it.searchQuery }
-            .flatMapLatest { searchQuery ->
-                productsRepository.getFavouriteProducts()
-                    .combine(settingsRepository.getShowProductImages()) { products, showImages ->
-                        products
-                            .filter {
-                                it.name.contains(searchQuery, ignoreCase = true)
-                                        || it.brands?.contains(
-                                    searchQuery,
-                                    ignoreCase = true
-                                ) == true
-                            }
-                            .map { it.toProductUi(showImages) }
-                    }
-            }
-            .onEach { products ->
-                _state.update { state ->
-                    state.copy(
-                        favouriteProducts = products,
-                        isLoading = false
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
 }

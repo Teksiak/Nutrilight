@@ -47,6 +47,7 @@ fun HistoryScreenRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.productsHistory.collectAsStateWithLifecycle()
 
+
     BackHandler {
         onNavigateBack()
     }

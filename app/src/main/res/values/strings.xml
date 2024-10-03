@@ -14,4 +14,7 @@
     <string name="show_explaination">Show explaination</string>
     <string name="show_product_images">Show product images</string>
     <string name="country_explanation">The country is used to filter searched products. It ensures that the search results will be as close to your expectations as they can.</string>
+    <string name="see_more">See more</string>
+    <string name="products_history">Products History</string>
+    <string name="favourite_products">Favourite Products</string>
 </resources>

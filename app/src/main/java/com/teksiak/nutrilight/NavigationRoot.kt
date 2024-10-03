@@ -55,6 +55,9 @@ fun NavigationRoot(
                 onNavigateBack = {
                     closeApp()
                 },
+                onNavigateToProduct = { productId ->
+                    navController.navigate(ProductDetailsRoute(productId))
+                },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
                         launchSingleTop = true
@@ -149,7 +152,7 @@ private fun NavigationTab.toRoute(): Any {
         NavigationTab.Home -> HomeRoute
         NavigationTab.History -> HistoryRoute
         NavigationTab.Scanner -> ScannerRoute
-        NavigationTab.Favorites -> FavouritesRoute
+        NavigationTab.Favourites -> FavouritesRoute
         NavigationTab.More -> MoreRoute
     }
 }

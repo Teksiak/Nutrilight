@@ -4,7 +4,7 @@ enum class NavigationTab {
     Home,
     History,
     Scanner,
-    Favorites,
+    Favourites,
     More
 }
 
@@ -13,7 +13,7 @@ fun NavigationTab.getIcon(): Int {
         NavigationTab.Home -> R.drawable.home
         NavigationTab.History -> R.drawable.history
         NavigationTab.Scanner -> R.drawable.scan_bar
-        NavigationTab.Favorites -> R.drawable.hearts
+        NavigationTab.Favourites -> R.drawable.hearts
         NavigationTab.More -> R.drawable.more
     }
 }
