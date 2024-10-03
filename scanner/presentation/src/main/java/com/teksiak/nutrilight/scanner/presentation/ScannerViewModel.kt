@@ -37,34 +37,7 @@ class ScannerViewModel @Inject constructor(
                     )
                 }
                 viewModelScope.launch(Dispatchers.IO) {
-                    when(val result = productsRepository.scanProduct(action.barcode)) {
-                        is Result.Success -> {
-                            withContext(Dispatchers.Main.immediate) {
-                                _state.update { state ->
-                                    state.copy(
-                                        isLoading = false,
-                                    )
-                                }
-                            }
-                            launch(Dispatchers.Main) {
-                                eventChannel.send(ScannerEvent.ProductFound(action.barcode))
-                            }
-                        }
-                        is Result.Error -> {
-                            val productNotFound = result.error == DataError.Remote.PRODUCT_NOT_FOUND
-                            withContext(Dispatchers.Main) {
-                                _state.update { state ->
-                                    state.copy(
-                                        isLoading = false,
-                                        shouldProcessImage = false,
-                                        scannedId = action.barcode,
-                                        productNotFound = productNotFound,
-                                        scannerError = !productNotFound
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    onProductScanned(action.barcode)
                 }
             }
             is ScannerAction.ScannerError -> {
@@ -110,6 +83,37 @@ class ScannerViewModel @Inject constructor(
                 }
             }
             else -> Unit
+        }
+    }
+
+    private suspend fun onProductScanned(barcode: String) {
+        when(val result = productsRepository.scanProduct(barcode)) {
+            is Result.Success -> {
+                withContext(Dispatchers.Main.immediate) {
+                    _state.update { state ->
+                        state.copy(
+                            isLoading = false,
+                        )
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    eventChannel.send(ScannerEvent.ProductFound(barcode))
+                }
+            }
+            is Result.Error -> {
+                val productNotFound = result.error == DataError.Remote.PRODUCT_NOT_FOUND
+                withContext(Dispatchers.Main) {
+                    _state.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            shouldProcessImage = false,
+                            scannedId = barcode,
+                            productNotFound = productNotFound,
+                            scannerError = !productNotFound
+                        )
+                    }
+                }
+            }
         }
     }
 }

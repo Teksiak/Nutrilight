@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.teksiak.nutrilight.core.database
 
 import android.database.sqlite.SQLiteFullException
@@ -9,6 +11,7 @@ import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.EmptyResult
 import com.teksiak.nutrilight.core.domain.util.Result
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
@@ -40,10 +43,13 @@ class RoomLocalProductsDataSource @Inject constructor(
 
     override fun getProductsHistory(): Flow<List<Product>> {
         return productsDao.getProductsHistory()
-            .combine(productsDao.getProducts()) { history, products ->
-                history.mapNotNull { code ->
-                    products.find { it.code == code }?.toProduct()
-                }
+            .flatMapLatest { history ->
+                productsDao.getProducts()
+                    .map { productsList ->
+                        history.mapNotNull { code ->
+                            productsList.find { it.code == code }?.toProduct()
+                        }
+                    }
             }
     }
 

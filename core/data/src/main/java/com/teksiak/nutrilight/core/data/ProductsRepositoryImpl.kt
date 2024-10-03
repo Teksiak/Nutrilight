@@ -25,7 +25,10 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun scanProduct(barcode: String): EmptyResult<DataError.Remote> {
         return when (val result = fetchProduct(barcode)) {
-            is Result.Error -> result.asEmptyDataResult()
+            is Result.Error -> {
+                Log.d("ProductsRepositoryImpl", "error: ${result.error}")
+                result.asEmptyDataResult()
+            }
             is Result.Success -> {
                 Log.d("ProductsRepositoryImpl", "scanProduct: ${result.data}")
                 applicationScope.launch {
