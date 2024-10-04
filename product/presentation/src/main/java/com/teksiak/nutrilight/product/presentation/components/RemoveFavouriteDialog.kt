@@ -16,7 +16,6 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.product.presentation.R
-import com.teksiak.nutrilight.product.presentation.history.HistoryAction
 
 @Composable
 fun RemoveFavouriteDialog(
