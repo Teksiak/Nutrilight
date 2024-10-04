@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -50,8 +51,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
 
-    implementation(projects.core.domain)
+    implementation(libs.kotlinx.serialization)
 
+    implementation(projects.core.domain)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

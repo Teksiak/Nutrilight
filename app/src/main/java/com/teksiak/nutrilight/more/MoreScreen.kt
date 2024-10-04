@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
-import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.HelpCircleIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
@@ -37,16 +37,12 @@ import com.teksiak.nutrilight.core.presentation.util.bottomBorder
 import com.teksiak.nutrilight.more.components.CountryDialog
 import com.teksiak.nutrilight.more.components.CountrySelect
 import com.teksiak.nutrilight.more.util.toCountryUi
-import kotlinx.serialization.Serializable
-
-@Serializable
-object MoreRoute
 
 @Composable
 fun MoreScreenRoot(
     viewModel: MoreViewModel,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -70,7 +66,7 @@ fun MoreScreenRoot(
 private fun HomeScreen(
     state: MoreState,
     onAction: (MoreAction) -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
     if(state.showCountrySelectDialog) {
         CountryDialog(
@@ -115,7 +111,7 @@ private fun HomeScreen(
                 )
             }
         },
-        currentTab = NavigationTab.More,
+        currentTab = BottomNavigationTab.More,
         onTabSelected = navigateWithTab
     ) { innerPadding ->
         if(!state.areSettingsLoaded) return@NutrilightScaffold

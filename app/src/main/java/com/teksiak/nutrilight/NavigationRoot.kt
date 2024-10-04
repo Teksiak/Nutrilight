@@ -1,31 +1,33 @@
 package com.teksiak.nutrilight
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.teksiak.nutrilight.core.presentation.NavigationTab
-import com.teksiak.nutrilight.home.HomeRoute
+import com.teksiak.nutrilight.core.presentation.NavigationRoute
+import com.teksiak.nutrilight.core.presentation.toRoute
 import com.teksiak.nutrilight.home.HomeScreenRoot
 import com.teksiak.nutrilight.home.HomeViewModel
-import com.teksiak.nutrilight.more.MoreRoute
 import com.teksiak.nutrilight.more.MoreScreenRoot
 import com.teksiak.nutrilight.more.MoreViewModel
-import com.teksiak.nutrilight.product.presentation.favourites.FavouritesRoute
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesScreenRoot
 import com.teksiak.nutrilight.product.presentation.favourites.FavouritesViewModel
-import com.teksiak.nutrilight.product.presentation.history.HistoryRoute
 import com.teksiak.nutrilight.product.presentation.history.HistoryScreenRoot
 import com.teksiak.nutrilight.product.presentation.history.HistoryViewModel
-import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsRoute
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsScreenRoot
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsViewModel
-import com.teksiak.nutrilight.scanner.presentation.ScannerRoute
 import com.teksiak.nutrilight.scanner.presentation.ScannerScreenRoot
 import com.teksiak.nutrilight.scanner.presentation.ScannerViewModel
 
@@ -40,23 +42,27 @@ fun NavigationRoot(
 
     NavHost(
         navController = navController,
-        startDestination = HomeRoute,
-        enterTransition = { EnterTransition.None},
-        exitTransition = { ExitTransition.None }
+        startDestination = NavigationRoute.HomeRoute,
+        enterTransition = {
+            fadeIn(animationSpec = tween(400))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(400))
+        }
     ) {
 
-        composable<HomeRoute> {
+        composable<NavigationRoute.HomeRoute> {
 
             HomeScreenRoot(
                 viewModel = viewModel<HomeViewModel>(viewModelStoreOwner),
                 onScanBarcode = {
-                    navController.navigate(ScannerRoute)
+                    navController.navigate(NavigationRoute.ScannerRoute)
                 },
                 onNavigateBack = {
                     closeApp()
                 },
                 onNavigateToProduct = { productId ->
-                    navController.navigate(ProductDetailsRoute(productId))
+                    navController.navigate(NavigationRoute.ProductDetailsRoute(productId))
                 },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
@@ -65,22 +71,48 @@ fun NavigationRoot(
                 }
             )
         }
-        composable<ScannerRoute> {
+        composable<NavigationRoute.ScannerRoute>(
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(300)
+                )
+            }
+        ) {
             ScannerScreenRoot(
                 viewModel = hiltViewModel<ScannerViewModel>(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
                 onNavigateToProduct = { productId ->
-                    navController.navigate(ProductDetailsRoute(productId)) {
-                        popUpTo(ScannerRoute) {
+                    navController.navigate(NavigationRoute.ProductDetailsRoute(productId)) {
+                        popUpTo(NavigationRoute.ScannerRoute) {
                             inclusive = true
                         }
                     }
                 },
             )
         }
-        composable<ProductDetailsRoute> {
+        composable<NavigationRoute.ProductDetailsRoute>(
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                    animationSpec = tween(300)
+                )
+            }
+        ) {
             ProductDetailsScreenRoot(
                 viewModel = hiltViewModel<ProductDetailsViewModel>(),
                 onNavigateBack = {
@@ -88,20 +120,20 @@ fun NavigationRoot(
                 }
             )
         }
-        composable<HistoryRoute> {
+        composable<NavigationRoute.HistoryRoute> {
             HistoryScreenRoot(
                 viewModel = hiltViewModel<HistoryViewModel>(viewModelStoreOwner),
                 onNavigateToProduct = { code ->
-                    navController.navigate(ProductDetailsRoute(code))
+                    navController.navigate(NavigationRoute.ProductDetailsRoute(code))
                 },
                 onNavigateBack = {
-                    navController.navigate(HomeRoute) {
+                    navController.navigate(NavigationRoute.HomeRoute) {
                         launchSingleTop = true
                     }
                 },
                 onSearchProduct = { },
                 onScanBarcode = {
-                    navController.navigate(ScannerRoute)
+                    navController.navigate(NavigationRoute.ScannerRoute)
                 },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
@@ -110,19 +142,19 @@ fun NavigationRoot(
                 }
             )
         }
-        composable<FavouritesRoute> {
+        composable<NavigationRoute.FavouritesRoute> {
             FavouritesScreenRoot(
                 viewModel = hiltViewModel<FavouritesViewModel>(viewModelStoreOwner),
                 onNavigateToProduct = { code ->
-                    navController.navigate(ProductDetailsRoute(code))
+                    navController.navigate(NavigationRoute.ProductDetailsRoute(code))
                 },
                 onNavigateBack = {
-                    navController.navigate(HomeRoute) {
+                    navController.navigate(NavigationRoute.HomeRoute) {
                         launchSingleTop = true
                     }
                 },
                 onScanBarcode = {
-                    navController.navigate(ScannerRoute)
+                    navController.navigate(NavigationRoute.ScannerRoute)
                 },
                 navigateWithTab = { tab ->
                     navController.navigate(tab.toRoute()) {
@@ -131,7 +163,7 @@ fun NavigationRoot(
                 }
             )
         }
-        composable<MoreRoute> {
+        composable<NavigationRoute.MoreRoute> {
             MoreScreenRoot(
                 viewModel = hiltViewModel<MoreViewModel>(viewModelStoreOwner),
                 onNavigateBack = {
@@ -144,15 +176,5 @@ fun NavigationRoot(
                 }
             )
         }
-    }
-}
-
-private fun NavigationTab.toRoute(): Any {
-    return when (this) {
-        NavigationTab.Home -> HomeRoute
-        NavigationTab.History -> HistoryRoute
-        NavigationTab.Scanner -> ScannerRoute
-        NavigationTab.Favourites -> FavouritesRoute
-        NavigationTab.More -> MoreRoute
     }
 }

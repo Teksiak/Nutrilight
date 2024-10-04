@@ -16,7 +16,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
@@ -30,10 +30,6 @@ import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.product.presentation.components.ProductsList
 import com.teksiak.nutrilight.product.presentation.components.RemoveFavouriteDialog
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object HistoryRoute
 
 @Composable
 fun HistoryScreenRoot(
@@ -42,7 +38,7 @@ fun HistoryScreenRoot(
     onSearchProduct: () -> Unit,
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.productsHistory.collectAsStateWithLifecycle()
@@ -72,7 +68,7 @@ fun HistoryScreenRoot(
 private fun HistoryScreen(
     state: HistoryState,
     onAction: (HistoryAction) -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
     state.productToRemove?.let {
         RemoveFavouriteDialog(
@@ -102,7 +98,7 @@ private fun HistoryScreen(
                 }
             )
         },
-        currentTab = NavigationTab.History,
+        currentTab = BottomNavigationTab.History,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         ProductsList(

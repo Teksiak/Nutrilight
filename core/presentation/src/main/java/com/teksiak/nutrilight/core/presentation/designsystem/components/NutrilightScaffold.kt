@@ -1,22 +1,21 @@
 package com.teksiak.nutrilight.core.presentation.designsystem.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 
 @Composable
 fun NutrilightScaffold(
     modifier : Modifier = Modifier,
     topAppBar: @Composable () -> Unit = {},
-    currentTab: NavigationTab? = null,
-    onTabSelected: (NavigationTab) -> Unit = {},
+    currentTab: BottomNavigationTab? = null,
+    onTabSelected: (BottomNavigationTab) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(

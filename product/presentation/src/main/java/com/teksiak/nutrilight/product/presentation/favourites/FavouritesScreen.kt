@@ -35,7 +35,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
@@ -53,10 +53,6 @@ import com.teksiak.nutrilight.core.presentation.util.bottomBorder
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.product.presentation.components.ProductsList
 import com.teksiak.nutrilight.product.presentation.components.RemoveFavouriteDialog
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object FavouritesRoute
 
 @Composable
 fun FavouritesScreenRoot(
@@ -64,7 +60,7 @@ fun FavouritesScreenRoot(
     onNavigateToProduct: (String) -> Unit,
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit,
+    navigateWithTab: (BottomNavigationTab) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.favouriteProducts.collectAsStateWithLifecycle()
@@ -103,7 +99,7 @@ fun FavouritesScreenRoot(
 private fun FavouritesScreen(
     state: FavouritesState,
     onAction: (FavouritesAction) -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
 
     state.productToRemove?.let {
@@ -225,7 +221,7 @@ private fun FavouritesScreen(
                 }
             }
         },
-        currentTab = NavigationTab.Favourites,
+        currentTab = BottomNavigationTab.Favourites,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         ProductsList(

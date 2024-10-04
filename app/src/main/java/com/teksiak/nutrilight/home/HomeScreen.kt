@@ -3,12 +3,7 @@
 package com.teksiak.nutrilight.home
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,19 +31,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
-import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
-import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
-import com.teksiak.nutrilight.home.components.ProductsListShortcut
 import com.teksiak.nutrilight.product.presentation.components.RemoveFavouriteDialog
-import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
-
-@Serializable
-object HomeRoute
 
 @Composable
 fun HomeScreenRoot(
@@ -60,7 +45,7 @@ fun HomeScreenRoot(
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToProduct: (String) -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -76,8 +61,8 @@ fun HomeScreenRoot(
         onAction = { action ->
             when (action) {
                 HomeAction.ScanBarcode -> onScanBarcode()
-                HomeAction.NavigateToProductsHistory -> navigateWithTab(NavigationTab.History)
-                HomeAction.NavigateToFavouriteProducts -> navigateWithTab(NavigationTab.Favourites)
+                HomeAction.NavigateToProductsHistory -> navigateWithTab(BottomNavigationTab.History)
+                HomeAction.NavigateToFavouriteProducts -> navigateWithTab(BottomNavigationTab.Favourites)
                 is HomeAction.NavigateToProduct -> {
                     onNavigateToProduct(action.code)
                 }
@@ -94,7 +79,7 @@ fun HomeScreenRoot(
 private fun HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
     var searchValue by remember { mutableStateOf("") }
 
@@ -146,7 +131,7 @@ private fun HomeScreen(
                 }
             )
         },
-        currentTab = NavigationTab.Home,
+        currentTab = BottomNavigationTab.Home,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         LazyColumn(

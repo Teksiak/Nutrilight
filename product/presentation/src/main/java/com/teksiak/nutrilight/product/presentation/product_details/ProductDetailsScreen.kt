@@ -57,12 +57,6 @@ import com.teksiak.nutrilight.product.presentation.product_details.components.Nu
 import com.teksiak.nutrilight.product.presentation.product_details.components.ProductBasicInformation
 import eu.wewox.textflow.material3.TextFlow
 import eu.wewox.textflow.material3.TextFlowObstacleAlignment
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class ProductDetailsRoute(
-    val productId: String
-)
 
 @Composable
 fun ProductDetailsScreenRoot(
