@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization)
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)

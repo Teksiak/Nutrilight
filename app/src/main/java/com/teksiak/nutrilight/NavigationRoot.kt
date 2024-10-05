@@ -16,6 +16,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import com.teksiak.nutrilight.core.presentation.NavigationRoute
 import com.teksiak.nutrilight.core.presentation.toRoute
 import com.teksiak.nutrilight.home.HomeScreenRoot

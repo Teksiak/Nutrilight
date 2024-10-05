@@ -51,7 +51,6 @@ class BarcodeImageAnalyzer(
                     barcode?.takeIf { it.isNotEmpty() }
                         ?.first()?.rawValue
                         ?.let {
-                            Log.d("BarcodeImageAnalyzer", "Barcode detected: $it")
                             onSuccess(it)
                         }
                 }

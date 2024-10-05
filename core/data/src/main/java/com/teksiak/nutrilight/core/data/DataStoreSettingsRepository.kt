@@ -18,6 +18,7 @@ import com.teksiak.nutrilight.core.domain.util.Result
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -29,8 +30,8 @@ class DataStoreSettingsRepository @Inject constructor(
         name = DATASTORE_NAME
     )
 
-    override fun getShowProductImages(): Flow<Boolean> {
-        return applicationContext.settingsDataStore.data
+    override val showProductImages: Flow<Boolean>
+        get() = applicationContext.settingsDataStore.data
             .catch {
                 if(it is Exception) {
                     emit(emptyPreferences())
@@ -41,10 +42,9 @@ class DataStoreSettingsRepository @Inject constructor(
             .map { preferences ->
                 preferences[SHOW_PRODUCT_IMAGES_KEY] ?: true
             }
-    }
 
-    override fun getCountryCode(): Flow<Country> {
-        return applicationContext.settingsDataStore.data
+    override val countryCode: Flow<Country>
+        get() = applicationContext.settingsDataStore.data
             .catch {
                 if(it is Exception) {
                     emit(emptyPreferences())
@@ -57,7 +57,10 @@ class DataStoreSettingsRepository @Inject constructor(
                     Country.fromCode(it)
                 } ?: Country.POLAND
                 //TODO: Change this to get user country somehow
-            }
+    }
+
+    override suspend fun getCountryCode(): Country {
+        return countryCode.map { it }.first()
     }
 
     override suspend fun toggleShowProductImages(): EmptyResult<DataError.Local> {

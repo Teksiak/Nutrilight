@@ -53,7 +53,7 @@ class ProductDetailsViewModel @Inject constructor(
 
     private fun loadProduct(productId: String) {
         productsRepository.getProduct(productId)
-            .combine(settingsRepository.getShowProductImages()) { product, showImages ->
+            .combine(settingsRepository.showProductImages) { product, showImages ->
                 product?.toProductUi(showImages)
             }
             .onEach {

@@ -70,7 +70,6 @@ fun ScannerScreenRoot(
     ) { event ->
         when(event) {
             is ScannerEvent.ProductFound -> {
-                Log.d("ScannerScreenRoot", "Product found: ${event.productId}")
                 onNavigateToProduct(event.productId)
             }
         }

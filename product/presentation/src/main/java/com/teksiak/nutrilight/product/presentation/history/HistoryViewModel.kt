@@ -26,7 +26,7 @@ class HistoryViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     val productsHistory = productsRepository.getProductsHistory()
-        .combine(settingsRepository.getShowProductImages()) { products, showImages ->
+        .combine(settingsRepository.showProductImages) { products, showImages ->
             products.map { it.toProductUi(showImages) }
         }
         .onEach { products ->

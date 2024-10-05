@@ -21,7 +21,7 @@ class MoreViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        settingsRepository.getCountryCode()
+        settingsRepository.countryCode
             .onEach { country ->
                 _state.update {
                     it.copy(selectedCountry = country, areSettingsLoaded = true)
@@ -29,7 +29,7 @@ class MoreViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        settingsRepository.getShowProductImages()
+        settingsRepository.showProductImages
             .onEach { showProductImages ->
                 _state.update {
                     it.copy(showProductImages = showProductImages, areSettingsLoaded = true)

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -33,7 +32,7 @@ class FavouritesViewModel @Inject constructor(
     val favouriteProducts = _state.map { it.searchQuery }
         .flatMapLatest { searchQuery ->
             productsRepository.getFavouriteProducts()
-                .combine(settingsRepository.getShowProductImages()) { products, showImages ->
+                .combine(settingsRepository.showProductImages) { products, showImages ->
                     products
                         .filter {
                             it.name.contains(searchQuery, ignoreCase = true)

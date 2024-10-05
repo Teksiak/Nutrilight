@@ -5,8 +5,9 @@ import com.teksiak.nutrilight.core.domain.util.EmptyResult
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-    fun getShowProductImages(): Flow<Boolean>
-    fun getCountryCode(): Flow<Country>
+    val showProductImages: Flow<Boolean>
+    val countryCode: Flow<Country>
+    suspend fun getCountryCode(): Country
     suspend fun toggleShowProductImages(): EmptyResult<DataError.Local>
     suspend fun setCountryCode(countryCode: String): EmptyResult<DataError.Local>
 
