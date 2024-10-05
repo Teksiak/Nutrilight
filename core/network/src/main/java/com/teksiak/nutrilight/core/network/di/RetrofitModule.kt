@@ -4,11 +4,13 @@ import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.network.NetworkConstants
 import com.teksiak.nutrilight.core.network.ProductsApiService
 import com.teksiak.nutrilight.core.network.interceptor.BaseUrlInterceptor
 import com.teksiak.nutrilight.core.network.interceptor.UserAgentInterceptor
+import com.teksiak.nutrilight.core.network.util.toBaseUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,7 +60,7 @@ object RetrofitModule {
         okHttpClient: OkHttpClient,
         gson: Gson
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(NetworkConstants.WORLD_BASE_URL)
+        .baseUrl(Country.POLAND.toBaseUrl())
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()

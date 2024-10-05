@@ -1,9 +1,13 @@
-package com.teksiak.nutrilight.core.network
+package com.teksiak.nutrilight.core.network.mapper
 
 import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.domain.product.Nutriments
 import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.domain.product.calculateScore
+import com.teksiak.nutrilight.core.network.dto.RemoteIngredient
+import com.teksiak.nutrilight.core.network.dto.RemoteNutriments
+import com.teksiak.nutrilight.core.network.dto.RemoteProductDto
+import com.teksiak.nutrilight.core.network.dto.RemoteSelectedImages
 
 fun RemoteProductDto.toProduct() = Product(
     code = code,

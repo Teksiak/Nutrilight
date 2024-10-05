@@ -1,6 +1,6 @@
 package com.teksiak.nutrilight.core.data
 
-import com.teksiak.nutrilight.core.network.toProduct
+import com.teksiak.nutrilight.core.network.mapper.toProduct
 import com.teksiak.nutrilight.core.data.util.safeApiCall
 import com.teksiak.nutrilight.core.domain.LocalProductsDataSource
 import com.teksiak.nutrilight.core.domain.ProductsRepository

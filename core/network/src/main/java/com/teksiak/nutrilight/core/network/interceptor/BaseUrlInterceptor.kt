@@ -2,6 +2,7 @@ package com.teksiak.nutrilight.core.network.interceptor
 
 import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
+import com.teksiak.nutrilight.core.network.NetworkConstants
 import com.teksiak.nutrilight.core.network.util.toBaseUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,7 @@ class BaseUrlInterceptor(
     private val settingsRepository: SettingsRepository,
     private val applicationScope: CoroutineScope,
 ): Interceptor {
-    private val baseUrl = MutableStateFlow(Country.POLAND.toBaseUrl())
+    private val baseUrl = MutableStateFlow(NetworkConstants.WORLD_BASE_URL)
 
     init {
         settingsRepository.countryCode
@@ -28,6 +29,8 @@ class BaseUrlInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.newBuilder().apply {
+            if (baseUrl.value == NetworkConstants.WORLD_BASE_URL) return@apply
+
             url(
                 request.url.newBuilder()
                     .host(baseUrl.value.toHttpUrl().host)
