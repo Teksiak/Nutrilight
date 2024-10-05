@@ -1,6 +1,6 @@
-package com.teksiak.nutrilight.core.data
+package com.teksiak.nutrilight.core.network
 
-object Constants {
+object NetworkConstants {
     const val WORLD_BASE_URL = "https://world.openfoodfacts.net/"
     const val POLAND_BASE_URL = "https://pl.openfoodfacts.net/"
     const val FRANCE_BASE_URL = "https://fr.openfoodfacts.net/"

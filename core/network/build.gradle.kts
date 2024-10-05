@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.teksiak.nutrilight.core.data"
+    namespace = "com.teksiak.nutrilight.core.network"
     compileSdk = 34
 
     defaultConfig {
@@ -25,9 +25,7 @@ android {
                 "proguard-rules.pro"
             )
         }
-
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -52,10 +50,7 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
 
-    implementation(libs.androidx.datastore.preferences)
-
     implementation(projects.core.domain)
-    implementation(projects.core.network)
 
     testImplementation(libs.junit5.api)
     testImplementation(libs.junit5.params)

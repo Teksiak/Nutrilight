@@ -4,14 +4,11 @@ package com.teksiak.nutrilight.core.data
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -20,7 +17,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -33,7 +29,7 @@ import java.io.File
 class ProductsApiServiceTest {
 
     private lateinit var gson: Gson
-    private lateinit var apiService: ProductsApiService
+    private lateinit var apiService: com.teksiak.nutrilight.core.network.ProductsApiService
     private lateinit var mockWebServer: MockWebServer
 
     @BeforeAll
@@ -50,7 +46,7 @@ class ProductsApiServiceTest {
             .baseUrl(mockWebServer.url("/"))
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
-            .create(ProductsApiService::class.java)
+            .create(com.teksiak.nutrilight.core.network.ProductsApiService::class.java)
 
         Dispatchers.setMain(UnconfinedTestDispatcher())
     }
@@ -63,7 +59,7 @@ class ProductsApiServiceTest {
 
     @ParameterizedTest
     @MethodSource("apiResponses")
-    fun `test if product is parsed correctly`(apiResponse: String, expectedParsing: RemoteProductDto) = runTest {
+    fun `test if product is parsed correctly`(apiResponse: String, expectedParsing: com.teksiak.nutrilight.core.network.RemoteProductDto) = runTest {
         val mockResponse = File(apiResponse).readText()
         mockWebServer.url("/product/20724696")
         mockWebServer.enqueue(MockResponse().setBody(mockResponse))
@@ -78,16 +74,16 @@ class ProductsApiServiceTest {
         fun apiResponses() = listOf(
             Arguments.of(
                 "src/test/resources/product_complete.json",
-                RemoteProductDto(
+                com.teksiak.nutrilight.core.network.RemoteProductDto(
                     status = 1,
                     code = "20724696",
-                    product = RemoteProduct(
+                    product = com.teksiak.nutrilight.core.network.RemoteProduct(
                         productName = "Californian Almond test",
                         brands = "Alesto,Lidl,Solent",
                         quantity = "200g",
                         packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
                         novaGroup = 1,
-                        nutriments = RemoteNutriments(
+                        nutriments = com.teksiak.nutrilight.core.network.RemoteNutriments(
                             energyKj = 2567f,
                             energyKcal = 621f,
                             fat100g = 53.3f,
@@ -100,7 +96,7 @@ class ProductsApiServiceTest {
                         ),
                         allergens = "en:nuts",
                         ingredients = listOf(
-                            RemoteIngredient(
+                            com.teksiak.nutrilight.core.network.RemoteIngredient(
                                 id = "en:almond",
                                 text = "almonds"
                             )
@@ -112,16 +108,16 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_brands_packaging.json",
-                RemoteProductDto(
+                com.teksiak.nutrilight.core.network.RemoteProductDto(
                     status = 1,
                     code = "20724696",
-                    product = RemoteProduct(
+                    product = com.teksiak.nutrilight.core.network.RemoteProduct(
                         productName = "Californian Almond test",
                         brands = null,
                         quantity = "200g",
                         packaging = null,
                         novaGroup = 1,
-                        nutriments = RemoteNutriments(
+                        nutriments = com.teksiak.nutrilight.core.network.RemoteNutriments(
                             energyKj = 2567f,
                             energyKcal = 621f,
                             fat100g = 53.3f,
@@ -134,7 +130,7 @@ class ProductsApiServiceTest {
                         ),
                         allergens = "en:nuts",
                         ingredients = listOf(
-                            RemoteIngredient(
+                            com.teksiak.nutrilight.core.network.RemoteIngredient(
                                 id = "en:almond",
                                 text = "almonds"
                             )
@@ -146,16 +142,16 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_ingredients_allergens.json",
-                RemoteProductDto(
+                com.teksiak.nutrilight.core.network.RemoteProductDto(
                     status = 1,
                     code = "20724696",
-                    product = RemoteProduct(
+                    product = com.teksiak.nutrilight.core.network.RemoteProduct(
                         productName = "Californian Almond test",
                         brands = "Alesto,Lidl,Solent",
                         quantity = "200g",
                         packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
                         novaGroup = 1,
-                        nutriments = RemoteNutriments(
+                        nutriments = com.teksiak.nutrilight.core.network.RemoteNutriments(
                             energyKj = 2567f,
                             energyKcal = 621f,
                             fat100g = 53.3f,
@@ -175,10 +171,10 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_nutriments.json",
-                RemoteProductDto(
+                com.teksiak.nutrilight.core.network.RemoteProductDto(
                     status = 1,
                     code = "20724696",
-                    product = RemoteProduct(
+                    product = com.teksiak.nutrilight.core.network.RemoteProduct(
                         productName = "Californian Almond test",
                         brands = "Alesto,Lidl,Solent",
                         quantity = "200g",
@@ -187,7 +183,7 @@ class ProductsApiServiceTest {
                         nutriments = null,
                         allergens = "en:nuts",
                         ingredients = listOf(
-                            RemoteIngredient(
+                            com.teksiak.nutrilight.core.network.RemoteIngredient(
                                 id = "en:almond",
                                 text = "almonds"
                             )
@@ -199,10 +195,10 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_nutriments_nova.json",
-                RemoteProductDto(
+                com.teksiak.nutrilight.core.network.RemoteProductDto(
                     status = 1,
                     code = "20724696",
-                    product = RemoteProduct(
+                    product = com.teksiak.nutrilight.core.network.RemoteProduct(
                         productName = "Californian Almond test",
                         brands = "Alesto,Lidl,Solent",
                         quantity = "200g",
@@ -211,7 +207,7 @@ class ProductsApiServiceTest {
                         nutriments = null,
                         allergens = "en:nuts",
                         ingredients = listOf(
-                            RemoteIngredient(
+                            com.teksiak.nutrilight.core.network.RemoteIngredient(
                                 id = "en:almond",
                                 text = "almonds"
                             )
@@ -223,7 +219,7 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/no_product_found.json",
-                RemoteProductDto(
+                com.teksiak.nutrilight.core.network.RemoteProductDto(
                     status = 0,
                     code = "20724696",
                     product = null

@@ -1,14 +1,14 @@
-package com.teksiak.nutrilight.core.data.di
+package com.teksiak.nutrilight.core.network.di
 
 import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.teksiak.nutrilight.core.data.BaseUrlInterceptor
-import com.teksiak.nutrilight.core.data.Constants
-import com.teksiak.nutrilight.core.data.ProductsApiService
-import com.teksiak.nutrilight.core.data.UserAgentInterceptor
 import com.teksiak.nutrilight.core.domain.SettingsRepository
+import com.teksiak.nutrilight.core.network.NetworkConstants
+import com.teksiak.nutrilight.core.network.ProductsApiService
+import com.teksiak.nutrilight.core.network.interceptor.BaseUrlInterceptor
+import com.teksiak.nutrilight.core.network.interceptor.UserAgentInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,9 +24,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
-
-    @Provides
-    fun provideBaseUrl(): String = Constants.WORLD_BASE_URL
 
     @Provides
     @Singleton
@@ -58,16 +55,16 @@ object RetrofitModule {
     @Provides
     @Singleton
     fun provideRetrofit(
-        baseUrl: String,
         okHttpClient: OkHttpClient,
         gson: Gson
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
+        .baseUrl(NetworkConstants.WORLD_BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     @Provides
     @Singleton
-    fun provideProductsApi(retrofit: Retrofit): ProductsApiService = retrofit.create(ProductsApiService::class.java)
+    fun provideProductsApi(retrofit: Retrofit): ProductsApiService = retrofit.create(
+        ProductsApiService::class.java)
 }

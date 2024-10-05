@@ -1,7 +1,8 @@
-package com.teksiak.nutrilight.core.data
+package com.teksiak.nutrilight.core.network.interceptor
 
 import android.content.Context
 import android.content.pm.PackageManager
+import com.teksiak.nutrilight.core.network.NetworkConstants
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -31,7 +32,7 @@ class UserAgentInterceptor(
 
             val applicationName = getApplicationLabel(context.applicationInfo)
 
-            return "$applicationName/$versionName (${Constants.CONTACT_EMAIL})"
+            return "$applicationName/$versionName (${NetworkConstants.CONTACT_EMAIL})"
         }
     }
 

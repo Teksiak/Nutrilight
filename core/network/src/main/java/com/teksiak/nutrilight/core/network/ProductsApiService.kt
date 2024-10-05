@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.core.data
+package com.teksiak.nutrilight.core.network
 
 import retrofit2.Response
 import retrofit2.http.GET

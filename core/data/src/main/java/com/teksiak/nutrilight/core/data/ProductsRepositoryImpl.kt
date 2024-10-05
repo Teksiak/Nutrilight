@@ -1,7 +1,6 @@
 package com.teksiak.nutrilight.core.data
 
-import android.util.Log
-import com.teksiak.nutrilight.core.data.mapper.toProduct
+import com.teksiak.nutrilight.core.network.toProduct
 import com.teksiak.nutrilight.core.data.util.safeApiCall
 import com.teksiak.nutrilight.core.domain.LocalProductsDataSource
 import com.teksiak.nutrilight.core.domain.ProductsRepository
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 
 class ProductsRepositoryImpl @Inject constructor(
-    private val apiService: ProductsApiService,
+    private val apiService: com.teksiak.nutrilight.core.network.ProductsApiService,
     private val localProductsDataSource: LocalProductsDataSource,
     private val applicationScope: CoroutineScope
 ) : ProductsRepository {

@@ -31,7 +31,7 @@ import retrofit2.Response
 class ProductsRepositoryTest {
 
     private lateinit var productsRepository: ProductsRepository
-    private lateinit var apiService: ProductsApiService
+    private lateinit var apiService: com.teksiak.nutrilight.core.network.ProductsApiService
 
     @BeforeAll
     fun setUp() {
@@ -45,12 +45,12 @@ class ProductsRepositoryTest {
 
     @ParameterizedTest
     @MethodSource("successResponses")
-    fun `test getProduct with success apiResponse`(apiResponse: Response<RemoteProductDto>, expectedProduct: Product) = runTest {
-        apiService = object : ProductsApiService {
+    fun `test getProduct with success apiResponse`(apiResponse: Response<com.teksiak.nutrilight.core.network.RemoteProductDto>, expectedProduct: Product) = runTest {
+        apiService = object : com.teksiak.nutrilight.core.network.ProductsApiService {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
-            ): Response<RemoteProductDto> {
+            ): Response<com.teksiak.nutrilight.core.network.RemoteProductDto> {
                 return apiResponse
             }
         }
@@ -67,11 +67,11 @@ class ProductsRepositoryTest {
     @ParameterizedTest
     @MethodSource("errorResponses")
     fun `test getProduct with error apiResponse`(errorCode: Int, expectedError: DataError.Remote) = runTest {
-        apiService = object : ProductsApiService {
+        apiService = object : com.teksiak.nutrilight.core.network.ProductsApiService {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
-            ): Response<RemoteProductDto> {
+            ): Response<com.teksiak.nutrilight.core.network.RemoteProductDto> {
                 return Response.error(errorCode, "".toResponseBody())
             }
         }
@@ -86,16 +86,16 @@ class ProductsRepositoryTest {
 
     @Test
     fun `test getProduct when product is not found`() = runTest {
-        apiService = object : ProductsApiService {
+        apiService = object : com.teksiak.nutrilight.core.network.ProductsApiService {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
-            ): Response<RemoteProductDto> {
+            ): Response<com.teksiak.nutrilight.core.network.RemoteProductDto> {
                 return Response.success(
-                    RemoteProductDto(
+                    com.teksiak.nutrilight.core.network.RemoteProductDto(
                         status = 0,
                         code = "20724696",
-                        product = RemoteProduct(
+                        product = com.teksiak.nutrilight.core.network.RemoteProduct(
                             productName = null,
                             brands = null,
                             quantity = null,
@@ -138,16 +138,16 @@ class ProductsRepositoryTest {
         fun successResponses() =  listOf(
             Arguments.of(
                 Response.success(
-                    RemoteProductDto(
+                    com.teksiak.nutrilight.core.network.RemoteProductDto(
                         status = 1,
                         code = "20724696",
-                        product = RemoteProduct(
+                        product = com.teksiak.nutrilight.core.network.RemoteProduct(
                             productName = "Californian Almond test",
                             brands = "Alesto,Lidl,Solent",
                             quantity = "200g",
                             packaging = "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
                             novaGroup = 1,
-                            nutriments = RemoteNutriments(
+                            nutriments = com.teksiak.nutrilight.core.network.RemoteNutriments(
                                 energyKj = 2567f,
                                 energyKcal = 621f,
                                 fat100g = 53.3f,
@@ -160,7 +160,7 @@ class ProductsRepositoryTest {
                             ),
                             allergens = "en:nuts",
                             ingredients = listOf(
-                                RemoteIngredient(
+                                com.teksiak.nutrilight.core.network.RemoteIngredient(
                                     id = "en:almond",
                                     text = "almonds"
                                 )
@@ -197,10 +197,10 @@ class ProductsRepositoryTest {
             ),
             Arguments.of(
                 Response.success(
-                    RemoteProductDto(
+                    com.teksiak.nutrilight.core.network.RemoteProductDto(
                         status = 1,
                         code = "20724696",
-                        product = RemoteProduct(
+                        product = com.teksiak.nutrilight.core.network.RemoteProduct(
                             productName = "Californian Almond test",
                             brands = "Alesto,Lidl,Solent",
                             quantity = "200g",
@@ -229,10 +229,10 @@ class ProductsRepositoryTest {
             ),
             Arguments.of(
                 Response.success(
-                    RemoteProductDto(
+                    com.teksiak.nutrilight.core.network.RemoteProductDto(
                         status = 1,
                         code = "20724696",
-                        product = RemoteProduct(
+                        product = com.teksiak.nutrilight.core.network.RemoteProduct(
                             productName = "Californian Almond test",
                             brands = "Alesto,Lidl,Solent",
                             quantity = null,

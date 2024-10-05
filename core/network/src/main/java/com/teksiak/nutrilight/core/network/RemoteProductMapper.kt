@@ -1,9 +1,5 @@
-package com.teksiak.nutrilight.core.data.mapper
+package com.teksiak.nutrilight.core.network
 
-import com.teksiak.nutrilight.core.data.RemoteIngredient
-import com.teksiak.nutrilight.core.data.RemoteNutriments
-import com.teksiak.nutrilight.core.data.RemoteProductDto
-import com.teksiak.nutrilight.core.data.RemoteSelectedImages
 import com.teksiak.nutrilight.core.domain.product.NovaGroup
 import com.teksiak.nutrilight.core.domain.product.Nutriments
 import com.teksiak.nutrilight.core.domain.product.Product

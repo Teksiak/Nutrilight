@@ -1,8 +1,8 @@
-package com.teksiak.nutrilight.core.data
+package com.teksiak.nutrilight.core.network.interceptor
 
-import com.teksiak.nutrilight.core.data.util.toBaseUrl
 import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
+import com.teksiak.nutrilight.core.network.util.toBaseUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

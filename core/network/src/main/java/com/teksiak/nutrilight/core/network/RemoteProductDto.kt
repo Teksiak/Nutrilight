@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.core.data
+package com.teksiak.nutrilight.core.network
 
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
