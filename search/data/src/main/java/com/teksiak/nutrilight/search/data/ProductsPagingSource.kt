@@ -15,7 +15,6 @@ class ProductsPagingSource(
     private val searchQuery: String
 ): PagingSource<Int, Product>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
-        Log.d("SEARCH", "load: ${params.key}")
         return try {
             val currentPage = params.key ?: 1
             val result = safeApiCall {
@@ -25,19 +24,23 @@ class ProductsPagingSource(
                 )
             }
             if(result is Result.Success) {
-                Log.d("SEARCH", "success")
                 val pageCount = ceil(result.data.count / ProductsApiService.SEARCH_PAGE_SIZE.toFloat()).toInt()
+                if(pageCount == 0) {
+                    return LoadResult.Page(
+                        data = emptyList(),
+                        prevKey = null,
+                        nextKey = null
+                    )
+                }
                 LoadResult.Page(
                     data = result.data.products.map { it.toProduct() },
                     prevKey = if(currentPage == 1) null else currentPage - 1,
                     nextKey = if(pageCount == currentPage) null else currentPage + 1
                 )
             } else {
-                Log.d("SEARCH", (result as Result.Error).error.name)
                 LoadResult.Error(Exception((result as Result.Error).error.name))
             }
         } catch (e: Exception) {
-            Log.d("SEARCH", e.message ?: "error")
             LoadResult.Error(e)
         }
     }
