@@ -24,13 +24,24 @@ interface ProductsApiService {
         @Query("action") action: String = "process",
     ): Response<SearchResultDto>
 
-    @GET(NetworkConstants.WORLD_BASE_URL + "cgi/search.pl")
+    @GET(WORLD_BASE_URL + "cgi/search.pl")
     suspend fun searchProductsGlobally(
         @Query("search_terms") searchTerms: String,
         @Query("page") page: Int,
-        @Query("page_size") pageSize: Int = 10,
+        @Query("page_size") pageSize: Int = SEARCH_PAGE_SIZE,
         @Query("search_simple") searchSimple: Int = 1,
         @Query("action") action: String = "process",
     ): Response<SearchResultDto>
+
+    companion object {
+        const val WORLD_BASE_URL = "https://world.openfoodfacts.net/"
+        const val POLAND_BASE_URL = "https://pl.openfoodfacts.net/"
+        const val FRANCE_BASE_URL = "https://fr.openfoodfacts.net/"
+        const val GERMANY_BASE_URL = "https://de.openfoodfacts.net/"
+        const val ITALY_BASE_URL = "https://it.openfoodfacts.net/"
+        const val SPAIN_BASE_URL = "https://es.openfoodfacts.net/"
+
+        const val SEARCH_PAGE_SIZE = 15
+    }
 
 }

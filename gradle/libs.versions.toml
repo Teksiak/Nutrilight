@@ -8,8 +8,8 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.2"
-composeBom = "2024.09.02"
-navigation = "2.8.1"
+composeBom = "2024.09.03"
+navigation = "2.8.2"
 jetbrainsKotlinJvm = "2.0.20"
 appcompat = "1.7.0"
 coroutines = "1.8.1"
@@ -24,6 +24,7 @@ coil = "2.7.0"
 textFlow = "1.2.1"
 room = "2.6.1"
 datastore = "1.1.1"
+paging3 = "3.3.2"
 
 junit5 = "5.10.1"
 junit5-plugin = "1.10.0.0"
@@ -53,23 +54,25 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+# CameraX and MLKit
 androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
 androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
-
 mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit" }
 
+# Coil
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 
+# DataStore
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
+# TextFlow
 textflow = { group = "io.github.oleksandrbalan", name = "textflow-material3", version.ref = "textFlow" }
-
-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
-
-kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 # Retrofit and OkHttp
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -87,6 +90,10 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+
+# Paging3
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging3" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging3" }
 
 # Test dependencies
 junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }

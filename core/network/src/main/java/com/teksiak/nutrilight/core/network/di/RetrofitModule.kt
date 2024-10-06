@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
-import com.teksiak.nutrilight.core.network.NetworkConstants
 import com.teksiak.nutrilight.core.network.ProductsApiService
 import com.teksiak.nutrilight.core.network.interceptor.BaseUrlInterceptor
 import com.teksiak.nutrilight.core.network.interceptor.UserAgentInterceptor
