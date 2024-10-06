@@ -21,6 +21,4 @@ interface ProductsRepository {
     suspend fun removeFavorite(code: String): EmptyResult<DataError.Local>
 
     suspend fun removeProduct(code: String, ignoreHistory: Boolean = false): EmptyResult<DataError.Local>
-
-    suspend fun searchProducts(query: String): Result<List<Product>, DataError.Remote>
 }

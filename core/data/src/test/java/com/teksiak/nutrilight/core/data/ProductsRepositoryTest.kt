@@ -14,7 +14,7 @@ import com.teksiak.nutrilight.core.domain.util.Result
 import com.teksiak.nutrilight.core.network.dto.RemoteIngredient
 import com.teksiak.nutrilight.core.network.dto.RemoteNutriments
 import com.teksiak.nutrilight.core.network.dto.RemoteProduct
-import com.teksiak.nutrilight.core.network.dto.RemoteProductDto
+import com.teksiak.nutrilight.core.network.dto.ProductResultDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -49,12 +49,12 @@ class ProductsRepositoryTest {
 
     @ParameterizedTest
     @MethodSource("successResponses")
-    fun `test getProduct with success apiResponse`(apiResponse: Response<RemoteProductDto>, expectedProduct: Product) = runTest {
+    fun `test getProduct with success apiResponse`(apiResponse: Response<ProductResultDto>, expectedProduct: Product) = runTest {
         apiService = object : com.teksiak.nutrilight.core.network.ProductsApiService {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
-            ): Response<RemoteProductDto> {
+            ): Response<ProductResultDto> {
                 return apiResponse
             }
         }
@@ -75,7 +75,7 @@ class ProductsRepositoryTest {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
-            ): Response<RemoteProductDto> {
+            ): Response<ProductResultDto> {
                 return Response.error(errorCode, "".toResponseBody())
             }
         }
@@ -94,9 +94,9 @@ class ProductsRepositoryTest {
             override suspend fun getProduct(
                 barcode: String,
                 fields: String
-            ): Response<RemoteProductDto> {
+            ): Response<ProductResultDto> {
                 return Response.success(
-                    RemoteProductDto(
+                    ProductResultDto(
                         status = 0,
                         code = "20724696",
                         product = RemoteProduct(
@@ -142,7 +142,7 @@ class ProductsRepositoryTest {
         fun successResponses() =  listOf(
             Arguments.of(
                 Response.success(
-                    RemoteProductDto(
+                    ProductResultDto(
                         status = 1,
                         code = "20724696",
                         product = RemoteProduct(
@@ -201,7 +201,7 @@ class ProductsRepositoryTest {
             ),
             Arguments.of(
                 Response.success(
-                    RemoteProductDto(
+                    ProductResultDto(
                         status = 1,
                         code = "20724696",
                         product = RemoteProduct(
@@ -233,7 +233,7 @@ class ProductsRepositoryTest {
             ),
             Arguments.of(
                 Response.success(
-                    RemoteProductDto(
+                    ProductResultDto(
                         status = 1,
                         code = "20724696",
                         product = RemoteProduct(

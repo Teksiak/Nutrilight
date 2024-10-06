@@ -7,6 +7,7 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -57,6 +59,7 @@ fun SearchBar(
     onSearch: (String) -> Unit,
     onClear: () -> Unit,
     onScanBarClick: () -> Unit,
+    onClick: () -> Unit = {},
     focusOnComposition: Boolean = false,
 ) {
     var isSearchFocused by remember { mutableStateOf(false) }
@@ -79,6 +82,9 @@ fun SearchBar(
             onClear = onClear,
             onFocusChanged = { isFocused ->
                 isSearchFocused = isFocused
+                if(isFocused) {
+                    onClick()
+                }
             },
             focusOnComposition = focusOnComposition
         )

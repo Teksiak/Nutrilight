@@ -1,6 +1,7 @@
 package com.teksiak.nutrilight.home
 
 sealed interface HomeAction {
+    data object SearchProducts: HomeAction
     data object ScanBarcode: HomeAction
     data object NavigateToProductsHistory: HomeAction
     data object NavigateToFavouriteProducts: HomeAction

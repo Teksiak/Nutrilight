@@ -36,12 +36,13 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
-import com.teksiak.nutrilight.product.presentation.components.RemoveFavouriteDialog
+import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreenRoot(
     viewModel: HomeViewModel,
+    onSearchProducts: () -> Unit,
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToProduct: (String) -> Unit,
@@ -60,6 +61,7 @@ fun HomeScreenRoot(
         state = state,
         onAction = { action ->
             when (action) {
+                HomeAction.SearchProducts -> onSearchProducts()
                 HomeAction.ScanBarcode -> onScanBarcode()
                 HomeAction.NavigateToProductsHistory -> navigateWithTab(BottomNavigationTab.History)
                 HomeAction.NavigateToFavouriteProducts -> navigateWithTab(BottomNavigationTab.Favourites)
@@ -81,8 +83,6 @@ private fun HomeScreen(
     onAction: (HomeAction) -> Unit,
     navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
-    var searchValue by remember { mutableStateOf("") }
-
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     var heightOffsetLimit by remember {
         mutableFloatStateOf(0f)
@@ -105,13 +105,14 @@ private fun HomeScreen(
             Layout(
                 content = {
                     SearchBar(
-                        searchValue = searchValue,
-                        onSearchValueChange = { searchValue = it },
+                        searchValue = "",
+                        onSearchValueChange = {  },
                         onSearch = { },
-                        onClear = { searchValue = "" },
+                        onClear = { },
                         onScanBarClick = {
                             onAction(HomeAction.ScanBarcode)
                         },
+                        onClick = { onAction(HomeAction.SearchProducts) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp)

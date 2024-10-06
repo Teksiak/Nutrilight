@@ -69,10 +69,16 @@ dependencies {
 
     implementation(projects.core.domain)
     implementation(projects.core.database)
+    implementation(projects.core.network)
     implementation(projects.core.data)
     implementation(projects.core.presentation)
+
     implementation(projects.scanner.presentation)
     implementation(projects.product.presentation)
+
+    implementation(projects.search.data)
+    implementation(projects.search.domain)
+    implementation(projects.search.presentation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

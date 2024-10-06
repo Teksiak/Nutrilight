@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.core.data.util
+package com.teksiak.nutrilight.core.network.util
 
 import com.teksiak.nutrilight.core.domain.util.DataError
 import com.teksiak.nutrilight.core.domain.util.Result

@@ -92,6 +92,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 
 # Paging3
+paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging3" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging3" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging3" }
 

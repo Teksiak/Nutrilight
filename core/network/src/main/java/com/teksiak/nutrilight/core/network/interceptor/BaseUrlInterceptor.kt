@@ -1,8 +1,6 @@
 package com.teksiak.nutrilight.core.network.interceptor
 
-import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
-import com.teksiak.nutrilight.core.network.NetworkConstants
 import com.teksiak.nutrilight.core.network.ProductsApiService
 import com.teksiak.nutrilight.core.network.util.toBaseUrl
 import kotlinx.coroutines.CoroutineScope

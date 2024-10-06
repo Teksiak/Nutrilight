@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="product_image">Product image</string>
+    <string name="oh_no">Oh no…</string>
+    <string name="remove_favourite_confirmation">Are you sure you want to remove this product from your favorites?</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
 </resources>

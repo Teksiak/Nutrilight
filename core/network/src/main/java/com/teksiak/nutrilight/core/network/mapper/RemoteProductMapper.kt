@@ -6,22 +6,25 @@ import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.domain.product.calculateScore
 import com.teksiak.nutrilight.core.network.dto.RemoteIngredient
 import com.teksiak.nutrilight.core.network.dto.RemoteNutriments
-import com.teksiak.nutrilight.core.network.dto.RemoteProductDto
+import com.teksiak.nutrilight.core.network.dto.ProductResultDto
+import com.teksiak.nutrilight.core.network.dto.RemoteProduct
 import com.teksiak.nutrilight.core.network.dto.RemoteSelectedImages
 
-fun RemoteProductDto.toProduct() = Product(
+fun ProductResultDto.toProduct() = product!!.toProduct()
+
+fun RemoteProduct.toProduct() = Product(
     code = code,
-    name = product!!.productName ?: "",
-    fullImageUrl = product.selectedImages.toFullImageUrl(),
-    smallImageUrl = product.selectedImages.toSmallImageUrl(),
-    brands = product.brands,
-    quantity = product.quantity,
-    packaging = product.packaging.removeLanguage(),
-    novaGroup = product.novaGroup.toNovaGroup(),
-    nutriments = product.nutriments.toNutriments(),
-    score = calculateScore(product.nutriscoreScore, product.ecoscoreScore),
-    allergens = product.allergens.removeLanguage(),
-    ingredients = product.ingredients.toIngredients(),
+    name = productName ?: "",
+    fullImageUrl = selectedImages.toFullImageUrl(),
+    smallImageUrl = selectedImages.toSmallImageUrl(),
+    brands = brands,
+    quantity = quantity,
+    packaging = packaging.removeLanguage(),
+    novaGroup = novaGroup.toNovaGroup(),
+    nutriments = nutriments.toNutriments(),
+    score = calculateScore(nutriscoreScore, ecoscoreScore),
+    allergens = allergens.removeLanguage(),
+    ingredients = ingredients.toIngredients(),
 )
 
 // TODO: Get country from user settings and use it to get images

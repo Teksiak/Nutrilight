@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.product.presentation.components
+package com.teksiak.nutrilight.core.presentation.designsystem.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,10 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartXIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
-import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
-import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
-import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
-import com.teksiak.nutrilight.product.presentation.R
+import com.teksiak.nutrilight.core.presentation.R
 
 @Composable
 fun RemoveFavouriteDialog(

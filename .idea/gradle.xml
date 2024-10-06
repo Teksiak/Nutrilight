@@ -20,6 +20,10 @@
             <option value="$PROJECT_DIR$/product/presentation" />
             <option value="$PROJECT_DIR$/scanner" />
             <option value="$PROJECT_DIR$/scanner/presentation" />
+            <option value="$PROJECT_DIR$/search" />
+            <option value="$PROJECT_DIR$/search/data" />
+            <option value="$PROJECT_DIR$/search/domain" />
+            <option value="$PROJECT_DIR$/search/presentation" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

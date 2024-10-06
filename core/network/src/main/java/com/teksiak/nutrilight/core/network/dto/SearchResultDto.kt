@@ -8,6 +8,6 @@ data class SearchResultDto(
     val page: Int,
     val pageCount: Int,
     val pageSize: Int,
-    val products: List<RemoteProductDto>,
+    val products: List<RemoteProduct>,
     val skip: Int
 )

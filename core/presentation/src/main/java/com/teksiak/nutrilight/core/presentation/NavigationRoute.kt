@@ -19,6 +19,9 @@ sealed interface NavigationRoute {
     data object MoreRoute : NavigationRoute
 
     @Serializable
+    data object SearchRoute : NavigationRoute
+
+    @Serializable
     data class ProductDetailsRoute(
         val productId: String
     ): NavigationRoute

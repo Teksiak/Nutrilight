@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RemoteProductDto(
+data class ProductResultDto(
     val code: String,
     val product: RemoteProduct?,
     val status: Int
@@ -12,6 +12,7 @@ data class RemoteProductDto(
 
 @Serializable
 data class RemoteProduct(
+    val code: String,
     val productName: String?,
     val selectedImages: RemoteSelectedImages?,
     val brands: String?,

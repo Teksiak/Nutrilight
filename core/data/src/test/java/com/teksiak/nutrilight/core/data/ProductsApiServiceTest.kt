@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder
 import com.teksiak.nutrilight.core.network.dto.RemoteIngredient
 import com.teksiak.nutrilight.core.network.dto.RemoteNutriments
 import com.teksiak.nutrilight.core.network.dto.RemoteProduct
-import com.teksiak.nutrilight.core.network.dto.RemoteProductDto
+import com.teksiak.nutrilight.core.network.dto.ProductResultDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -63,7 +63,7 @@ class ProductsApiServiceTest {
 
     @ParameterizedTest
     @MethodSource("apiResponses")
-    fun `test if product is parsed correctly`(apiResponse: String, expectedParsing: RemoteProductDto) = runTest {
+    fun `test if product is parsed correctly`(apiResponse: String, expectedParsing: ProductResultDto) = runTest {
         val mockResponse = File(apiResponse).readText()
         mockWebServer.url("/product/20724696")
         mockWebServer.enqueue(MockResponse().setBody(mockResponse))
@@ -78,7 +78,7 @@ class ProductsApiServiceTest {
         fun apiResponses() = listOf(
             Arguments.of(
                 "src/test/resources/product_complete.json",
-                RemoteProductDto(
+                ProductResultDto(
                     status = 1,
                     code = "20724696",
                     product = RemoteProduct(
@@ -112,7 +112,7 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_brands_packaging.json",
-                RemoteProductDto(
+                ProductResultDto(
                     status = 1,
                     code = "20724696",
                     product = RemoteProduct(
@@ -146,7 +146,7 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_ingredients_allergens.json",
-                RemoteProductDto(
+                ProductResultDto(
                     status = 1,
                     code = "20724696",
                     product = RemoteProduct(
@@ -175,7 +175,7 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_nutriments.json",
-                RemoteProductDto(
+                ProductResultDto(
                     status = 1,
                     code = "20724696",
                     product = RemoteProduct(
@@ -199,7 +199,7 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/product_no_nutriments_nova.json",
-                RemoteProductDto(
+                ProductResultDto(
                     status = 1,
                     code = "20724696",
                     product = RemoteProduct(
@@ -223,7 +223,7 @@ class ProductsApiServiceTest {
             ),
             Arguments.of(
                 "src/test/resources/no_product_found.json",
-                RemoteProductDto(
+                ProductResultDto(
                     status = 0,
                     code = "20724696",
                     product = null

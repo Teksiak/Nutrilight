@@ -1,22 +1,16 @@
 package com.teksiak.nutrilight
 
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import com.teksiak.nutrilight.core.presentation.NavigationRoute
 import com.teksiak.nutrilight.core.presentation.toRoute
 import com.teksiak.nutrilight.home.HomeScreenRoot
@@ -31,6 +25,8 @@ import com.teksiak.nutrilight.product.presentation.product_details.ProductDetail
 import com.teksiak.nutrilight.product.presentation.product_details.ProductDetailsViewModel
 import com.teksiak.nutrilight.scanner.presentation.ScannerScreenRoot
 import com.teksiak.nutrilight.scanner.presentation.ScannerViewModel
+import com.teksiak.nutrilight.search.presentation.SearchScreenRoot
+import com.teksiak.nutrilight.search.presentation.SearchViewModel
 
 @Composable
 fun NavigationRoot(
@@ -56,6 +52,9 @@ fun NavigationRoot(
 
             HomeScreenRoot(
                 viewModel = viewModel<HomeViewModel>(viewModelStoreOwner),
+                onSearchProducts = {
+                    navController.navigate(NavigationRoute.SearchRoute)
+                },
                 onScanBarcode = {
                     navController.navigate(NavigationRoute.ScannerRoute)
                 },
@@ -100,6 +99,20 @@ fun NavigationRoot(
                 },
             )
         }
+        composable<NavigationRoute.SearchRoute> {
+            SearchScreenRoot(
+                viewModel = hiltViewModel<SearchViewModel>(),
+                onScanBarcode = {
+                    navController.navigate(NavigationRoute.ScannerRoute)
+                },
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToProduct = { productId ->
+                    navController.navigate(NavigationRoute.ProductDetailsRoute(productId))
+                }
+            )
+        }
         composable<NavigationRoute.ProductDetailsRoute>(
             enterTransition = {
                 slideIntoContainer(
@@ -132,7 +145,9 @@ fun NavigationRoot(
                         launchSingleTop = true
                     }
                 },
-                onSearchProduct = { },
+                onSearchProduct = {
+                    navController.navigate(NavigationRoute.SearchRoute)
+                },
                 onScanBarcode = {
                     navController.navigate(NavigationRoute.ScannerRoute)
                 },

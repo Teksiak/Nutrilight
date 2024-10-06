@@ -1,6 +1,6 @@
 package com.teksiak.nutrilight.core.network
 
-import com.teksiak.nutrilight.core.network.dto.RemoteProductDto
+import com.teksiak.nutrilight.core.network.dto.ProductResultDto
 import com.teksiak.nutrilight.core.network.dto.SearchResultDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -13,15 +13,16 @@ interface ProductsApiService {
     suspend fun getProduct(
         @Path("barcode") barcode: String,
         @Query("fields") fields: String = "code,product_name,brands,nova_group,quantity,ecoscore_score,nutriscore_score,packaging,nutrients,ingredients,nutriments,allergens,selected_images"
-    ): Response<RemoteProductDto>
+    ): Response<ProductResultDto>
 
     @GET("cgi/search.pl")
     suspend fun searchProducts(
         @Query("search_terms") searchTerms: String,
         @Query("page") page: Int,
-        @Query("page_size") pageSize: Int = 10,
+        @Query("page_size") pageSize: Int = SEARCH_PAGE_SIZE,
         @Query("search_simple") searchSimple: Int = 1,
         @Query("action") action: String = "process",
+        @Query("json") json: Int = 1,
     ): Response<SearchResultDto>
 
     @GET(WORLD_BASE_URL + "cgi/search.pl")
@@ -31,6 +32,7 @@ interface ProductsApiService {
         @Query("page_size") pageSize: Int = SEARCH_PAGE_SIZE,
         @Query("search_simple") searchSimple: Int = 1,
         @Query("action") action: String = "process",
+        @Query("json") json: Int = 1,
     ): Response<SearchResultDto>
 
     companion object {

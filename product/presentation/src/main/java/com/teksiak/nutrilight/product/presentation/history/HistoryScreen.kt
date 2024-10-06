@@ -29,7 +29,7 @@ import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.product.presentation.components.ProductsList
-import com.teksiak.nutrilight.product.presentation.components.RemoveFavouriteDialog
+import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 
 @Composable
 fun HistoryScreenRoot(
