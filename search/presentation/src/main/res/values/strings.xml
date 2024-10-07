@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="finding_your_match">Hang tight, we\'re finding your match...</string>
+    <string name="finding_your_match">Hang tight, we’re finding your match…</string>
     <string name="no_recent_matches">No recent matches</string>
     <string name="no_more_recent_matches">No more recent matches</string>
+    <string name="worldwide">Worldwide</string>
+    <string name="search">Search</string>
+    <string name="looks_like_nothing_came_up">Looks like nothing came up.</string>
+    <string name="havent_found_what_youre_looking_for">Haven’t found what you’re looking for?</string>
 </resources>

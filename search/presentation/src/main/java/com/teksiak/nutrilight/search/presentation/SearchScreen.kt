@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +31,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
+import com.teksiak.nutrilight.core.presentation.designsystem.GlobeIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
@@ -154,7 +158,7 @@ private fun SearchScreen(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(
-                        vertical = 24.dp
+                        vertical = 16.dp
                     ),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -179,9 +183,63 @@ private fun SearchScreen(
                                 modifier = Modifier.size(24.dp)
                             )
                         }
+                    } else if(searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0) {
+                        item {
+                            SearchWorldwide(
+                                message = stringResource(id = R.string.havent_found_what_youre_looking_for),
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+                    } else {
+                        item {
+                            SearchWorldwide(
+                                message = stringResource(id = R.string.looks_like_nothing_came_up),
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun SearchWorldwide(
+    message: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Silver
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(id = R.string.search),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Primary
+            )
+            Icon(
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 2.dp)
+                    .size(18.dp),
+                imageVector = GlobeIcon,
+                contentDescription = null,
+                tint = Primary,
+            )
+            Text(
+                text = stringResource(id = R.string.worldwide),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Primary
+            )
         }
     }
 }

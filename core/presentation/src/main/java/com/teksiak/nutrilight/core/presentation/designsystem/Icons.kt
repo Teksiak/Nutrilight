@@ -93,6 +93,10 @@ val XCloseIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.x_close)
 
+val GlobeIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.globe)
+
 
 
 
