@@ -101,7 +101,7 @@ class ScannerViewModel @Inject constructor(
                 }
             }
             is Result.Error -> {
-                val productNotFound = result.error == DataError.Remote.PRODUCT_NOT_FOUND
+                val productNotFound = (result.error == DataError.Remote.PRODUCT_NOT_FOUND)
                 withContext(Dispatchers.Main) {
                     _state.update { state ->
                         state.copy(

@@ -10,6 +10,8 @@ interface ProductsRepository {
 
     suspend fun scanProduct(barcode: String): EmptyResult<DataError.Remote>
 
+    suspend fun addProduct(product: Product): EmptyResult<DataError.Local>
+
     fun getProduct(code: String): Flow<Product?>
 
     fun getFavouriteProducts(): Flow<List<Product>>

@@ -27,6 +27,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
@@ -34,6 +35,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.product.ProductUi
+import com.teksiak.nutrilight.core.presentation.product.toProductUi
 
 @Composable
 fun SearchScreenRoot(
@@ -53,12 +55,12 @@ fun SearchScreenRoot(
         state = state,
         searchedProducts = searchedProducts,
         onAction = { action ->
+            viewModel.onAction(action)
             when (action) {
                 is SearchAction.ScanBarcode -> onScanBarcode()
-                is SearchAction.NavigateToProduct -> onNavigateToProduct(action.productId)
+                is SearchAction.NavigateToProduct -> onNavigateToProduct(action.product.code)
                 else -> Unit
             }
-            viewModel.onAction(action)
         }
     )
 }
@@ -66,7 +68,7 @@ fun SearchScreenRoot(
 @Composable
 private fun SearchScreen(
     state: SearchState,
-    searchedProducts: LazyPagingItems<ProductUi>,
+    searchedProducts: LazyPagingItems<Product>,
     onAction: (SearchAction) -> Unit
 ) {
 
@@ -80,7 +82,7 @@ private fun SearchScreen(
                 onScanBarClick = {
                     onAction(SearchAction.ScanBarcode)
                 },
-                focusOnComposition = true,
+                focusOnComposition = !state.hasSearched,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
@@ -115,8 +117,8 @@ private fun SearchScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .animateItem(),
-                            productUi = product,
-                            onNavigate = { onAction(SearchAction.NavigateToProduct(product.code)) }
+                            productUi = product.toProductUi(showImage = state.showProductImages),
+                            onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
                         )
                     }
                     item {
@@ -166,8 +168,8 @@ private fun SearchScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .animateItem(),
-                                productUi = product,
-                                onNavigate = { onAction(SearchAction.NavigateToProduct(product.code)) }
+                                productUi = product.toProductUi(showImage = state.showProductImages),
+                                onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
                             )
                         }
                     }

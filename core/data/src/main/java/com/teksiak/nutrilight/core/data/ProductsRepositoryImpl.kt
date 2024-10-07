@@ -28,6 +28,7 @@ class ProductsRepositoryImpl @Inject constructor(
             is Result.Error -> {
                 result.asEmptyDataResult()
             }
+
             is Result.Success -> {
                 applicationScope.launch {
                     localProductsDataSource.upsertProduct(result.data).asEmptyDataResult()
@@ -37,26 +38,38 @@ class ProductsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getProduct(code: String): Flow<Product?> {
-        return localProductsDataSource.getProduct(code)
-            .map { product ->
-                product ?: try {
-                    (fetchProduct(code) as Result.Success).data
-                } catch (e: Exception) {
-                    null
-                }
-        }
+    override suspend fun addProduct(product: Product): EmptyResult<DataError.Local> {
+        return localProductsDataSource.upsertProduct(product)
     }
 
-    override fun getFavouriteProducts(): Flow<List<Product>> = localProductsDataSource.getFavouriteProducts()
+    override fun getProduct(code: String): Flow<Product?> {
+        return localProductsDataSource.getProduct(code)
+//            .map { product ->
+//                // If the product is not in the local database, try to fetch it from the remote API
+//                product ?: try {
+//                    (fetchProduct(code) as Result.Success).data
+//                } catch (e: Exception) {
+//                    null
+//                }
+//            }
+    }
 
-    override fun getProductsHistory(): Flow<List<Product>> = localProductsDataSource.getProductsHistory()
+    override fun getFavouriteProducts(): Flow<List<Product>> =
+        localProductsDataSource.getFavouriteProducts()
 
-    override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> = localProductsDataSource.toggleFavourite(code)
+    override fun getProductsHistory(): Flow<List<Product>> =
+        localProductsDataSource.getProductsHistory()
 
-    override suspend fun removeFavorite(code: String): EmptyResult<DataError.Local> = localProductsDataSource.removeFavourite(code)
+    override suspend fun toggleFavourite(code: String): EmptyResult<DataError.Local> =
+        localProductsDataSource.toggleFavourite(code)
 
-    override suspend fun removeProduct(code: String, ignoreHistory: Boolean): EmptyResult<DataError.Local> = localProductsDataSource.removeProduct(code, ignoreHistory)
+    override suspend fun removeFavorite(code: String): EmptyResult<DataError.Local> =
+        localProductsDataSource.removeFavourite(code)
+
+    override suspend fun removeProduct(
+        code: String,
+        ignoreHistory: Boolean
+    ): EmptyResult<DataError.Local> = localProductsDataSource.removeProduct(code, ignoreHistory)
 
     private suspend fun fetchProduct(barcode: String): Result<Product, DataError.Remote> {
         return when (val result = safeApiCall {
