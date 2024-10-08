@@ -25,17 +25,10 @@ class ProductsPagingSource(
             }
             if(result is Result.Success) {
                 val pageCount = ceil(result.data.count / ProductsApiService.SEARCH_PAGE_SIZE.toFloat()).toInt()
-                if(pageCount == 0) {
-                    return LoadResult.Page(
-                        data = emptyList(),
-                        prevKey = null,
-                        nextKey = null
-                    )
-                }
                 LoadResult.Page(
                     data = result.data.products.map { it.toProduct() },
-                    prevKey = if(currentPage == 1) null else currentPage - 1,
-                    nextKey = if(pageCount == currentPage) null else currentPage + 1
+                    prevKey = null,
+                    nextKey = if(pageCount <= currentPage) null else currentPage + 1
                 )
             } else {
                 LoadResult.Error(Exception((result as Result.Error).error.name))
