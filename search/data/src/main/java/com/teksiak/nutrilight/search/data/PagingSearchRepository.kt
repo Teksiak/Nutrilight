@@ -29,7 +29,7 @@ class PagingSearchRepository @Inject constructor(
         get() = searchQuery
             .flatMapLatest { query ->
                 Log.d("SEARCH", "query: $query")
-                if(query.length >= 3 && query.isNotBlank()) {
+                if(query.isNotBlank()) {
                     Pager(
                         config = PagingConfig(
                             pageSize = ProductsApiService.SEARCH_PAGE_SIZE,

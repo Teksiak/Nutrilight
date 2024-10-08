@@ -1,12 +1,14 @@
 package com.teksiak.nutrilight.search.presentation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,6 +39,7 @@ import androidx.paging.compose.itemKey
 import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.GlobeIcon
+import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
@@ -177,10 +185,48 @@ private fun SearchScreen(
                             )
                         }
                     }
-                    if (searchedProducts.loadState.append is LoadState.Loading) {
+                    if(searchedProducts.loadState.hasError) {
+                        item {
+                            Column(
+                                modifier = Modifier.padding(top = 8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Image(
+                                    modifier = Modifier
+                                        .size(64.dp)
+                                        .alpha(0.1f),
+                                    imageVector = LogoRottenIcon,
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+                                        setToSaturation(
+                                            0f
+                                        )
+                                    })
+                                )
+                                Column(
+                                    modifier = Modifier.padding(horizontal = 24.dp),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.whoops),
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = Silver
+                                    )
+                                    Text(
+                                        text = stringResource(id = R.string.something_went_wrong_with_search),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Silver,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                    } else if (searchedProducts.loadState.append is LoadState.Loading) {
                         item {
                             LoadingAnimation(
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(48.dp).padding(top = 8.dp)
                             )
                         }
                     } else if(searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0) {
@@ -193,8 +239,7 @@ private fun SearchScreen(
                     } else {
                         item {
                             SearchWorldwide(
-                                message = stringResource(id = R.string.looks_like_nothing_came_up),
-                                modifier = Modifier.padding(top = 8.dp)
+                                message = stringResource(id = R.string.looks_like_nothing_came_up)
                             )
                         }
                     }

@@ -226,7 +226,7 @@ private fun ScannerScreen(
                     Icon(
                         modifier = Modifier.size(64.dp),
                         imageVector = LogoRottenIcon,
-                        contentDescription = "Error icon",
+                        contentDescription = null,
                         tint = Color.Unspecified
                     )
                 },
@@ -250,7 +250,7 @@ private fun ScannerScreen(
                     Icon(
                         modifier = Modifier.size(64.dp),
                         imageVector = LogoRottenIcon,
-                        contentDescription = "Error icon",
+                        contentDescription = null,
                         tint = Color.Unspecified
                     )
                 },
