@@ -1,7 +1,6 @@
 package com.teksiak.nutrilight.core.data
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
@@ -91,7 +90,7 @@ class DataStoreSettingsRepository @Inject constructor(
     }
 
     override suspend fun setHistorySize(size: Int): EmptyResult<DataError.Local> {
-        Log.d("DataStoreSettingsRepository", "setHistorySize: $size")
+        // TODO: Use history size when adding products to history with ProductsRepository and correct the history size if it exceeds the current limit
         return safeSettingsChange {
             applicationContext.settingsDataStore.edit { preferences ->
                 preferences[HISTORY_SIZE_KEY] = size

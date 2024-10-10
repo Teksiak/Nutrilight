@@ -38,6 +38,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
+import com.teksiak.nutrilight.core.presentation.product.toProductUi
 import com.teksiak.nutrilight.more.components.VerticalPicker
 import kotlin.math.roundToInt
 
@@ -160,9 +161,9 @@ private fun HomeScreen(
             items(
                 items = state.productsHistory.take(3),
                 key = { it.code + "-his" }
-            ) { productUi ->
+            ) { product ->
                 ProductCard(
-                    productUi = productUi,
+                    productUi = product.toProductUi(state.showProductImages),
                     onFavouriteToggle = { onAction(HomeAction.ToggleFavourite(it)) },
                     onNavigate = { onAction(HomeAction.NavigateToProduct(it)) },
                     modifier = Modifier
@@ -208,9 +209,9 @@ private fun HomeScreen(
             items(
                 items = state.favouriteProducts.take(3),
                 key = { it.code + "-fav" }
-            ) { productUi ->
+            ) { product ->
                 ProductCard(
-                    productUi = productUi,
+                    productUi = product.toProductUi(state.showProductImages),
                     onFavouriteToggle = { onAction(HomeAction.ToggleFavourite(it)) },
                     onNavigate = { onAction(HomeAction.NavigateToProduct(it)) },
                     modifier = Modifier

@@ -228,7 +228,7 @@ private fun FavouritesScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            productsList = state.favouriteProducts,
+            productsList = state.favouriteProducts.map { it.toProductUi(state.showProductImages) },
             onFavouriteToggle = { onAction(FavouritesAction.RemoveFavourite(it)) },
             onNavigateToProduct = { onAction(FavouritesAction.NavigateToProduct(it)) },
             emptyInformationText = if(!state.isLoading) buildAnnotatedString {
@@ -264,8 +264,8 @@ private fun FavouritesScreenPreview() {
             state = FavouritesState()
                 .copy(
                     favouriteProducts = listOf(
-                        DummyProduct.toProductUi().copy(isFavourite = true),
-                        DummyProduct.toProductUi().copy(isFavourite = true),
+                        DummyProduct,
+                        DummyProduct,
                     )
                 ),
             onAction = {},

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,9 +26,6 @@ class HomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     val productsHistory = productsRepository.getProductsHistory()
-        .combine(settingsRepository.showProductImages) { products, showImages ->
-            products.map { it.toProductUi(showImages) }
-        }
         .onEach { products ->
             _state.update { state ->
                 state.copy(
@@ -42,9 +40,6 @@ class HomeViewModel @Inject constructor(
         )
 
     val favouriteProducts = productsRepository.getFavouriteProducts()
-        .combine(settingsRepository.showProductImages) { products, showImages ->
-            products.map { it.toProductUi(showImages) }
-        }
         .onEach { products ->
             _state.update { state ->
                 state.copy(
@@ -58,11 +53,23 @@ class HomeViewModel @Inject constructor(
             _state.value.favouriteProducts
         )
 
+    init {
+        settingsRepository.showProductImages
+            .onEach { showProductImages ->
+                _state.update { state ->
+                    state.copy(
+                        showProductImages = showProductImages
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun onAction(action: HomeAction) {
         when (action) {
             is HomeAction.ToggleFavourite -> {
                 _state.update { state ->
-                    if (!state.productsHistory.first { it.code == action.code }.isFavourite) {
+                    if (state.productsHistory.first { it.code == action.code }.isFavourite != true) {
                         viewModelScope.launch {
                             productsRepository.toggleFavourite(action.code)
                         }

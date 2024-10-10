@@ -105,7 +105,7 @@ private fun HistoryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            productsList = state.productsHistory,
+            productsList = state.productsHistory.map { it.toProductUi(state.showProductImages) },
             onFavouriteToggle = { onAction(HistoryAction.ToggleFavourite(it)) },
             onNavigateToProduct = { onAction(HistoryAction.NavigateToProduct(it)) },
             emptyInformationText = if(!state.isLoading) buildAnnotatedString {
@@ -137,8 +137,8 @@ private fun FavouritesScreenPreview() {
             state = HistoryState()
                 .copy(
                     productsHistory = listOf(
-                        DummyProduct.toProductUi().copy(isFavourite = true),
-                        DummyProduct.toProductUi().copy(isFavourite = true),
+                        DummyProduct,
+                        DummyProduct,
                     )
                 ),
             onAction = {},

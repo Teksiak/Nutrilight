@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.SettingsRepository
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
+import com.teksiak.nutrilight.core.domain.product.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -32,16 +33,14 @@ class FavouritesViewModel @Inject constructor(
     val favouriteProducts = _state.map { it.searchQuery }
         .flatMapLatest { searchQuery ->
             productsRepository.getFavouriteProducts()
-                .combine(settingsRepository.showProductImages) { products, showImages ->
-                    products
-                        .filter {
-                            it.name.contains(searchQuery, ignoreCase = true)
-                                    || it.brands?.contains(searchQuery, ignoreCase = true) == true
-                        }
-                        .map { it.toProductUi(showImages) }
+                .mapLatest { products ->
+                    products.filter {
+                        it.name.contains(searchQuery, ignoreCase = true)
+                                || it.brands?.contains(searchQuery, ignoreCase = true) == true
+                    }
                 }
         }
-        .onEach { products ->
+        .onEach { products: List<Product> ->
             _state.update { state ->
                 state.copy(
                     favouriteProducts = products,
@@ -57,6 +56,14 @@ class FavouritesViewModel @Inject constructor(
 
     init {
         _state.update { it.copy(isLoading = true) }
+
+        settingsRepository.showProductImages
+            .onEach { showImages ->
+                _state.update {
+                    it.copy(showProductImages = showImages)
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onAction(action: FavouritesAction) {
