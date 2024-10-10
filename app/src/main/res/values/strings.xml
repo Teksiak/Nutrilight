@@ -17,4 +17,7 @@
     <string name="see_more">See more</string>
     <string name="products_history">Products History</string>
     <string name="favourite_products">Favourite Products</string>
+    <string name="history_size">History size</string>
+    <string name="close_dialog">Close dialog</string>
+    <string name="history_size_description">Number of products you\'d like to keep in your history. A higher choice will allow you to track more past products, but it may use more storage on your device.</string>
 </resources>

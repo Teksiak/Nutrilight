@@ -1,20 +1,14 @@
 package com.teksiak.nutrilight.more.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,17 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.teksiak.nutrilight.R
-import com.teksiak.nutrilight.core.domain.Country
+import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
-import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.XCloseIcon
-import com.teksiak.nutrilight.more.util.toCountryUi
 
 @Composable
-fun CountryDialog(
-    onCountrySelect: (String) -> Unit,
+fun HistorySizeDialog(
+    selectedSizeIndex: Int,
+    onHistorySizeSelect: (Int) -> Unit,
     onDismiss: () -> Unit = {}
 ) {
     Dialog(
@@ -79,36 +72,17 @@ fun CountryDialog(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Country.entries.map { it.toCountryUi() }.forEach { countryUi ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onCountrySelect(countryUi.code)
-                                onDismiss()
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Image(
-                            imageVector = countryUi.flag,
-                            contentDescription = countryUi.name,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(CircleShape)
-                        )
-                        Text(
-                            text = countryUi.name,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                    if (countryUi.code != Country.entries.last().code) {
-                        HorizontalDivider(
-                            color = ShadedWhite,
-                        )
-                    }
-                }
+                VerticalPicker(
+                    items = SettingsRepository.HISTORY_SIZES,
+                    selectedIndex = selectedSizeIndex,
+                    onItemSelected = onHistorySizeSelect
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(
+                    text = stringResource(R.string.history_size_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -116,10 +90,11 @@ fun CountryDialog(
 
 @Preview
 @Composable
-private fun CountryDialogPreview() {
+private fun PreviewCountryDialog() {
     NutrilightTheme {
-        CountryDialog(
-            onCountrySelect = {}
+        HistorySizeDialog(
+            selectedSizeIndex = 5,
+            onHistorySizeSelect = {},
         )
     }
 }

@@ -6,6 +6,7 @@ import com.teksiak.nutrilight.core.domain.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -21,21 +22,26 @@ class MoreViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        settingsRepository.countryCode
-            .onEach { country ->
-                _state.update {
-                    it.copy(selectedCountry = country, areSettingsLoaded = true)
-                }
+        combine(
+            settingsRepository.countryCode,
+            settingsRepository.showProductImages,
+            settingsRepository.historySize,
+        ) { countryCode, showProductImages, historySize ->
+            MoreState(
+                selectedCountry = countryCode,
+                showProductImages = showProductImages,
+                historySize = historySize
+            )
+        }.onEach { settings ->
+            _state.update {
+                it.copy(
+                    selectedCountry = settings.selectedCountry,
+                    showProductImages = settings.showProductImages,
+                    historySize = settings.historySize,
+                    areSettingsLoaded = true
+                )
             }
-            .launchIn(viewModelScope)
-
-        settingsRepository.showProductImages
-            .onEach { showProductImages ->
-                _state.update {
-                    it.copy(showProductImages = showProductImages, areSettingsLoaded = true)
-                }
-            }
-            .launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: MoreAction) {
@@ -49,7 +55,6 @@ class MoreViewModel @Inject constructor(
             }
 
             is MoreAction.SelectCountry -> {
-                // TODO: Implement error ui handling
                 viewModelScope.launch {
                     settingsRepository.setCountryCode(action.code)
                 }
@@ -59,8 +64,21 @@ class MoreViewModel @Inject constructor(
                 _state.update { it.copy(showCountrySelectDialog = false) }
             }
 
+            is MoreAction.ShowHistorySizeDialog -> {
+                _state.update { it.copy(showHistorySizeDialog = true) }
+            }
+
+            is MoreAction.SetHistorySize -> {
+                viewModelScope.launch {
+                    settingsRepository.setHistorySize(action.size)
+                }
+            }
+
+            is MoreAction.HideHistorySizeDialog -> {
+                _state.update { it.copy(showHistorySizeDialog = false) }
+            }
+
             is MoreAction.ToggleProductImages -> {
-                // TODO: Implement error ui handling
                 viewModelScope.launch {
                     settingsRepository.toggleShowProductImages()
                 }

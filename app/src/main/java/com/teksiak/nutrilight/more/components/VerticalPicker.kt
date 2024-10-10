@@ -89,11 +89,6 @@ fun <T> VerticalPicker(
                             minimumValue = 0f,
                             maximumValue = (itemsCount - 1) * itemSize
                         )
-
-                        val selectedItemIndex = (currentOffsetY / itemSize).toInt()
-                        if(selectedItemIndex != selectedIndex) {
-                            onItemSelected(selectedItemIndex)
-                        }
                     },
                     onDragEnd = {
                         val rest = currentOffsetY % itemSize
@@ -202,7 +197,7 @@ fun <T> VerticalPicker(
 
 @Preview(showBackground = true)
 @Composable
-fun VerticalPickerPreview() {
+private fun VerticalPickerPreview() {
     NutrilightTheme {
         VerticalPicker(
             items = listOf(
