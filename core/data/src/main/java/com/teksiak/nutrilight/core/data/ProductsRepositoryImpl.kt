@@ -12,7 +12,6 @@ import com.teksiak.nutrilight.core.domain.util.asEmptyDataResult
 import com.teksiak.nutrilight.core.network.ProductsApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

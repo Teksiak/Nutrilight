@@ -6,11 +6,13 @@ import com.teksiak.nutrilight.core.database.ProductsDatabase
 import com.teksiak.nutrilight.core.database.RoomLocalProductsDataSource
 import com.teksiak.nutrilight.core.database.dao.ProductsDao
 import com.teksiak.nutrilight.core.domain.LocalProductsDataSource
+import com.teksiak.nutrilight.core.domain.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
 @Module
@@ -38,6 +40,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideProductsDataSource(
-        productsDao: ProductsDao
-    ): LocalProductsDataSource = RoomLocalProductsDataSource(productsDao)
+        productsDao: ProductsDao,
+        settingsRepository: SettingsRepository,
+        applicationScope: CoroutineScope
+    ): LocalProductsDataSource = RoomLocalProductsDataSource(productsDao, settingsRepository, applicationScope)
 }

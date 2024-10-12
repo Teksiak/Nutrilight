@@ -15,12 +15,12 @@ interface ProductsDao: HistoryDao {
     suspend fun upsertProduct(product: ProductEntity)
 
     @Transaction
-    suspend fun addProduct(product: ProductEntity) {
+    suspend fun addProduct(product: ProductEntity, historySize: Int = 10) {
         upsertProduct(product)
-        if(getHistoryCount() >= 10) {
+        addToHistory(product.code.asHistoryEntity())
+        if(getHistoryCount() > historySize) {
             deleteLastHistory()
         }
-        addToHistory(product.code.asHistoryEntity())
     }
 
     @Query("SELECT * FROM Products WHERE code = :code")

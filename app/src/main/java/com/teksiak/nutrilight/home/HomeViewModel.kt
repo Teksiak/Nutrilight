@@ -69,7 +69,8 @@ class HomeViewModel @Inject constructor(
         when (action) {
             is HomeAction.ToggleFavourite -> {
                 _state.update { state ->
-                    if (state.productsHistory.first { it.code == action.code }.isFavourite != true) {
+                    val product = state.productsHistory.firstOrNull { it.code == action.code } ?: state.favouriteProducts.first { it.code == action.code }
+                    if (product.isFavourite != true) {
                         viewModelScope.launch {
                             productsRepository.toggleFavourite(action.code)
                         }
