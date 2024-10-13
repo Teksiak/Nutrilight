@@ -25,6 +25,7 @@ fun Country.toCountryUi(): CountryUi {
         Country.ITALY -> R.string.italy to ItalyFlag
         Country.POLAND -> R.string.poland to PolandFlag
         Country.SPAIN -> R.string.spain to SpainFlag
+        Country.UNITED_KINGDOM -> R.string.united_kingdom to FranceFlag
     }
     return CountryUi(
         name = stringResource(nameRes),

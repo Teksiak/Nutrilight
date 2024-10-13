@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.more
 
+import android.content.res.Resources
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
+import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.HelpCircleIcon
@@ -45,6 +48,7 @@ import com.teksiak.nutrilight.more.components.CountryDialog
 import com.teksiak.nutrilight.more.components.CountrySelect
 import com.teksiak.nutrilight.more.components.HistorySizeDialog
 import com.teksiak.nutrilight.more.util.toCountryUi
+import java.util.Locale
 
 @Composable
 fun MoreScreenRoot(
@@ -76,8 +80,17 @@ private fun HomeScreen(
     onAction: (MoreAction) -> Unit,
     navigateWithTab: (BottomNavigationTab) -> Unit
 ) {
+    val suggestedCountries = remember {
+        val locales = Resources.getSystem().configuration.locales
+        (0 until locales.size()).mapNotNull { index ->
+            Country.fromCodeOrNull(locales[index].country)
+        }
+    }
+
     if (state.showCountrySelectDialog) {
         CountryDialog(
+            selectedCountry = state.selectedCountry,
+            suggestedCountries = suggestedCountries,
             onCountrySelect = { country ->
                 onAction(MoreAction.SelectCountry(country))
             },

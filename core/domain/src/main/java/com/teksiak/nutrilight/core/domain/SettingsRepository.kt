@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
     val showProductImages: Flow<Boolean>
-    val countryCode: Flow<Country>
+    val country: Flow<Country>
     val historySize: Flow<Int>
     suspend fun toggleShowProductImages(): EmptyResult<DataError.Local>
-    suspend fun setCountryCode(countryCode: String): EmptyResult<DataError.Local>
+    suspend fun setCountry(countryCode: String): EmptyResult<DataError.Local>
     suspend fun setHistorySize(size: Int): EmptyResult<DataError.Local>
 
     companion object {

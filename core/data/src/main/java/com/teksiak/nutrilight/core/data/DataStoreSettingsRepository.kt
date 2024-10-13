@@ -1,6 +1,7 @@
 package com.teksiak.nutrilight.core.data
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 import javax.inject.Inject
 
 class DataStoreSettingsRepository @Inject constructor(
@@ -44,7 +46,7 @@ class DataStoreSettingsRepository @Inject constructor(
                 preferences[SHOW_PRODUCT_IMAGES_KEY] ?: true
             }
 
-    override val countryCode: Flow<Country>
+    override val country: Flow<Country>
         get() = applicationContext.settingsDataStore.data
             .catch {
                 if(it is Exception) {
@@ -56,8 +58,7 @@ class DataStoreSettingsRepository @Inject constructor(
             .map { preferences ->
                 preferences[COUNTRY_KEY]?.let {
                     Country.fromCode(it)
-                } ?: Country.POLAND
-                //TODO: Change this to get user country somehow
+                } ?: (Country.fromCodeOrNull(Resources.getSystem().configuration.locales[0].country) ?: Country.UNITED_KINGDOM)
     }
 
     override val historySize: Flow<Int>
@@ -81,7 +82,7 @@ class DataStoreSettingsRepository @Inject constructor(
         }
     }
 
-    override suspend fun setCountryCode(countryCode: String): EmptyResult<DataError.Local> {
+    override suspend fun setCountry(countryCode: String): EmptyResult<DataError.Local> {
         return safeSettingsChange {
             applicationContext.settingsDataStore.edit { preferences ->
                 preferences[COUNTRY_KEY] = countryCode
@@ -90,7 +91,6 @@ class DataStoreSettingsRepository @Inject constructor(
     }
 
     override suspend fun setHistorySize(size: Int): EmptyResult<DataError.Local> {
-        // TODO: Use history size when adding products to history with ProductsRepository and correct the history size if it exceeds the current limit
         return safeSettingsChange {
             applicationContext.settingsDataStore.edit { preferences ->
                 preferences[HISTORY_SIZE_KEY] = size

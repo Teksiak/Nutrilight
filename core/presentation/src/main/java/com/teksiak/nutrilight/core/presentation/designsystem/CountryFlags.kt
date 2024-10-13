@@ -24,3 +24,7 @@ val ItalyFlag: ImageVector
 val SpainFlag: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.es_flag)
+
+val UnitedKingdomFlag: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.uk_flag)

@@ -18,7 +18,7 @@ class BaseUrlInterceptor(
     private val baseUrl = MutableStateFlow(ProductsApiService.WORLD_BASE_URL)
 
     init {
-        settingsRepository.countryCode
+        settingsRepository.country
             .onEach { country ->
                 baseUrl.value = country.toBaseUrl()
             }

@@ -23,12 +23,12 @@ class MoreViewModel @Inject constructor(
 
     init {
         combine(
-            settingsRepository.countryCode,
+            settingsRepository.country,
             settingsRepository.showProductImages,
             settingsRepository.historySize,
-        ) { countryCode, showProductImages, historySize ->
+        ) { country, showProductImages, historySize ->
             MoreState(
-                selectedCountry = countryCode,
+                selectedCountry = country,
                 showProductImages = showProductImages,
                 historySize = historySize
             )
@@ -56,7 +56,7 @@ class MoreViewModel @Inject constructor(
 
             is MoreAction.SelectCountry -> {
                 viewModelScope.launch {
-                    settingsRepository.setCountryCode(action.code)
+                    settingsRepository.setCountry(action.code)
                 }
             }
 
