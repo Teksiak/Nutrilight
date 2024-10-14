@@ -88,40 +88,42 @@ fun CountryDialog(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Text(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-                    text = stringResource(R.string.suggested),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = if(isSuggestedSelected) Primary else ShadedWhite,
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = if(isSuggestedSelected) Primary else ShadedWhite,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .padding(horizontal = 12.dp)
-                ) {
-                    suggestedCountries.map { it.toCountryUi() }.forEach { countryUi ->
-                        CountryItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            countryUi = countryUi,
-                            isSelected = countryUi.code == selectedCountry.code,
-                            onClick = {
-                                onCountrySelect(countryUi.code)
-                                onDismiss()
-                            }
-                        )
-                        if (countryUi.code != Country.entries.last().code) {
-                            HorizontalDivider(
+                if(suggestedCountries.isNotEmpty()) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                        text = stringResource(R.string.suggested),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if(isSuggestedSelected) Primary else ShadedWhite,
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
                                 color = if(isSuggestedSelected) Primary else ShadedWhite,
+                                shape = RoundedCornerShape(16.dp)
                             )
+                            .padding(horizontal = 12.dp)
+                    ) {
+                        suggestedCountries.map { it.toCountryUi() }.forEach { countryUi ->
+                            CountryItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                countryUi = countryUi,
+                                isSelected = countryUi.code == selectedCountry.code,
+                                onClick = {
+                                    onCountrySelect(countryUi.code)
+                                    onDismiss()
+                                }
+                            )
+                            if (countryUi.code != Country.entries.last().code) {
+                                HorizontalDivider(
+                                    color = if(isSuggestedSelected) Primary else ShadedWhite,
+                                )
+                            }
                         }
                     }
+                    Spacer(modifier = Modifier.size(16.dp))
                 }
-                Spacer(modifier = Modifier.size(16.dp))
 
                 (Country.entries - suggestedCountries.toSet()).map { it.toCountryUi() }.forEach { countryUi ->
                     CountryItem(

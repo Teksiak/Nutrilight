@@ -1,6 +1,7 @@
 package com.teksiak.nutrilight.more
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -83,7 +84,7 @@ private fun HomeScreen(
     val suggestedCountries = remember {
         val locales = Resources.getSystem().configuration.locales
         (0 until locales.size()).mapNotNull { index ->
-            Country.fromCodeOrNull(locales[index].country)
+            Country.fromLocale(locales[index])
         }
     }
 

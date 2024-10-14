@@ -42,6 +42,7 @@ interface ProductsApiService {
         const val GERMANY_BASE_URL = "https://de.openfoodfacts.net/"
         const val ITALY_BASE_URL = "https://it.openfoodfacts.net/"
         const val SPAIN_BASE_URL = "https://es.openfoodfacts.net/"
+        const val UNITED_KINGDOM_BASE_URL = "https://uk.openfoodfacts.net/"
 
         const val SEARCH_PAGE_SIZE = 25
     }

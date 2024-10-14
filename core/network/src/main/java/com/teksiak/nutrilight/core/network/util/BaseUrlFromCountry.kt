@@ -10,6 +10,7 @@ fun Country.toBaseUrl(): String {
         Country.GERMANY -> ProductsApiService.GERMANY_BASE_URL
         Country.ITALY -> ProductsApiService.ITALY_BASE_URL
         Country.SPAIN -> ProductsApiService.SPAIN_BASE_URL
+        Country.UNITED_KINGDOM -> ProductsApiService.UNITED_KINGDOM_BASE_URL
         else -> ProductsApiService.WORLD_BASE_URL
     }
 }

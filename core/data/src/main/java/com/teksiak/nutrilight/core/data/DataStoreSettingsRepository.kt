@@ -58,7 +58,12 @@ class DataStoreSettingsRepository @Inject constructor(
             .map { preferences ->
                 preferences[COUNTRY_KEY]?.let {
                     Country.fromCode(it)
-                } ?: (Country.fromCodeOrNull(Resources.getSystem().configuration.locales[0].country) ?: Country.UNITED_KINGDOM)
+                } ?: run {
+                    val locales = Resources.getSystem().configuration.locales
+                    (0 until locales.size()).mapNotNull { index ->
+                        Country.fromLocale(locales[index])
+                    }[0]
+                }
     }
 
     override val historySize: Flow<Int>
