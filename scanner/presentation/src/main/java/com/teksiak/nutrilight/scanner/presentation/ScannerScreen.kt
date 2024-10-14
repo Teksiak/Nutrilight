@@ -96,6 +96,7 @@ private fun ScannerScreen(
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
+            Log.d("ScannerScreen", "Launcher result")
             val activity = context as ComponentActivity
             val showCameraRationale = activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
 
@@ -109,9 +110,10 @@ private fun ScannerScreen(
     )
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsStateWithLifecycle()
     
     LaunchedEffect(lifecycleState) {
+        Log.d("ScannerScreen", "Lifecycle state: $lifecycleState")
         if(lifecycleState == Lifecycle.State.RESUMED) {
             val activity = context as ComponentActivity
             val hasCameraPermission = context.hasPermission(Manifest.permission.CAMERA)
@@ -124,7 +126,7 @@ private fun ScannerScreen(
                 )
             )
 
-            if(!hasCameraPermission) {
+            if(!hasCameraPermission && !state.requestedCameraPermission) {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
