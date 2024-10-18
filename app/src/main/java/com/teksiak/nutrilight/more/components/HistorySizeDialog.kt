@@ -32,7 +32,7 @@ fun HistorySizeDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.select_country),
+                text = stringResource(R.string.select_history_size),
                 style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center
             )
