@@ -1,9 +1,11 @@
 package com.teksiak.nutrilight.product.presentation.product_details
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,16 +29,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teksiak.nutrilight.core.presentation.designsystem.CopyIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
@@ -82,7 +94,6 @@ private fun ProductDetailsScreen(
     state: ProductDetailsState,
     onAction: (ProductDetailsAction) -> Unit
 ) {
-
     state.productUi?.let { productUi ->
         NutrilightScaffold(
             topAppBar = {
@@ -118,9 +129,14 @@ private fun ProductDetailsScreen(
                         modifier = Modifier.weight(1f)
                     )
                     ProductImage(
-                        imageUrl = if(productUi.showImage) productUi.fullImageUrl else null,
+                        imageUrl = if (productUi.showImage) productUi.fullImageUrl else null,
                         modifier = Modifier
-                            .sizeIn(maxWidth = 164.dp, maxHeight = 164.dp, minWidth = 164.dp, minHeight = 164.dp)
+                            .sizeIn(
+                                maxWidth = 164.dp,
+                                maxHeight = 164.dp,
+                                minWidth = 164.dp,
+                                minHeight = 164.dp
+                            )
                             .then(
                                 if (state.productUi.fullImageUrl != null) Modifier.wrapContentSize()
                                 else Modifier
@@ -138,7 +154,9 @@ private fun ProductDetailsScreen(
                 Spacer(modifier = Modifier.height(24.dp))
                 AnimatedVisibility(
                     visible = state.showNutritionFacts,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                     enter = expandVertically(
                         expandFrom = Alignment.Top,
                         animationSpec = tween(300)
@@ -164,7 +182,9 @@ private fun ProductDetailsScreen(
 
 
                 TextFlow(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                     text = buildAnnotatedString {
                         val style = MaterialTheme.typography.bodyLarge.toSpanStyle()
                         withStyle(
@@ -224,45 +244,109 @@ private fun ProductDetailsScreen(
                 Spacer(modifier = Modifier.weight(1f))
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .topBorder(1.dp, ShadedWhite)
-                        .padding(horizontal = 48.dp)
-                        .padding(top = 12.dp),
-                    textAlign = TextAlign.Center,
-                    text = buildAnnotatedString {
-                        val style = MaterialTheme.typography.bodySmall
-                        val dataResources = stringResource(id = R.string.data_resources) + " "
-                        val showMore = stringResource(id = R.string.show_more)
-                        withStyle(
-                            style = ParagraphStyle(
-                                lineHeight = 15.sp,
-                            )
-                        ) {
-                            withStyle(
-                                style = style.toSpanStyle()
-                                    .copy(color = Silver)
-                            ) {
-                                append(dataResources)
-                                withStyle(
-                                    style = SpanStyle(
-                                        color = Primary
-                                    )
-                                ) {
-                                    append(showMore)
-                                }
-                            }
-                        }
-                    }
+                BottomCredits(
+                    productId = productUi.code,
+                    onNavigateToCredits = { }
                 )
             }
         }
     }
 }
 
+@Composable
+private fun BottomCredits(
+    productId: String,
+    onNavigateToCredits: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
 
-@Preview(showBackground = true, heightDp = 900)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .topBorder(1.dp, ShadedWhite)
+            .padding(horizontal = 48.dp)
+            .padding(top = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.product_id),
+                style = MaterialTheme.typography.bodySmall,
+                color = Silver
+            )
+            Row(
+                modifier = Modifier
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = {
+                                clipboardManager.setText(AnnotatedString(productId))
+                            }
+                        )
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = CopyIcon,
+                    contentDescription = stringResource(id = R.string.copy),
+                    tint = Primary,
+                )
+                Text(
+                    text = productId,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Primary
+                )
+            }
+        }
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            text = buildAnnotatedString {
+                val style = MaterialTheme.typography.bodySmall
+                val dataResources = stringResource(id = R.string.data_resources) + " "
+                val showMore = stringResource(id = R.string.show_more)
+                withStyle(
+                    style = ParagraphStyle(
+                        lineHeight = 15.sp,
+                    )
+                ) {
+                    withStyle(
+                        style = style.toSpanStyle()
+                            .copy(color = Silver)
+                    ) {
+                        append(dataResources)
+                        withLink(
+                            link = LinkAnnotation.Clickable(
+                                tag = "data_resources",
+                                linkInteractionListener = {
+                                    onNavigateToCredits()
+                                }
+                            ),
+                        ) {
+                            withStyle(
+                                style = SpanStyle(
+                                    color = Primary
+                                )
+                            ) {
+                                append(showMore)
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    }
+}
+
+
+@Preview(showBackground = true, heightDp = 920)
 @Composable
 private fun ProductDetailsScreenPreview() {
     NutrilightTheme {

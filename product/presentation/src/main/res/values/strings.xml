@@ -34,4 +34,6 @@
     <string name="show_more">Show more</string>
     <string name="allergens">Allergens</string>
     <string name="product_image">Product image</string>
+    <string name="product_id">Product ID:</string>
+    <string name="copy">Copy</string>
 </resources>

@@ -101,6 +101,10 @@ val CheckIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.check)
 
+val CopyIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.copy)
+
 
 
 
