@@ -1,7 +1,6 @@
 package com.teksiak.nutrilight.more
 
 import android.content.res.Resources
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -45,11 +44,10 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightSwitch
 import com.teksiak.nutrilight.core.presentation.util.bottomBorder
-import com.teksiak.nutrilight.more.components.CountryDialog
+import com.teksiak.nutrilight.more.components.CountrySelectDialog
 import com.teksiak.nutrilight.more.components.CountrySelect
 import com.teksiak.nutrilight.more.components.HistorySizeDialog
 import com.teksiak.nutrilight.more.util.toCountryUi
-import java.util.Locale
 
 @Composable
 fun MoreScreenRoot(
@@ -89,7 +87,7 @@ private fun HomeScreen(
     }
 
     if (state.showCountrySelectDialog) {
-        CountryDialog(
+        CountrySelectDialog(
             selectedCountry = state.selectedCountry,
             suggestedCountries = suggestedCountries,
             onCountrySelect = { country ->

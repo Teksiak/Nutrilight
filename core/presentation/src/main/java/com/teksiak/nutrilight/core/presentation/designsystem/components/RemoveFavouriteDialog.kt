@@ -19,7 +19,7 @@ fun RemoveFavouriteDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    NutrilightDialog(
+    InteractionDialog(
         title = stringResource(id = R.string.oh_no),
         description = stringResource(id = R.string.remove_favourite_confirmation),
         onDismiss = onDismiss,

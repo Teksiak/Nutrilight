@@ -27,7 +27,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,7 +47,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.White
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingDialog
-import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightDialog
+import com.teksiak.nutrilight.core.presentation.designsystem.components.InteractionDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.PrimaryButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SecondaryButton
 import com.teksiak.nutrilight.core.presentation.util.ObserveAsEvents
@@ -134,7 +133,7 @@ private fun ScannerScreen(
 
     if(!state.acceptedCameraPermission && state.requestedCameraPermission) {
         if(state.showCameraPermissionRationale) {
-            NutrilightDialog(
+            InteractionDialog(
                 title = stringResource(id = R.string.camera_permission_rationale_title),
                 description = stringResource(id = R.string.camera_permission_rationale_description),
                 isDismissible = false,
@@ -160,7 +159,7 @@ private fun ScannerScreen(
                 }
             )
         } else {
-            NutrilightDialog(
+            InteractionDialog(
                 title = stringResource(id = R.string.camera_permission_rationale_title),
                 description = stringResource(id = R.string.camera_permission_denied_description),
                 isDismissible = false,
@@ -221,7 +220,7 @@ private fun ScannerScreen(
         }
 
         if(state.scannerError) {
-            NutrilightDialog(
+            InteractionDialog(
                 title = stringResource(id = R.string.whoops),
                 description = stringResource(id = R.string.something_went_wrong),
                 icon = {
@@ -245,7 +244,7 @@ private fun ScannerScreen(
                 }
             )
         } else if(state.productNotFound) {
-            NutrilightDialog(
+            InteractionDialog(
                 title = stringResource(id = R.string.hmm),
                 description = stringResource(id = R.string.product_not_found),
                 icon = {
