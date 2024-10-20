@@ -9,6 +9,8 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,12 +51,12 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
+import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchInput
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.core.presentation.util.bottomBorder
 import com.teksiak.nutrilight.product.presentation.R
-import com.teksiak.nutrilight.product.presentation.components.ProductsList
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 
 @Composable
@@ -224,35 +229,58 @@ private fun FavouritesScreen(
         currentTab = BottomNavigationTab.Favourites,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
-        ProductsList(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            productsList = state.favouriteProducts.map { it.toProductUi(state.showProductImages) },
-            onFavouriteToggle = { onAction(FavouritesAction.RemoveFavourite(it)) },
-            onNavigateToProduct = { onAction(FavouritesAction.NavigateToProduct(it)) },
-            emptyInformationText = if(!state.isLoading) buildAnnotatedString {
-                withStyle(
-                    style = MaterialTheme.typography.bodyMedium.toSpanStyle()
-                ) {
-                    withStyle(
-                        style = SpanStyle(color = Silver)
-                    ) {
-                        if (state.searchQuery.isNotBlank()) {
-                            append(stringResource(id = R.string.no_favourite_matches))
-                        } else {
-                            append(stringResource(id = R.string.no_favourites_added))
+            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(
+                state.favouriteProducts.map { it.toProductUi(state.showProductImages) },
+                key = { it.code }
+            ) { productUi ->
+                ProductCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
+                    productUi = productUi,
+                    onFavouriteToggle = { onAction(FavouritesAction.RemoveFavourite(it)) },
+                    onNavigate = { onAction(FavouritesAction.NavigateToProduct(it)) }
+                )
+            }
+            if (state.favouriteProducts.isEmpty() && !state.isLoading) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        textAlign = TextAlign.Center,
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Silver)
+                                ) {
+                                    if (state.searchQuery.isNotBlank()) {
+                                        append(stringResource(id = R.string.no_favourite_matches))
+                                    } else {
+                                        append(stringResource(id = R.string.no_favourites_added))
+                                    }
+                                }
+                                append("\n")
+                                withStyle(
+                                    style = SpanStyle(color = Primary)
+                                ) {
+                                    append(stringResource(id = R.string.save_your_top_picks))
+                                }
+                            }
                         }
-                    }
-                    append("\n")
-                    withStyle(
-                        style = SpanStyle(color = Primary)
-                    ) {
-                        append(stringResource(id = R.string.save_your_top_picks))
-                    }
+                    )
                 }
-            } else null
-        )
+            }
+        }
     }
 }
 

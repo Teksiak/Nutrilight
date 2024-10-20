@@ -2,16 +2,22 @@ package com.teksiak.nutrilight.product.presentation.history
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,10 +31,10 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
+import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.product.presentation.R
-import com.teksiak.nutrilight.product.presentation.components.ProductsList
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 
 @Composable
@@ -101,31 +107,54 @@ private fun HistoryScreen(
         currentTab = BottomNavigationTab.History,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
-        ProductsList(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            productsList = state.productsHistory.map { it.toProductUi(state.showProductImages) },
-            onFavouriteToggle = { onAction(HistoryAction.ToggleFavourite(it)) },
-            onNavigateToProduct = { onAction(HistoryAction.NavigateToProduct(it)) },
-            emptyInformationText = if(!state.isLoading) buildAnnotatedString {
-                withStyle(
-                    style = MaterialTheme.typography.bodyMedium.toSpanStyle()
-                ) {
-                    withStyle(
-                        style = SpanStyle(color = Silver)
-                    ) {
-                        append(stringResource(id = R.string.empty_history))
-                    }
-                    append("\n")
-                    withStyle(
-                        style = SpanStyle(color = Primary)
-                    ) {
-                        append(stringResource(id = R.string.try_scanning_something))
-                    }
+            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(
+                state.productsHistory.map { it.toProductUi(state.showProductImages) },
+                key = { it.code }
+            ) { productUi ->
+                ProductCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(),
+                    productUi = productUi,
+                    onFavouriteToggle = { onAction(HistoryAction.ToggleFavourite(it)) },
+                    onNavigate = { onAction(HistoryAction.NavigateToProduct(it)) }
+                )
+            }
+            if (state.productsHistory.isEmpty() && !state.isLoading) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        textAlign = TextAlign.Center,
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Silver)
+                                ) {
+                                    append(stringResource(id = R.string.empty_history))
+                                }
+                                append("\n")
+                                withStyle(
+                                    style = SpanStyle(color = Primary)
+                                ) {
+                                    append(stringResource(id = R.string.try_scanning_something))
+                                }
+                            }
+                        }
+                    )
                 }
-            } else null
-        )
+            }
+        }
     }
 }
 
