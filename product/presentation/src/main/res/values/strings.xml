@@ -36,4 +36,6 @@
     <string name="product_image">Product image</string>
     <string name="product_id">Product ID:</string>
     <string name="copy">Copy</string>
+    <string name="history_too_short">Is your products history too short?</string>
+    <string name="check_more_tab_to_adjust_size">Check the More tab to adjust its size!</string>
 </resources>

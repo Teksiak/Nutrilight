@@ -32,7 +32,7 @@ fun NutrilightDialog(
     content: @Composable () -> Unit
 ) {
     Dialog(
-        onDismissRequest = { },
+        onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnClickOutside = isDismissible,
             dismissOnBackPress = onBackPressed != null || isDismissible

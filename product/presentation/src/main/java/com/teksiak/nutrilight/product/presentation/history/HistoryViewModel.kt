@@ -49,6 +49,14 @@ class HistoryViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
+
+        settingsRepository.historySize
+            .onEach { size ->
+                _state.update {
+                    it.copy(historySizeSetting = size)
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onAction(action: HistoryAction) {

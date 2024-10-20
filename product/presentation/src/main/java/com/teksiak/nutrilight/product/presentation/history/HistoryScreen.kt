@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -148,6 +150,41 @@ private fun HistoryScreen(
                                     style = SpanStyle(color = Primary)
                                 ) {
                                     append(stringResource(id = R.string.try_scanning_something))
+                                }
+                            }
+                        }
+                    )
+                }
+            } else if (state.productsHistory.size == state.historySizeSetting && !state.isLoading) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        textAlign = TextAlign.Center,
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Silver)
+                                ) {
+                                    append(stringResource(id = R.string.history_too_short))
+                                }
+                                append("\n")
+                                withLink(
+                                    link = LinkAnnotation.Clickable(
+                                        tag = "more_tab",
+                                        linkInteractionListener = {
+                                            navigateWithTab(BottomNavigationTab.More)
+                                        }
+                                    )
+                                ) {
+                                    withStyle(
+                                        style = SpanStyle(color = Primary)
+                                    ) {
+                                        append(stringResource(id = R.string.check_more_tab_to_adjust_size))
+                                    }
                                 }
                             }
                         }

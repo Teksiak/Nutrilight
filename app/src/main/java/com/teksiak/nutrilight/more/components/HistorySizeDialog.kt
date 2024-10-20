@@ -22,7 +22,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 fun HistorySizeDialog(
     selectedSizeIndex: Int,
     onHistorySizeSelect: (Int) -> Unit,
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit
 ) {
     NutrilightDialog(
         onDismiss = onDismiss
@@ -59,6 +59,7 @@ private fun PreviewCountryDialog() {
         HistorySizeDialog(
             selectedSizeIndex = 5,
             onHistorySizeSelect = {},
+            onDismiss = {}
         )
     }
 }
