@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.AlmostWhite
@@ -19,8 +18,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Carbs
 import com.teksiak.nutrilight.core.presentation.designsystem.Fat
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Protein
-import com.teksiak.nutrilight.core.presentation.product.NutrimentsUi
-import com.teksiak.nutrilight.core.presentation.product.toNutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.NutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toNutrimentsUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 
 @Composable

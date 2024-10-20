@@ -3,11 +3,6 @@
     <string name="nutrilight">Nutrilight</string>
     <string name="shining_light">Shining a light on what You eat</string>
     <string name="logo">Logo</string>
-    <string name="france">France</string>
-    <string name="spain">Spain</string>
-    <string name="poland">Poland</string>
-    <string name="italy">Italy</string>
-    <string name="germany">Germany</string>
     <string name="select_country">Select your country</string>
     <string name="app_settings">App Settings</string>
     <string name="your_country">Your country</string>
@@ -20,7 +15,6 @@
     <string name="history_size">History size</string>
     <string name="close_dialog">Close dialog</string>
     <string name="history_size_description">Number of products you\'d like to keep in your history. A higher choice will allow you to track more past products, but it may use more storage on your device.</string>
-    <string name="united_kingdom">United Kingdom</string>
     <string name="suggested">Suggested</string>
     <string name="selected">Selected</string>
     <string name="select_history_size">Select history size</string>

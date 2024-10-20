@@ -40,11 +40,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.ChevronDownIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.ChevronUpIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
-import com.teksiak.nutrilight.core.presentation.product.NutrimentsUi
-import com.teksiak.nutrilight.core.presentation.product.toNutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.NutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toNutrimentsUi
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 

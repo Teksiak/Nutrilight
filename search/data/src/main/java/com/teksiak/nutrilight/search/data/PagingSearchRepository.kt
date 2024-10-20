@@ -12,6 +12,7 @@ import com.teksiak.nutrilight.core.network.ProductsApiService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
@@ -20,6 +21,13 @@ class PagingSearchRepository @Inject constructor(
     private val apiService: ProductsApiService
 ) : SearchRepository {
     private val searchQuery = MutableStateFlow("")
+
+    private val _searchResultCount = MutableStateFlow(0)
+    override val searchResultCount = _searchResultCount.asStateFlow()
+
+    private val searchResultListener = SearchResultListener { resultCount: Int ->
+        _searchResultCount.value = resultCount
+    }
 
     override fun setQuery(query: String) {
         searchQuery.value = query
@@ -38,8 +46,10 @@ class PagingSearchRepository @Inject constructor(
                         pagingSourceFactory = {
                             ProductsPagingSource(
                                 apiService = apiService,
-                                searchQuery = query
-                            )
+                                searchQuery = query,
+                            ).apply {
+                                setSearchResultListener(searchResultListener)
+                            }
                         }
                     ).flow
                 } else flowOf(

@@ -12,7 +12,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
-import com.teksiak.nutrilight.core.presentation.product.ProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.ProductUi
 
 @Composable
 fun ProductsList(

@@ -44,6 +44,22 @@ class SearchViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
+        settingsRepository.country
+            .onEach { country ->
+                _state.update {
+                    it.copy(searchedCountry = country)
+                }
+            }
+            .launchIn(viewModelScope)
+
+        searchRepository.searchResultCount
+            .onEach { count ->
+                _state.update {
+                    it.copy(searchResultCount = count)
+                }
+            }
+            .launchIn(viewModelScope)
+
         loadHistoryProducts()
     }
 

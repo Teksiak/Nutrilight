@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -37,17 +35,17 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.teksiak.nutrilight.core.domain.product.Product
-import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.GlobeIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
+import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
-import com.teksiak.nutrilight.core.presentation.product.ProductUi
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 
 @Composable
 fun SearchScreenRoot(
@@ -111,7 +109,7 @@ private fun SearchScreen(
                 .padding(horizontal = 24.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            if(state.isLoading) return@Box
+            if (state.isLoading) return@Box
             if (searchedProducts.itemCount == 0 && !state.hasSearched) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -136,7 +134,7 @@ private fun SearchScreen(
                     item {
                         Text(
                             modifier = Modifier.animateItem(),
-                            text = if(state.productsHistory.isEmpty()) {
+                            text = if (state.productsHistory.isEmpty()) {
                                 stringResource(id = R.string.no_recent_matches)
                             } else if (state.searchQuery.isNotBlank()) {
                                 stringResource(id = R.string.no_more_recent_matches)
@@ -149,7 +147,7 @@ private fun SearchScreen(
                 }
             } else if (searchedProducts.loadState.refresh is LoadState.Loading) {
                 Column(
-                    modifier = Modifier.padding(top = 24.dp),
+                    modifier = Modifier.padding(top = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -166,26 +164,67 @@ private fun SearchScreen(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(
-                        vertical = 16.dp
+                        top = 8.dp,
+                        bottom = 16.dp
                     ),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    items(
-                        count = searchedProducts.itemCount,
-                        key = searchedProducts.itemKey { it.code },
-                    ) { index ->
-                        searchedProducts[index]?.let { product ->
-                            ProductCard(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .animateItem(),
-                                productUi = product.toProductUi(showImage = state.showProductImages),
-                                onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
-                            )
+                    if (!searchedProducts.loadState.hasError) {
+                        item {
+                            state.searchedCountry?.toCountryUi()?.let { country ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.searching_in),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Silver
+                                    )
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                    Icon(
+                                        modifier = Modifier.size(16.dp),
+                                        imageVector = country.flag,
+                                        contentDescription = null,
+                                        tint = Color.Unspecified,
+                                    )
+                                    Spacer(modifier = Modifier.size(4.dp))
+                                    Text(
+                                        text = country.name,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = TintedBlack
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    state.searchResultCount.takeIf { it > 0 }?.let { count ->
+                                        Text(
+                                            text = "$count " +
+                                                    stringResource(
+                                                        id = if (count == 1) R.string.product
+                                                        else R.string.products
+                                                    ),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = Silver
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        items(
+                            count = searchedProducts.itemCount,
+                            key = searchedProducts.itemKey { it.code },
+                        ) { index ->
+                            searchedProducts[index]?.let { product ->
+                                ProductCard(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .animateItem(),
+                                    productUi = product.toProductUi(showImage = state.showProductImages),
+                                    onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
+                                )
+                            }
                         }
                     }
-                    if(searchedProducts.loadState.hasError) {
+                    if (searchedProducts.loadState.hasError) {
                         item {
                             Column(
                                 modifier = Modifier.padding(top = 8.dp),
@@ -226,14 +265,15 @@ private fun SearchScreen(
                     } else if (searchedProducts.loadState.append is LoadState.Loading) {
                         item {
                             LoadingAnimation(
-                                modifier = Modifier.size(48.dp).padding(top = 8.dp)
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .padding(top = 8.dp)
                             )
                         }
-                    } else if(searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0) {
+                    } else if (searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0) {
                         item {
                             SearchWorldwide(
-                                message = stringResource(id = R.string.havent_found_what_youre_looking_for),
-                                modifier = Modifier.padding(top = 8.dp)
+                                message = stringResource(id = R.string.havent_found_what_youre_looking_for)
                             )
                         }
                     } else {

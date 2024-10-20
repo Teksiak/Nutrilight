@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
-import com.teksiak.nutrilight.core.presentation.product.NutrimentsUi
-import com.teksiak.nutrilight.core.presentation.product.toNutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.NutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toNutrimentsUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.product.presentation.R
 

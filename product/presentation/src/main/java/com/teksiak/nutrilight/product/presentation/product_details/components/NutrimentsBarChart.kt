@@ -23,8 +23,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Carbs
 import com.teksiak.nutrilight.core.presentation.designsystem.Fat
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Protein
-import com.teksiak.nutrilight.core.presentation.product.NutrimentsUi
-import com.teksiak.nutrilight.core.presentation.product.toNutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.NutrimentsUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toNutrimentsUi
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 

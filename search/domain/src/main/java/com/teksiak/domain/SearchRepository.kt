@@ -10,4 +10,6 @@ interface SearchRepository {
 
     val searchedProducts: Flow<PagingData<Product>>
 
+    val searchResultCount: Flow<Int>
+
 }

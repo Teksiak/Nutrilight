@@ -1,6 +1,6 @@
 package com.teksiak.nutrilight.product.presentation.product_details
 
-import com.teksiak.nutrilight.core.presentation.product.ProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.ProductUi
 
 data class ProductDetailsState(
     val productUi: ProductUi? = null,

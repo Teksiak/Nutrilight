@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.product.presentation.product_details
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -35,7 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -59,7 +57,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScore
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductImage
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.core.presentation.util.topBorder
 import com.teksiak.nutrilight.product.presentation.R

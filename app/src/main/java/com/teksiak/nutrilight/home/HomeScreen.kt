@@ -19,8 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -38,8 +36,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.Nutrilig
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
-import com.teksiak.nutrilight.more.components.VerticalPicker
+import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import kotlin.math.roundToInt
 
 @Composable

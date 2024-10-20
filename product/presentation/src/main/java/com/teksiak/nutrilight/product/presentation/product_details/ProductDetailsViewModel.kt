@@ -7,7 +7,7 @@ import androidx.navigation.toRoute
 import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.presentation.NavigationRoute
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow

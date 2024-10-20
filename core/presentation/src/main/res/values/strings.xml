@@ -5,4 +5,10 @@
     <string name="remove_favourite_confirmation">Are you sure you want to remove this product from your favorites?</string>
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
+    <string name="france">France</string>
+    <string name="spain">Spain</string>
+    <string name="poland">Poland</string>
+    <string name="italy">Italy</string>
+    <string name="germany">Germany</string>
+    <string name="united_kingdom">United Kingdom</string>
 </resources>

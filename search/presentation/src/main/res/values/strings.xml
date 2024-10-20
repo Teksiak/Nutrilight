@@ -9,4 +9,7 @@
     <string name="havent_found_what_youre_looking_for">Haven’t found what you’re looking for?</string>
     <string name="whoops">Whoops!</string>
     <string name="something_went_wrong_with_search">Something went wrong with the search. Please try again or check your connection.</string>
+    <string name="searching_in">Searching in</string>
+    <string name="product">product</string>
+    <string name="products">products</string>
 </resources>

@@ -34,8 +34,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.White
-import com.teksiak.nutrilight.core.presentation.product.ProductUi
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.ProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 
 @Composable

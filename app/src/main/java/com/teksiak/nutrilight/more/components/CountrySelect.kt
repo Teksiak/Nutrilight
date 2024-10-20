@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
-import com.teksiak.nutrilight.more.util.CountryUi
-import com.teksiak.nutrilight.more.util.toCountryUi
+import com.teksiak.nutrilight.core.presentation.ui_models.CountryUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 
 @Composable
 fun CountrySelect(

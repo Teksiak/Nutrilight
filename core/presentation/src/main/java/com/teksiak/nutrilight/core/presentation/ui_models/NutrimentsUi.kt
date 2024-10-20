@@ -1,4 +1,4 @@
-package com.teksiak.nutrilight.core.presentation.product
+package com.teksiak.nutrilight.core.presentation.ui_models
 
 import com.teksiak.nutrilight.core.domain.product.Nutriments
 import kotlin.math.roundToInt

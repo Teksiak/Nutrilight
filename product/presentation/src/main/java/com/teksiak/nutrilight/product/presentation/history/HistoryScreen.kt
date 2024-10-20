@@ -25,7 +25,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
-import com.teksiak.nutrilight.core.presentation.product.toProductUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import com.teksiak.nutrilight.core.presentation.util.DummyProduct
 import com.teksiak.nutrilight.product.presentation.R
 import com.teksiak.nutrilight.product.presentation.components.ProductsList

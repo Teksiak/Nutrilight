@@ -1,10 +1,10 @@
-package com.teksiak.nutrilight.more.util
+package com.teksiak.nutrilight.core.presentation.ui_models
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import com.teksiak.nutrilight.R
 import com.teksiak.nutrilight.core.domain.Country
+import com.teksiak.nutrilight.core.presentation.R
 import com.teksiak.nutrilight.core.presentation.designsystem.FranceFlag
 import com.teksiak.nutrilight.core.presentation.designsystem.GermanyFlag
 import com.teksiak.nutrilight.core.presentation.designsystem.ItalyFlag

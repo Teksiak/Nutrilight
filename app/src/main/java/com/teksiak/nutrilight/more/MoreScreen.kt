@@ -47,7 +47,7 @@ import com.teksiak.nutrilight.core.presentation.util.bottomBorder
 import com.teksiak.nutrilight.more.components.CountrySelectDialog
 import com.teksiak.nutrilight.more.components.CountrySelect
 import com.teksiak.nutrilight.more.components.HistorySizeDialog
-import com.teksiak.nutrilight.more.util.toCountryUi
+import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 
 @Composable
 fun MoreScreenRoot(

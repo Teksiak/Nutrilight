@@ -1,6 +1,5 @@
 package com.teksiak.nutrilight.search.data
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.teksiak.nutrilight.core.domain.product.Product
@@ -14,6 +13,13 @@ class ProductsPagingSource(
     private val apiService: ProductsApiService,
     private val searchQuery: String
 ): PagingSource<Int, Product>() {
+
+    private var searchResultListener: SearchResultListener? = null
+
+    fun setSearchResultListener(listener: SearchResultListener) {
+        searchResultListener = listener
+    }
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         return try {
             val currentPage = params.key ?: 1
@@ -24,6 +30,10 @@ class ProductsPagingSource(
                 )
             }
             if(result is Result.Success) {
+                searchResultListener?.onSearchResult(
+                    resultCount = result.data.count
+                )
+
                 val pageCount = ceil(result.data.count / ProductsApiService.SEARCH_PAGE_SIZE.toFloat()).toInt()
                 LoadResult.Page(
                     data = result.data.products.map { it.toProduct() },
