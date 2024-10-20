@@ -24,6 +24,6 @@ fun NavigationTab.toRoute(): Any {
         NavigationTab.History -> NavigationRoute.HistoryRoute
         NavigationTab.Scanner -> NavigationRoute.ScannerRoute
         NavigationTab.Favourites -> NavigationRoute.FavouritesRoute
-        NavigationTab.More -> NavigationRoute.MoreRoute
+        NavigationTab.More -> NavigationRoute.MoreRoute()
     }
 }

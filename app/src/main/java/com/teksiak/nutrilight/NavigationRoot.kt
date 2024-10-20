@@ -144,6 +144,11 @@ fun NavigationRoot(
                 onSearchProduct = {
                     navController.navigate(NavigationRoute.SearchRoute)
                 },
+                onMoreInformation = { information ->
+                    navController.navigate(NavigationRoute.MoreRoute(information)) {
+                        launchSingleTop = true
+                    }
+                },
                 navigateToTab = { tab ->
                     navController.navigate(tab.toRoute()) {
                         launchSingleTop = true
@@ -174,7 +179,7 @@ fun NavigationRoot(
         }
         composable<NavigationRoute.MoreRoute> {
             MoreScreenRoot(
-                viewModel = hiltViewModel<MoreViewModel>(viewModelStoreOwner),
+                viewModel = hiltViewModel<MoreViewModel>(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teksiak.nutrilight.core.presentation.Information
 import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
@@ -45,6 +46,7 @@ fun HistoryScreenRoot(
     onNavigateToProduct: (String) -> Unit,
     onSearchProduct: () -> Unit,
     onNavigateBack: () -> Unit,
+    onMoreInformation: (Information) -> Unit,
     navigateToTab: (NavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -65,6 +67,7 @@ fun HistoryScreenRoot(
                     navigateToTab(NavigationTab.Scanner)
                 }
                 is HistoryAction.SearchProduct -> onSearchProduct()
+                is HistoryAction.ShowHistorySizeSetting -> onMoreInformation(Information.HistorySize)
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -177,7 +180,7 @@ private fun HistoryScreen(
                                     link = LinkAnnotation.Clickable(
                                         tag = "more_tab",
                                         linkInteractionListener = {
-                                            navigateWithTab(NavigationTab.More)
+                                            onAction(HistoryAction.ShowHistorySizeSetting)
                                         }
                                     )
                                 ) {

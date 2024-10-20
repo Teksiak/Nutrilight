@@ -1,9 +1,15 @@
 package com.teksiak.nutrilight.more
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.teksiak.nutrilight.core.domain.SettingsRepository
+import com.teksiak.nutrilight.core.presentation.Information
+import com.teksiak.nutrilight.core.presentation.NavigationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -15,8 +21,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoreViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
+
+    private val parameters = savedStateHandle.toRoute<NavigationRoute.MoreRoute>()
 
     private val _state = MutableStateFlow(MoreState())
     val state = _state.asStateFlow()
@@ -42,6 +51,19 @@ class MoreViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
+
+        Log.d("MoreViewModel", parameters.toString())
+
+        parameters.information?.let { information ->
+            viewModelScope.launch {
+                delay(200)
+                when (information) {
+                    Information.HistorySize -> {
+                        onAction(MoreAction.ShowHistorySizeDialog)
+                    }
+                }
+            }
+        }
     }
 
     fun onAction(action: MoreAction) {
