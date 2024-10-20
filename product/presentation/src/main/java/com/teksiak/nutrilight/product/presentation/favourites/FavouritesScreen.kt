@@ -40,7 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.BackIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
@@ -65,7 +65,7 @@ fun FavouritesScreenRoot(
     onNavigateToProduct: (String) -> Unit,
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit,
+    navigateToTab: (NavigationTab) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.favouriteProducts.collectAsStateWithLifecycle()
@@ -95,7 +95,7 @@ fun FavouritesScreenRoot(
                 viewModel.onAction(FavouritesAction.ToggleSearchbar)
                 viewModel.onAction(FavouritesAction.ClearSearch)
             }
-            navigateWithTab(it)
+            navigateToTab(it)
         }
     )
 }
@@ -104,7 +104,7 @@ fun FavouritesScreenRoot(
 private fun FavouritesScreen(
     state: FavouritesState,
     onAction: (FavouritesAction) -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
 
     state.productToRemove?.let {
@@ -226,7 +226,7 @@ private fun FavouritesScreen(
                 }
             }
         },
-        currentTab = BottomNavigationTab.Favourites,
+        currentTab = NavigationTab.Favourites,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         LazyColumn(

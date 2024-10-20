@@ -49,14 +49,10 @@ fun NavigationRoot(
     ) {
 
         composable<NavigationRoute.HomeRoute> {
-
             HomeScreenRoot(
                 viewModel = viewModel<HomeViewModel>(viewModelStoreOwner),
                 onSearchProducts = {
                     navController.navigate(NavigationRoute.SearchRoute)
-                },
-                onScanBarcode = {
-                    navController.navigate(NavigationRoute.ScannerRoute)
                 },
                 onNavigateBack = {
                     closeApp()
@@ -64,7 +60,7 @@ fun NavigationRoot(
                 onNavigateToProduct = { productId ->
                     navController.navigate(NavigationRoute.ProductDetailsRoute(productId))
                 },
-                navigateWithTab = { tab ->
+                navigateToTab = { tab ->
                     navController.navigate(tab.toRoute()) {
                         launchSingleTop = true
                     }
@@ -148,10 +144,7 @@ fun NavigationRoot(
                 onSearchProduct = {
                     navController.navigate(NavigationRoute.SearchRoute)
                 },
-                onScanBarcode = {
-                    navController.navigate(NavigationRoute.ScannerRoute)
-                },
-                navigateWithTab = { tab ->
+                navigateToTab = { tab ->
                     navController.navigate(tab.toRoute()) {
                         launchSingleTop = true
                     }
@@ -172,7 +165,7 @@ fun NavigationRoot(
                 onScanBarcode = {
                     navController.navigate(NavigationRoute.ScannerRoute)
                 },
-                navigateWithTab = { tab ->
+                navigateToTab = { tab ->
                     navController.navigate(tab.toRoute()) {
                         launchSingleTop = true
                     }

@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
-import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
@@ -43,10 +43,9 @@ import kotlin.math.roundToInt
 fun HomeScreenRoot(
     viewModel: HomeViewModel,
     onSearchProducts: () -> Unit,
-    onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToProduct: (String) -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateToTab: (NavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -62,9 +61,11 @@ fun HomeScreenRoot(
         onAction = { action ->
             when (action) {
                 HomeAction.SearchProducts -> onSearchProducts()
-                HomeAction.ScanBarcode -> onScanBarcode()
-                HomeAction.NavigateToProductsHistory -> navigateWithTab(BottomNavigationTab.History)
-                HomeAction.NavigateToFavouriteProducts -> navigateWithTab(BottomNavigationTab.Favourites)
+                HomeAction.ScanBarcode -> {
+                    navigateToTab(NavigationTab.Scanner)
+                }
+                HomeAction.NavigateToProductsHistory -> navigateToTab(NavigationTab.History)
+                HomeAction.NavigateToFavouriteProducts -> navigateToTab(NavigationTab.Favourites)
                 is HomeAction.NavigateToProduct -> {
                     onNavigateToProduct(action.code)
                 }
@@ -73,7 +74,7 @@ fun HomeScreenRoot(
             }
             viewModel.onAction(action)
         },
-        navigateWithTab = navigateWithTab
+        navigateWithTab = navigateToTab
     )
 }
 
@@ -81,7 +82,7 @@ fun HomeScreenRoot(
 private fun HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     var heightOffsetLimit by remember {
@@ -132,7 +133,7 @@ private fun HomeScreen(
                 }
             )
         },
-        currentTab = BottomNavigationTab.Home,
+        currentTab = NavigationTab.Home,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         LazyColumn(

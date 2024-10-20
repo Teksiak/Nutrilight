@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
@@ -31,8 +31,8 @@ import com.teksiak.nutrilight.core.presentation.util.topBorder
 
 @Composable
 fun NutrilightNavBar(
-    currentTab: BottomNavigationTab,
-    onTabSelected: (BottomNavigationTab) -> Unit = {}
+    currentTab: NavigationTab,
+    onTabSelected: (NavigationTab) -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -43,7 +43,7 @@ fun NutrilightNavBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BottomNavigationTab.entries.forEach { navTab ->
+        NavigationTab.entries.forEach { navTab ->
             NavigationTab(
                 navTab = navTab,
                 isSelected = navTab == currentTab,
@@ -57,7 +57,7 @@ fun NutrilightNavBar(
 
 @Composable
 private fun NavigationTab(
-    navTab: BottomNavigationTab,
+    navTab: NavigationTab,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
@@ -104,6 +104,6 @@ private fun NavigationTab(
 @Composable
 private fun NutrilightNavBarPreview() {
     NutrilightNavBar(
-        currentTab = BottomNavigationTab.Home
+        currentTab = NavigationTab.Home
     )
 }

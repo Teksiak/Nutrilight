@@ -24,7 +24,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ScanBarIcon
@@ -44,9 +44,8 @@ fun HistoryScreenRoot(
     viewModel: HistoryViewModel,
     onNavigateToProduct: (String) -> Unit,
     onSearchProduct: () -> Unit,
-    onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateToTab: (NavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     viewModel.productsHistory.collectAsStateWithLifecycle()
@@ -62,13 +61,15 @@ fun HistoryScreenRoot(
             when (action) {
                 is HistoryAction.NavigateToProduct -> onNavigateToProduct(action.code)
                 is HistoryAction.NavigateBack -> onNavigateBack()
-                is HistoryAction.ScanBarcode -> onScanBarcode()
+                is HistoryAction.ScanBarcode -> {
+                    navigateToTab(NavigationTab.Scanner)
+                }
                 is HistoryAction.SearchProduct -> onSearchProduct()
                 else -> Unit
             }
             viewModel.onAction(action)
         },
-        navigateWithTab = navigateWithTab
+        navigateWithTab = navigateToTab
     )
 }
 
@@ -76,7 +77,7 @@ fun HistoryScreenRoot(
 private fun HistoryScreen(
     state: HistoryState,
     onAction: (HistoryAction) -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
     state.productToRemove?.let {
         RemoveFavouriteDialog(
@@ -106,7 +107,7 @@ private fun HistoryScreen(
                 }
             )
         },
-        currentTab = BottomNavigationTab.History,
+        currentTab = NavigationTab.History,
         onTabSelected = navigateWithTab
     ) { paddingValues ->
         LazyColumn(
@@ -176,7 +177,7 @@ private fun HistoryScreen(
                                     link = LinkAnnotation.Clickable(
                                         tag = "more_tab",
                                         linkInteractionListener = {
-                                            navigateWithTab(BottomNavigationTab.More)
+                                            navigateWithTab(NavigationTab.More)
                                         }
                                     )
                                 ) {

@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
 import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
-import com.teksiak.nutrilight.core.presentation.BottomNavigationTab
+import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.HelpCircleIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
@@ -53,7 +53,7 @@ import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 fun MoreScreenRoot(
     viewModel: MoreViewModel,
     onNavigateBack: () -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -77,7 +77,7 @@ fun MoreScreenRoot(
 private fun HomeScreen(
     state: MoreState,
     onAction: (MoreAction) -> Unit,
-    navigateWithTab: (BottomNavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit
 ) {
     val suggestedCountries = remember {
         val locales = Resources.getSystem().configuration.locales
@@ -143,7 +143,7 @@ private fun HomeScreen(
                 )
             }
         },
-        currentTab = BottomNavigationTab.More,
+        currentTab = NavigationTab.More,
         onTabSelected = navigateWithTab
     ) { innerPadding ->
         if (!state.areSettingsLoaded) return@NutrilightScaffold
