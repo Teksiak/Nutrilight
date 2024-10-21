@@ -1,12 +1,15 @@
 package com.teksiak.nutrilight.more
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,12 +23,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +54,12 @@ import com.teksiak.nutrilight.more.components.CountrySelectDialog
 import com.teksiak.nutrilight.more.components.CountrySelect
 import com.teksiak.nutrilight.more.components.HistorySizeDialog
 import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
+import com.teksiak.nutrilight.core.presentation.util.ObserveAsEvents
+import com.teksiak.nutrilight.more.util.simulatePress
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 
 @Composable
 fun MoreScreenRoot(
@@ -61,8 +73,9 @@ fun MoreScreenRoot(
         onNavigateBack()
     }
 
-    HomeScreen(
+    MoreScreen(
         state = state,
+        events = viewModel.events,
         onAction = { action ->
             when (action) {
                 else -> Unit
@@ -74,15 +87,28 @@ fun MoreScreenRoot(
 }
 
 @Composable
-private fun HomeScreen(
+private fun MoreScreen(
     state: MoreState,
+    events: Flow<MoreEvent>,
     onAction: (MoreAction) -> Unit,
     navigateWithTab: (NavigationTab) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val suggestedCountries = remember {
         val locales = Resources.getSystem().configuration.locales
         (0 until locales.size()).mapNotNull { index ->
             Country.fromLocale(locales[index])
+        }
+    }
+    val historySizeInteractionSource = remember { MutableInteractionSource() }
+
+    ObserveAsEvents(flow = events) { event ->
+        when(event) {
+            is MoreEvent.ShowHistorySizeDialog -> {
+                coroutineScope.launch {
+                    simulatePress(historySizeInteractionSource)
+                }
+            }
         }
     }
 
@@ -157,7 +183,8 @@ private fun HomeScreen(
         ) {
             AppSettings(
                 state = state,
-                onAction = onAction
+                onAction = onAction,
+                historySizeInteractionSource = historySizeInteractionSource
             )
         }
     }
@@ -167,7 +194,8 @@ private fun HomeScreen(
 private fun AppSettings(
     state: MoreState,
     onAction: (MoreAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    historySizeInteractionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = modifier
@@ -235,7 +263,7 @@ private fun AppSettings(
                 checked = state.showProductImages,
                 onCheckedChange = {
                     onAction(MoreAction.ToggleProductImages)
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -249,40 +277,59 @@ private fun AppSettings(
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .height(40.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .clickable { onAction(MoreAction.ShowHistorySizeDialog) }
-                    .border(
-                        width = 1.dp,
-                        color = ShadedWhite,
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = state.historySize.toProducts(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Primary
-                )
-            }
+            HistorySizeButton(
+                size = state.historySize,
+                onClick = {
+                    onAction(MoreAction.ShowHistorySizeDialog)
+                },
+                interactionSource = historySizeInteractionSource
+            )
         }
     }
 }
 
-private fun Int.toProducts() = "$this products"
+@Composable
+private fun HistorySizeButton(
+    size: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+) {
+    Box(
+        modifier = modifier
+            .height(40.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = ripple(),
+                onClick = onClick
+            )
+            .border(
+                width = 1.dp,
+                color = ShadedWhite,
+                shape = RoundedCornerShape(20.dp)
+            )
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "$size products",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Primary
+        )
+    }
+}
 
 @Preview
 @Composable
 private fun HomeScreenPreview() {
     NutrilightTheme {
-        HomeScreen(
+        MoreScreen(
             state = MoreState(
                 showCountryExplanation = true,
                 areSettingsLoaded = true
             ),
+            events = emptyFlow(),
             onAction = {},
             navigateWithTab = {}
         )
