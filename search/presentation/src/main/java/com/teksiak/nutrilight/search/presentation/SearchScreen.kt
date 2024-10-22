@@ -2,6 +2,8 @@ package com.teksiak.nutrilight.search.presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,6 +37,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.designsystem.GlobeIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.LogoRottenIcon
@@ -44,6 +48,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingA
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
+import com.teksiak.nutrilight.core.presentation.ui_models.CountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 
@@ -172,42 +177,12 @@ private fun SearchScreen(
                 ) {
                     if (!searchedProducts.loadState.hasError) {
                         item {
-                            state.searchedCountry?.toCountryUi()?.let { country ->
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.searching_in),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = Silver
-                                    )
-                                    Spacer(modifier = Modifier.size(8.dp))
-                                    Icon(
-                                        modifier = Modifier.size(16.dp),
-                                        imageVector = country.flag,
-                                        contentDescription = null,
-                                        tint = Color.Unspecified,
-                                    )
-                                    Spacer(modifier = Modifier.size(4.dp))
-                                    Text(
-                                        text = country.name,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = TintedBlack
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    state.searchResultCount.takeIf { it > 0 }?.let { count ->
-                                        Text(
-                                            text = "$count " +
-                                                    stringResource(
-                                                        id = if (count == 1) R.string.product
-                                                        else R.string.products
-                                                    ),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = Silver
-                                        )
-                                    }
-                                }
-                            }
+                            SearchInfo(
+                                country = state.searchedCountry?.toCountryUi(),
+                                isSearchedGlobally = state.searchedGlobally,
+                                searchResultCount = state.searchResultCount,
+                                modifier = Modifier.fillMaxWidth()
+                            )
                         }
                         items(
                             count = searchedProducts.itemCount,
@@ -270,16 +245,34 @@ private fun SearchScreen(
                                     .padding(top = 8.dp)
                             )
                         }
-                    } else if (searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0) {
+                    } else if (searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0 && !state.searchedGlobally) {
                         item {
                             SearchWorldwide(
-                                message = stringResource(id = R.string.havent_found_what_youre_looking_for)
+                                message = stringResource(id = R.string.havent_found_what_youre_looking_for),
+                                onClick = { onAction(SearchAction.SearchGlobally) }
+                            )
+                        }
+                    } else if(searchedProducts.loadState.append is LoadState.NotLoading &&searchedProducts.itemCount > 0 && state.searchedGlobally) {
+                        item {
+                            Text(
+                                text = stringResource(id = R.string.no_more_results),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Silver
+                            )
+                        }
+                    } else if(searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount == 0  && !state.searchedGlobally) {
+                        item {
+                            SearchWorldwide(
+                                message = stringResource(id = R.string.looks_like_nothing_came_up),
+                                onClick = { onAction(SearchAction.SearchGlobally) }
                             )
                         }
                     } else {
                         item {
-                            SearchWorldwide(
-                                message = stringResource(id = R.string.looks_like_nothing_came_up)
+                            Text(
+                                text = stringResource(id = R.string.looks_like_nothing_came_up),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Silver
                             )
                         }
                     }
@@ -290,8 +283,73 @@ private fun SearchScreen(
 }
 
 @Composable
+private fun SearchInfo(
+    country: CountryUi?,
+    isSearchedGlobally: Boolean,
+    searchResultCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+    ) {
+        if(!isSearchedGlobally && country != null) {
+            Text(
+                text = stringResource(id = R.string.searching_in),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Silver
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Icon(
+                modifier = Modifier.size(16.dp),
+                imageVector = country.flag,
+                contentDescription = null,
+                tint = Color.Unspecified,
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(
+                text = country.name,
+                style = MaterialTheme.typography.bodyMedium,
+                color = TintedBlack
+            )
+        } else if(isSearchedGlobally) {
+            Text(
+                text = stringResource(id = R.string.searching),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Silver
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Icon(
+                modifier = Modifier.size(16.dp),
+                imageVector = GlobeIcon,
+                contentDescription = null,
+                tint = Primary,
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(
+                text = stringResource(id = R.string.worldwide),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Primary
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        searchResultCount.takeIf { it > 0 }?.let { count ->
+            Text(
+                text = "$count " +
+                        stringResource(
+                            id = if (count == 1) R.string.product
+                            else R.string.products
+                        ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Silver
+            )
+        }
+    }
+}
+
+@Composable
 private fun SearchWorldwide(
     message: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -305,7 +363,12 @@ private fun SearchWorldwide(
             color = Silver
         )
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
         ) {
             Text(
                 text = stringResource(id = R.string.search),

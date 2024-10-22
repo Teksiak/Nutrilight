@@ -11,7 +11,8 @@ import kotlin.math.ceil
 
 class ProductsPagingSource(
     private val apiService: ProductsApiService,
-    private val searchQuery: String
+    private val searchQuery: String,
+    private val globalSearch: Boolean = false
 ): PagingSource<Int, Product>() {
 
     private var searchResultListener: SearchResultListener? = null
@@ -24,10 +25,17 @@ class ProductsPagingSource(
         return try {
             val currentPage = params.key ?: 1
             val result = safeApiCall {
-                apiService.searchProducts(
-                    searchTerms = searchQuery,
-                    page = currentPage
-                )
+                if(globalSearch) {
+                    apiService.searchProductsGlobally(
+                        searchTerms = searchQuery,
+                        page = currentPage
+                    )
+                } else {
+                    apiService.searchProducts(
+                        searchTerms = searchQuery,
+                        page = currentPage
+                    )
+                }
             }
             if(result is Result.Success) {
                 searchResultListener?.onSearchResult(

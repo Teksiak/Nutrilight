@@ -12,4 +12,6 @@
     <string name="searching_in">Searching in</string>
     <string name="product">product</string>
     <string name="products">products</string>
+    <string name="searching">Searching</string>
+    <string name="no_more_results">No more results</string>
 </resources>

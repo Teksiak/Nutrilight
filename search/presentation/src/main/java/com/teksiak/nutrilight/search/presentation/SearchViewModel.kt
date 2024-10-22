@@ -84,6 +84,13 @@ class SearchViewModel @Inject constructor(
                 }
             }
 
+            is SearchAction.SearchGlobally -> {
+                _state.update {
+                    it.copy(searchedGlobally = true)
+                }
+                searchRepository.setGlobalSearch(true)
+            }
+
             is SearchAction.NavigateToProduct -> {
                 applicationScope.launch {
                     productsRepository.addProduct(action.product)
@@ -119,5 +126,6 @@ class SearchViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         searchRepository.setQuery("")
+        searchRepository.setGlobalSearch(false)
     }
 }

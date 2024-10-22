@@ -8,6 +8,8 @@ interface SearchRepository {
 
     fun setQuery(query: String)
 
+    fun setGlobalSearch(globalSearch: Boolean)
+
     val searchedProducts: Flow<PagingData<Product>>
 
     val searchResultCount: Flow<Int>
