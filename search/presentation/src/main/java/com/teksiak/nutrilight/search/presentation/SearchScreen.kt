@@ -62,20 +62,21 @@ fun SearchScreenRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val searchedProducts = viewModel.searchedProducts.collectAsLazyPagingItems()
 
-    BackHandler {
-        onNavigateBack()
-    }
-
     SearchScreen(
         state = state,
         searchedProducts = searchedProducts,
         onAction = { action ->
-            viewModel.onAction(action)
             when (action) {
                 is SearchAction.ScanBarcode -> onScanBarcode()
                 is SearchAction.NavigateToProduct -> onNavigateToProduct(action.product.code)
+                is SearchAction.NavigateBack -> {
+                    if(!state.searchedGlobally) {
+                        onNavigateBack()
+                    }
+                }
                 else -> Unit
             }
+            viewModel.onAction(action)
         }
     )
 }
@@ -86,6 +87,9 @@ private fun SearchScreen(
     searchedProducts: LazyPagingItems<Product>,
     onAction: (SearchAction) -> Unit
 ) {
+    BackHandler {
+        onAction(SearchAction.NavigateBack)
+    }
 
     NutrilightScaffold(
         topAppBar = {

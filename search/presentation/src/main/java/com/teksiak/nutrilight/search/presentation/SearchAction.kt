@@ -9,4 +9,5 @@ sealed interface SearchAction {
     data object SearchGlobally: SearchAction
     data object ScanBarcode: SearchAction
     data class NavigateToProduct(val product: Product): SearchAction
+    data object NavigateBack: SearchAction
 }

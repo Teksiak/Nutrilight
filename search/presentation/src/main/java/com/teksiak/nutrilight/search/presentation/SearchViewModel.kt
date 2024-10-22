@@ -97,6 +97,16 @@ class SearchViewModel @Inject constructor(
                 }
             }
 
+            is SearchAction.NavigateBack -> {
+                if(_state.value.searchedGlobally) {
+                    // TODO: Do some caching with Retrofit to avoid unnecessary API calls
+                    _state.update {
+                        it.copy(searchedGlobally = false)
+                    }
+                    searchRepository.setGlobalSearch(false)
+                }
+            }
+
             else -> Unit
         }
     }
