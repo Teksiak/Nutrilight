@@ -193,7 +193,13 @@ private fun SearchScreen(
                 }
             } else {
                 val composedItems = remember(state.searchResultCount) { MutableList(state.searchResultCount) { false } }
-                var lastComposedIndex by remember { mutableIntStateOf(0) }
+
+                LaunchedEffect(state.lastShownProductIndex) {
+                    (0 .. state.lastShownProductIndex).forEach {
+                        composedItems[it] = true
+                    }
+                }
+
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(
@@ -217,18 +223,17 @@ private fun SearchScreen(
                             key = searchedProducts.itemKey { it.code },
                         ) { index ->
                             searchedProducts[index]?.let { product ->
-                                val delay = (index - lastComposedIndex) * 50
+                                val delay = (index - state.lastShownProductIndex) * 50
                                 LaunchedEffect(Unit) {
-                                    composedItems[index] = true
-                                    lastComposedIndex = index
+                                    onAction(SearchAction.LastShownProductIndexChanged(index))
                                 }
                                 AnimatedVisibility(
                                     visibleState = remember {
-                                        MutableTransitionState(false).apply {
+                                        MutableTransitionState(composedItems[index]).apply {
                                             targetState = true
                                         }
                                     },
-                                    enter = if(!composedItems[index]) {
+                                    enter =
                                         slideInHorizontally(
                                             animationSpec = tween(
                                                 durationMillis = 200,
@@ -241,8 +246,7 @@ private fun SearchScreen(
                                                 delayMillis = delay,
                                                 easing = LinearEasing
                                             )
-                                        )
-                                    } else EnterTransition.None,
+                                        ),
                                     exit = fadeOut()
                                 ) {
                                     ProductCard(

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.max
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -73,9 +74,20 @@ class SearchViewModel @Inject constructor(
 
             is SearchAction.SearchProducts -> {
                 _state.update {
-                    it.copy(hasSearched = true)
+                    it.copy(
+                        hasSearched = true,
+                        lastShownProductIndex = 0
+                    )
                 }
                 searchRepository.setQuery(state.value.searchQuery)
+            }
+
+            is SearchAction.LastShownProductIndexChanged -> {
+                _state.update {
+                    it.copy(
+                        lastShownProductIndex = max(it.lastShownProductIndex, action.index)
+                    )
+                }
             }
 
             is SearchAction.ClearSearchQuery -> {
@@ -86,7 +98,10 @@ class SearchViewModel @Inject constructor(
 
             is SearchAction.SearchGlobally -> {
                 _state.update {
-                    it.copy(searchedGlobally = true)
+                    it.copy(
+                        searchedGlobally = true,
+                        lastShownProductIndex = 0
+                    )
                 }
                 searchRepository.setGlobalSearch(true)
             }
@@ -100,7 +115,10 @@ class SearchViewModel @Inject constructor(
             is SearchAction.NavigateToNormalSearch -> {
                 // TODO: Do some caching with Retrofit to avoid unnecessary API calls
                 _state.update {
-                    it.copy(searchedGlobally = false)
+                    it.copy(
+                        searchedGlobally = false,
+                        lastShownProductIndex = 0
+                    )
                 }
                 searchRepository.setGlobalSearch(false)
             }

@@ -10,6 +10,7 @@ data class SearchState(
     val searchedCountry: Country? = null,
     val searchedGlobally: Boolean = false,
     val searchResultCount: Int = 0,
+    val lastShownProductIndex: Int = 0,
     val productsHistory: List<Product> = emptyList(),
     val showProductImages: Boolean = true
 )
