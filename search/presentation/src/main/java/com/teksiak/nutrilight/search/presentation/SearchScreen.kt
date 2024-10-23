@@ -1,6 +1,19 @@
 package com.teksiak.nutrilight.search.presentation
 
 import androidx.activity.compose.BackHandler
+import androidx.collection.mutableIntSetOf
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,12 +30,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -51,6 +71,8 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBa
 import com.teksiak.nutrilight.core.presentation.ui_models.CountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SearchScreenRoot(
@@ -69,11 +91,7 @@ fun SearchScreenRoot(
             when (action) {
                 is SearchAction.ScanBarcode -> onScanBarcode()
                 is SearchAction.NavigateToProduct -> onNavigateToProduct(action.product.code)
-                is SearchAction.NavigateBack -> {
-                    if(!state.searchedGlobally) {
-                        onNavigateBack()
-                    }
-                }
+                is SearchAction.NavigateBack -> onNavigateBack()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -88,7 +106,11 @@ private fun SearchScreen(
     onAction: (SearchAction) -> Unit
 ) {
     BackHandler {
-        onAction(SearchAction.NavigateBack)
+        if (state.searchedGlobally) {
+            onAction(SearchAction.NavigateToNormalSearch)
+        } else {
+            onAction(SearchAction.NavigateBack)
+        }
     }
 
     NutrilightScaffold(
@@ -170,6 +192,8 @@ private fun SearchScreen(
                     )
                 }
             } else {
+                val composedItems = remember(state.searchResultCount) { MutableList(state.searchResultCount) { false } }
+                var lastComposedIndex by remember { mutableIntStateOf(0) }
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(
@@ -193,20 +217,50 @@ private fun SearchScreen(
                             key = searchedProducts.itemKey { it.code },
                         ) { index ->
                             searchedProducts[index]?.let { product ->
-                                ProductCard(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .animateItem(),
-                                    productUi = product.toProductUi(showImage = state.showProductImages),
-                                    onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
-                                )
+                                val delay = (index - lastComposedIndex) * 50
+                                LaunchedEffect(Unit) {
+                                    composedItems[index] = true
+                                    lastComposedIndex = index
+                                }
+                                AnimatedVisibility(
+                                    visibleState = remember {
+                                        MutableTransitionState(false).apply {
+                                            targetState = true
+                                        }
+                                    },
+                                    enter = if(!composedItems[index]) {
+                                        slideInHorizontally(
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                delayMillis = delay,
+                                                easing = LinearOutSlowInEasing
+                                            )
+                                        ) + fadeIn(
+                                            animationSpec = tween(
+                                                durationMillis = 200,
+                                                delayMillis = delay,
+                                                easing = LinearEasing
+                                            )
+                                        )
+                                    } else EnterTransition.None,
+                                    exit = fadeOut()
+                                ) {
+                                    ProductCard(
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        productUi = product.toProductUi(showImage = state.showProductImages),
+                                        onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
+                                    )
+                                }
                             }
                         }
                     }
                     if (searchedProducts.loadState.hasError) {
                         item {
                             Column(
-                                modifier = Modifier.padding(top = 8.dp),
+                                modifier = Modifier
+                                    .animateItem()
+                                    .padding(top = 8.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
@@ -246,6 +300,7 @@ private fun SearchScreen(
                             LoadingAnimation(
                                 modifier = Modifier
                                     .size(48.dp)
+                                    .animateItem()
                                     .padding(top = 8.dp)
                             )
                         }
@@ -253,22 +308,25 @@ private fun SearchScreen(
                         item {
                             SearchWorldwide(
                                 message = stringResource(id = R.string.havent_found_what_youre_looking_for),
-                                onClick = { onAction(SearchAction.SearchGlobally) }
+                                onClick = { onAction(SearchAction.SearchGlobally) },
+                                modifier = Modifier.animateItem()
                             )
                         }
-                    } else if(searchedProducts.loadState.append is LoadState.NotLoading &&searchedProducts.itemCount > 0 && state.searchedGlobally) {
+                    } else if (searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount > 0 && state.searchedGlobally) {
                         item {
                             Text(
                                 text = stringResource(id = R.string.no_more_results),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Silver
+                                color = Silver,
+                                modifier = Modifier.animateItem()
                             )
                         }
-                    } else if(searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount == 0  && !state.searchedGlobally) {
+                    } else if (searchedProducts.loadState.append is LoadState.NotLoading && searchedProducts.itemCount == 0 && !state.searchedGlobally) {
                         item {
                             SearchWorldwide(
                                 message = stringResource(id = R.string.looks_like_nothing_came_up),
-                                onClick = { onAction(SearchAction.SearchGlobally) }
+                                onClick = { onAction(SearchAction.SearchGlobally) },
+                                modifier = Modifier.animateItem()
                             )
                         }
                     } else {
@@ -276,7 +334,8 @@ private fun SearchScreen(
                             Text(
                                 text = stringResource(id = R.string.looks_like_nothing_came_up),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Silver
+                                color = Silver,
+                                modifier = Modifier.animateItem()
                             )
                         }
                     }
@@ -296,7 +355,7 @@ private fun SearchInfo(
     Row(
         modifier = modifier,
     ) {
-        if(!isSearchedGlobally && country != null) {
+        if (!isSearchedGlobally && country != null) {
             Text(
                 text = stringResource(id = R.string.searching_in),
                 style = MaterialTheme.typography.bodyMedium,
@@ -315,7 +374,7 @@ private fun SearchInfo(
                 style = MaterialTheme.typography.bodyMedium,
                 color = TintedBlack
             )
-        } else if(isSearchedGlobally) {
+        } else if (isSearchedGlobally) {
             Text(
                 text = stringResource(id = R.string.searching),
                 style = MaterialTheme.typography.bodyMedium,

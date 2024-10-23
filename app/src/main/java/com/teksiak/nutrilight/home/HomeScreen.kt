@@ -34,8 +34,8 @@ import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
-import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
+import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import kotlin.math.roundToInt
 

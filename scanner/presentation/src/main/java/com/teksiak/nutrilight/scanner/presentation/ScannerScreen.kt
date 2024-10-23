@@ -112,7 +112,6 @@ private fun ScannerScreen(
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsStateWithLifecycle()
     
     LaunchedEffect(lifecycleState) {
-        Log.d("ScannerScreen", "Lifecycle state: $lifecycleState")
         if(lifecycleState == Lifecycle.State.RESUMED) {
             val activity = context as ComponentActivity
             val hasCameraPermission = context.hasPermission(Manifest.permission.CAMERA)
