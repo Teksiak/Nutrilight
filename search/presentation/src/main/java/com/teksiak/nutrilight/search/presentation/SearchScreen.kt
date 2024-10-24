@@ -192,10 +192,11 @@ private fun SearchScreen(
                     )
                 }
             } else {
-                val composedItems = remember(state.searchResultCount) { MutableList(state.searchResultCount) { false } }
+                val composedItems =
+                    remember(state.searchResultCount) { MutableList(state.searchResultCount) { false } }
 
                 LaunchedEffect(state.lastShownProductIndex) {
-                    (0 .. state.lastShownProductIndex).forEach {
+                    (0..state.lastShownProductIndex).forEach {
                         composedItems[it] = true
                     }
                 }
@@ -229,31 +230,42 @@ private fun SearchScreen(
                                 }
                                 AnimatedVisibility(
                                     visibleState = remember {
-                                        MutableTransitionState(composedItems[index]).apply {
+                                        MutableTransitionState(
+                                            composedItems
+                                                .getOrElse(
+                                                    index
+                                                ) { true }
+                                        ).apply {
                                             targetState = true
                                         }
                                     },
                                     enter =
-                                        slideInHorizontally(
-                                            animationSpec = tween(
-                                                durationMillis = 200,
-                                                delayMillis = delay,
-                                                easing = LinearOutSlowInEasing
-                                            )
-                                        ) + fadeIn(
-                                            animationSpec = tween(
-                                                durationMillis = 200,
-                                                delayMillis = delay,
-                                                easing = LinearEasing
-                                            )
-                                        ),
+                                    slideInHorizontally(
+                                        animationSpec = tween(
+                                            durationMillis = 200,
+                                            delayMillis = delay,
+                                            easing = LinearOutSlowInEasing
+                                        )
+                                    ) + fadeIn(
+                                        animationSpec = tween(
+                                            durationMillis = 200,
+                                            delayMillis = delay,
+                                            easing = LinearEasing
+                                        )
+                                    ),
                                     exit = fadeOut()
                                 ) {
                                     ProductCard(
                                         modifier = Modifier
                                             .fillMaxSize(),
                                         productUi = product.toProductUi(showImage = state.showProductImages),
-                                        onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
+                                        onNavigate = {
+                                            onAction(
+                                                SearchAction.NavigateToProduct(
+                                                    product
+                                                )
+                                            )
+                                        }
                                     )
                                 }
                             }

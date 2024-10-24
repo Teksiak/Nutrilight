@@ -85,7 +85,7 @@ class SearchViewModel @Inject constructor(
             is SearchAction.LastShownProductIndexChanged -> {
                 _state.update {
                     it.copy(
-                        lastShownProductIndex = max(it.lastShownProductIndex, action.index)
+                        lastShownProductIndex = max(it.lastShownProductIndex, action.index).coerceAtMost(it.searchResultCount - 1)
                     )
                 }
             }

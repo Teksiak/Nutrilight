@@ -60,9 +60,9 @@ class DataStoreSettingsRepository @Inject constructor(
                     Country.fromCode(it)
                 } ?: run {
                     val locales = Resources.getSystem().configuration.locales
-                    (0 until locales.size()).mapNotNull { index ->
+                    (0 until locales.size()).firstNotNullOfOrNull { index ->
                         Country.fromLocale(locales[index])
-                    }[0]
+                    } ?: Country.UNITED_KINGDOM
                 }
     }
 
