@@ -1,6 +1,7 @@
 package com.teksiak.nutrilight.core.network.di
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -8,6 +9,7 @@ import com.teksiak.nutrilight.core.domain.Country
 import com.teksiak.nutrilight.core.domain.SettingsRepository
 import com.teksiak.nutrilight.core.network.ProductsApiService
 import com.teksiak.nutrilight.core.network.interceptor.BaseUrlInterceptor
+import com.teksiak.nutrilight.core.network.interceptor.CacheInterceptor
 import com.teksiak.nutrilight.core.network.interceptor.UserAgentInterceptor
 import com.teksiak.nutrilight.core.network.util.toBaseUrl
 import dagger.Module
@@ -16,6 +18,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -33,12 +36,20 @@ object RetrofitModule {
         settingsRepository: SettingsRepository,
         applicationScope: CoroutineScope
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(UserAgentInterceptor(context))
+        .cache(
+            Cache(context.cacheDir, ProductsApiService.CACHE_SIZE)
+        )
+        .addInterceptor(
+            UserAgentInterceptor(context)
+        )
         .addInterceptor(
             BaseUrlInterceptor(
                 settingsRepository = settingsRepository,
                 applicationScope = applicationScope
             )
+        )
+        .addInterceptor(
+            CacheInterceptor(context)
         )
         .addInterceptor(
             HttpLoggingInterceptor().apply {
@@ -67,5 +78,6 @@ object RetrofitModule {
     @Provides
     @Singleton
     fun provideProductsApi(retrofit: Retrofit): ProductsApiService = retrofit.create(
-        ProductsApiService::class.java)
+        ProductsApiService::class.java
+    )
 }

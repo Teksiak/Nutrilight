@@ -10,7 +10,7 @@ class UserAgentInterceptor(
     private val context: Context,
 ): Interceptor {
 
-    val userAgent: String by lazy {
+    private val userAgent: String by lazy {
         createUserAgent()
     }
 

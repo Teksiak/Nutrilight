@@ -44,6 +44,9 @@ interface ProductsApiService {
         const val SPAIN_BASE_URL = "https://es.openfoodfacts.net/"
         const val UNITED_KINGDOM_BASE_URL = "https://uk.openfoodfacts.net/"
 
+        const val CACHE_SIZE = 10 * 1024 * 1024L
+        const val CACHE_MAX_AGE = 60
+        const val CACHE_MAX_STALE = 2 * 24 * 60 * 60
         const val SEARCH_PAGE_SIZE = 25
     }
 
