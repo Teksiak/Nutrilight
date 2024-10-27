@@ -91,7 +91,7 @@ class RoomLocalProductsDataSource(
         }
     }
 
-    override suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local> {
+    override suspend fun upsertProduct(product: Product, addToHistory: Boolean): EmptyResult<DataError.Local> {
         return try {
             val existingProduct = productsDao.getProduct(product.code).first()
             val updatedProduct = if(existingProduct != null && product.isFavourite == null) {
@@ -100,7 +100,7 @@ class RoomLocalProductsDataSource(
                 )
             } else product
 
-            productsDao.addProduct(updatedProduct.toProductEntity(), historySize.value)
+            productsDao.addProduct(updatedProduct.toProductEntity(), historySize.value, addToHistory)
             Result.Success(Unit)
         } catch (e: SQLiteFullException) {
             Result.Error(DataError.Local.DISK_FULL)

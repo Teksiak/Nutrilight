@@ -16,11 +16,13 @@ interface ProductsDao: HistoryDao {
     suspend fun upsertProduct(product: ProductEntity)
 
     @Transaction
-    suspend fun addProduct(product: ProductEntity, historySize: Int = SettingsRepository.DEFAULT_HISTORY_SIZE) {
+    suspend fun addProduct(product: ProductEntity, historySize: Int = SettingsRepository.DEFAULT_HISTORY_SIZE, addToHistory: Boolean = true) {
         upsertProduct(product)
-        addToHistory(product.code.asHistoryEntity())
-        if(getHistoryCount() > historySize) {
-            deleteLastHistory()
+        if(addToHistory) {
+            addToHistory(product.code.asHistoryEntity())
+            if(getHistoryCount() > historySize) {
+                deleteLastHistory()
+            }
         }
     }
 

@@ -10,7 +10,7 @@ interface ProductsRepository {
 
     suspend fun scanProduct(barcode: String): EmptyResult<DataError.Remote>
 
-    suspend fun addProduct(product: Product): EmptyResult<DataError.Local>
+    suspend fun addProduct(product: Product, addToHistory: Boolean = true): EmptyResult<DataError.Local>
 
     fun getProduct(code: String): Flow<Product?>
 

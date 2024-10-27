@@ -37,8 +37,8 @@ class ProductsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addProduct(product: Product): EmptyResult<DataError.Local> {
-        return localProductsDataSource.upsertProduct(product)
+    override suspend fun addProduct(product: Product, addToHistory: Boolean): EmptyResult<DataError.Local> {
+        return localProductsDataSource.upsertProduct(product, addToHistory)
     }
 
     override fun getProduct(code: String): Flow<Product?> {

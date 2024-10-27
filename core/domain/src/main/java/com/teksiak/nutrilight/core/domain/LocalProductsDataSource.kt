@@ -18,7 +18,7 @@ interface LocalProductsDataSource {
 
     suspend fun removeFavourite(code: String): EmptyResult<DataError.Local>
 
-    suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local>
+    suspend fun upsertProduct(product: Product, addToHistory: Boolean = true): EmptyResult<DataError.Local>
 
     suspend fun removeProduct(code: String, ignoreHistory: Boolean = false): EmptyResult<DataError.Local>
 

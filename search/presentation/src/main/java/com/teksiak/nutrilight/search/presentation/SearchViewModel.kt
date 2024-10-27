@@ -139,7 +139,8 @@ class SearchViewModel @Inject constructor(
                     if (action.product.isFavourite != true) {
                         viewModelScope.launch {
                             productsRepository.addProduct(
-                                action.product.copy(isFavourite = true)
+                                product = action.product.copy(isFavourite = true),
+                                addToHistory = false
                             )
                         }
                         state
