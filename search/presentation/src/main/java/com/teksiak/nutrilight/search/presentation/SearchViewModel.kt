@@ -1,19 +1,28 @@
 package com.teksiak.nutrilight.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.teksiak.domain.SearchRepository
 import com.teksiak.nutrilight.core.domain.ProductsRepository
 import com.teksiak.nutrilight.core.domain.SettingsRepository
+import com.teksiak.nutrilight.core.domain.product.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.switchMap
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,11 +35,22 @@ class SearchViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val applicationScope: CoroutineScope,
 ) : ViewModel() {
-    val searchedProducts = searchRepository.searchedProducts
-        .cachedIn(viewModelScope)
 
     private val _state = MutableStateFlow(SearchState())
     val state = _state.asStateFlow()
+
+    private val favouriteCodesFlow = productsRepository.getFavouriteProducts().map { productList ->
+        productList.map { it.code }
+    }
+
+    val searchedProducts = searchRepository.searchedProducts
+        .cachedIn(viewModelScope)
+        .combine(favouriteCodesFlow) { pagingData, favouriteCodes ->
+            pagingData.map { product ->
+                product.copy(isFavourite = favouriteCodes.contains(product.code))
+            }
+        }
+        .cachedIn(viewModelScope)
 
     init {
         _state.update { state ->
@@ -113,7 +133,6 @@ class SearchViewModel @Inject constructor(
             }
 
             is SearchAction.NavigateToNormalSearch -> {
-                // TODO: Do some caching with Retrofit to avoid unnecessary API calls
                 _state.update {
                     it.copy(
                         searchedGlobally = false,
