@@ -9,6 +9,8 @@ sealed interface SearchAction {
     data class LastShownProductIndexChanged(val index: Int): SearchAction
     data class NavigateToProduct(val product: Product): SearchAction
     data class ToggleFavourite(val product: Product): SearchAction
+    data object ConfirmRemoveFavourite: SearchAction
+    data object CancelRemoveFavourite : SearchAction
     data object SearchGlobally: SearchAction
     data object NavigateToNormalSearch: SearchAction
     data object ScanBarcode: SearchAction

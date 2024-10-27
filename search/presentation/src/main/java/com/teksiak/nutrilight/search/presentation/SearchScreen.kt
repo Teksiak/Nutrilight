@@ -68,6 +68,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingAnimation
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
+import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.ui_models.CountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
@@ -106,6 +107,13 @@ private fun SearchScreen(
     searchedProducts: LazyPagingItems<Product>,
     onAction: (SearchAction) -> Unit
 ) {
+    state.productToRemove?.let {
+        RemoveFavouriteDialog(
+            onConfirm = { onAction(SearchAction.ConfirmRemoveFavourite) },
+            onDismiss = { onAction(SearchAction.CancelRemoveFavourite) }
+        )
+    }
+
     BackHandler {
         if (state.searchedGlobally) {
             onAction(SearchAction.NavigateToNormalSearch)
@@ -160,6 +168,7 @@ private fun SearchScreen(
                                 .fillMaxSize()
                                 .animateItem(),
                             productUi = product.toProductUi(showImage = state.showProductImages),
+                            onFavouriteToggle = { onAction(SearchAction.ToggleFavourite(product)) },
                             onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
                         )
                     }
@@ -257,13 +266,8 @@ private fun SearchScreen(
                                         modifier = Modifier
                                             .fillMaxSize(),
                                         productUi = product.toProductUi(showImage = state.showProductImages),
-                                        onNavigate = {
-                                            onAction(
-                                                SearchAction.NavigateToProduct(
-                                                    product
-                                                )
-                                            )
-                                        }
+                                        onFavouriteToggle = { onAction(SearchAction.ToggleFavourite(product)) },
+                                        onNavigate = { onAction(SearchAction.NavigateToProduct(product)) }
                                     )
                                 }
                             }

@@ -6,6 +6,7 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import com.teksiak.nutrilight.core.database.entity.ProductEntity
 import com.teksiak.nutrilight.core.database.mapper.asHistoryEntity
+import com.teksiak.nutrilight.core.domain.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,7 +16,7 @@ interface ProductsDao: HistoryDao {
     suspend fun upsertProduct(product: ProductEntity)
 
     @Transaction
-    suspend fun addProduct(product: ProductEntity, historySize: Int = 10) {
+    suspend fun addProduct(product: ProductEntity, historySize: Int = SettingsRepository.DEFAULT_HISTORY_SIZE) {
         upsertProduct(product)
         addToHistory(product.code.asHistoryEntity())
         if(getHistoryCount() > historySize) {

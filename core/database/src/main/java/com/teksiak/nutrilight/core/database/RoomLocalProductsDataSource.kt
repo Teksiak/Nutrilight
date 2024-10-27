@@ -28,7 +28,7 @@ class RoomLocalProductsDataSource(
     private val applicationScope: CoroutineScope
 ): LocalProductsDataSource {
 
-    private val historySize = MutableStateFlow(10)
+    private val historySize = MutableStateFlow(SettingsRepository.DEFAULT_HISTORY_SIZE)
 
     init {
         settingsRepository.historySize
@@ -94,7 +94,7 @@ class RoomLocalProductsDataSource(
     override suspend fun upsertProduct(product: Product): EmptyResult<DataError.Local> {
         return try {
             val existingProduct = productsDao.getProduct(product.code).first()
-            val updatedProduct = if(existingProduct != null) {
+            val updatedProduct = if(existingProduct != null && product.isFavourite == null) {
                 product.copy(
                     isFavourite = existingProduct.isFavourite
                 )
