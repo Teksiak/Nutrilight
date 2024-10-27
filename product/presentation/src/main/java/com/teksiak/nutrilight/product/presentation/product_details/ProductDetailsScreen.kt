@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,13 +22,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -45,14 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.core.presentation.designsystem.CopyIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.HeartFilledIcon
-import com.teksiak.nutrilight.core.presentation.designsystem.HeartIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.NutrilightTheme
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
+import com.teksiak.nutrilight.core.presentation.designsystem.components.FavouriteAnimatedIcon
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightAppBar
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScore
@@ -101,9 +101,13 @@ private fun ProductDetailsScreen(
                     actionButtons = {
                         CircleButton(
                             onClick = { onAction(ProductDetailsAction.ToggleFavourite) },
-                            iconTint = if (productUi.isFavourite) Color.Unspecified else TintedBlack,
-                            icon = if (productUi.isFavourite) HeartFilledIcon else HeartIcon,
-                        )
+                        ) {
+                            FavouriteAnimatedIcon(
+                                isFavourite = productUi.isFavourite,
+                                onClick = { onAction(ProductDetailsAction.ToggleFavourite) },
+                                defaultColor = TintedBlack
+                            )
+                        }
                     }
                 )
             }

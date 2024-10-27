@@ -21,7 +21,7 @@ fun CircleButton(
     icon: ImageVector,
     modifier: Modifier = Modifier,
     iconTint: Color = TintedBlack,
-    onClick: () -> Unit = { }
+    onClick: () -> Unit,
 ) {
     OutlinedIconButton(
         onClick = onClick,
@@ -38,12 +38,30 @@ fun CircleButton(
     }
 }
 
+@Composable
+fun CircleButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    OutlinedIconButton(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.dp, ShadedWhite),
+        modifier = modifier
+            .size(40.dp)
+    ) {
+        content()
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun CircleButtonPreview() {
     NutrilightTheme {
         CircleButton(
             icon = ScanBarIcon,
+            onClick = {}
         )
     }
 }

@@ -103,19 +103,11 @@ fun ProductCard(
                 .width(60.dp),
             horizontalAlignment = Alignment.End
         ) {
-            Icon(
+            FavouriteAnimatedIcon(
+                isFavourite = productUi.isFavourite,
+                onClick = { onFavouriteToggle(productUi.code) },
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        onFavouriteToggle(productUi.code)
-                    }
-                ,
-                imageVector = if(productUi.isFavourite) HeartFilledIcon else HeartIcon,
-                contentDescription = if(productUi.isFavourite) "Remove from favourites" else "Add to favourites",
-                tint = if(productUi.isFavourite) Color.Unspecified else Silver
             )
             Spacer(modifier = Modifier.weight(1f))
             productUi.score?.let { score ->
