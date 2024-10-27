@@ -12,5 +12,6 @@ data class SearchState(
     val searchResultCount: Int = 0,
     val lastShownProductIndex: Int = -1,
     val productsHistory: List<Product> = emptyList(),
+    val productToRemove: String? = null,
     val showProductImages: Boolean = true
 )

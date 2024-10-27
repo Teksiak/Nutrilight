@@ -18,6 +18,10 @@ interface SettingsRepository {
         const val COUNTRY_NAME = "country"
         const val HISTORY_SIZE = "history_size"
 
+        const val DEFAULT_HISTORY_SIZE = 10
+        const val DEFAULT_SHOW_PRODUCT_IMAGES = true
+        val DEFAULT_COUNTRY = Country.UNITED_KINGDOM
+
         val HISTORY_SIZES = (5..25).toList()
     }
 }

@@ -7,9 +7,10 @@ sealed interface SearchAction {
     data object ClearSearchQuery: SearchAction
     data object SearchProducts: SearchAction
     data class LastShownProductIndexChanged(val index: Int): SearchAction
-    data object SearchGlobally: SearchAction
-    data object ScanBarcode: SearchAction
     data class NavigateToProduct(val product: Product): SearchAction
+    data class ToggleFavourite(val product: Product): SearchAction
+    data object SearchGlobally: SearchAction
     data object NavigateToNormalSearch: SearchAction
+    data object ScanBarcode: SearchAction
     data object NavigateBack: SearchAction
 }

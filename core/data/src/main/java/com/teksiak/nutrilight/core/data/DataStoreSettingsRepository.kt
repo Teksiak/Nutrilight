@@ -20,9 +20,7 @@ import com.teksiak.nutrilight.core.domain.util.Result
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.Locale
 import javax.inject.Inject
 
 class DataStoreSettingsRepository @Inject constructor(
@@ -43,7 +41,7 @@ class DataStoreSettingsRepository @Inject constructor(
                 }
             }
             .map { preferences ->
-                preferences[SHOW_PRODUCT_IMAGES_KEY] ?: true
+                preferences[SHOW_PRODUCT_IMAGES_KEY] ?: SettingsRepository.DEFAULT_SHOW_PRODUCT_IMAGES
             }
 
     override val country: Flow<Country>
@@ -62,7 +60,7 @@ class DataStoreSettingsRepository @Inject constructor(
                     val locales = Resources.getSystem().configuration.locales
                     (0 until locales.size()).firstNotNullOfOrNull { index ->
                         Country.fromLocale(locales[index])
-                    } ?: Country.UNITED_KINGDOM
+                    } ?: SettingsRepository.DEFAULT_COUNTRY
                 }
     }
 
@@ -76,13 +74,13 @@ class DataStoreSettingsRepository @Inject constructor(
                 }
             }
             .map { preferences ->
-                preferences[HISTORY_SIZE_KEY] ?: 10
+                preferences[HISTORY_SIZE_KEY] ?: SettingsRepository.DEFAULT_HISTORY_SIZE
             }
 
     override suspend fun toggleShowProductImages(): EmptyResult<DataError.Local> {
         return safeSettingsChange {
             applicationContext.settingsDataStore.edit { preferences ->
-                preferences[SHOW_PRODUCT_IMAGES_KEY] = !(preferences[SHOW_PRODUCT_IMAGES_KEY] ?: true)
+                preferences[SHOW_PRODUCT_IMAGES_KEY] = !(preferences[SHOW_PRODUCT_IMAGES_KEY] ?: SettingsRepository.DEFAULT_SHOW_PRODUCT_IMAGES)
             }
         }
     }
