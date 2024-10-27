@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.search.presentation
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
@@ -193,13 +194,11 @@ private fun SearchScreen(
                 }
             } else {
                 val composedItems =
-                    remember(state.searchResultCount) { MutableList(state.searchResultCount) { false } }
-
-                LaunchedEffect(state.lastShownProductIndex) {
-                    (0..state.lastShownProductIndex).forEach {
-                        composedItems[it] = true
+                    remember(state.searchResultCount, state.lastShownProductIndex) {
+                        MutableList(state.searchResultCount) { index ->
+                            index <= state.lastShownProductIndex
+                        }
                     }
-                }
 
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -224,18 +223,17 @@ private fun SearchScreen(
                             key = searchedProducts.itemKey { it.code },
                         ) { index ->
                             searchedProducts[index]?.let { product ->
+                                val composed = remember { composedItems.getOrElse(index) { false } }
                                 val delay = (index - state.lastShownProductIndex) * 50
+
                                 LaunchedEffect(Unit) {
+                                    if(composed) return@LaunchedEffect
                                     onAction(SearchAction.LastShownProductIndexChanged(index))
                                 }
+
                                 AnimatedVisibility(
                                     visibleState = remember {
-                                        MutableTransitionState(
-                                            composedItems
-                                                .getOrElse(
-                                                    index
-                                                ) { true }
-                                        ).apply {
+                                        MutableTransitionState(composed).apply {
                                             targetState = true
                                         }
                                     },
