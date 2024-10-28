@@ -93,9 +93,29 @@ fun NavigationRoot(
                         }
                     }
                 },
+                onNavigateToSearch = {
+                    navController.navigate(NavigationRoute.SearchRoute) {
+                        popUpTo(NavigationRoute.ScannerRoute) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
-        composable<NavigationRoute.SearchRoute> {
+        composable<NavigationRoute.SearchRoute>(
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(300)
+                )
+            }
+        ) {
             SearchScreenRoot(
                 viewModel = hiltViewModel<SearchViewModel>(),
                 onScanBarcode = {

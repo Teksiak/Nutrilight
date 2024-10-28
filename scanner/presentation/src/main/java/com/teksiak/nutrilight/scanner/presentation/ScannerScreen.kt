@@ -61,6 +61,7 @@ fun ScannerScreenRoot(
     viewModel: ScannerViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToProduct: (String) -> Unit,
+    onNavigateToSearch: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -79,6 +80,7 @@ fun ScannerScreenRoot(
         onAction = { action ->
             when(action) {
                 ScannerAction.NavigateBack -> onNavigateBack()
+                ScannerAction.NavigateToSearch -> onNavigateToSearch()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -258,7 +260,7 @@ private fun ScannerScreen(
                     PrimaryButton(
                         text = stringResource(id = R.string.search),
                         onClick = {
-                            onAction(ScannerAction.DismissError)
+                            onAction(ScannerAction.NavigateToSearch)
                         },
                     )
                 },
