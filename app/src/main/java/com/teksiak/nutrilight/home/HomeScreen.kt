@@ -1,8 +1,11 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 
 package com.teksiak.nutrilight.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,12 +43,13 @@ import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 import kotlin.math.roundToInt
 
 @Composable
-fun HomeScreenRoot(
+fun SharedTransitionScope.HomeScreenRoot(
     viewModel: HomeViewModel,
     onSearchProducts: () -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToProduct: (String) -> Unit,
-    navigateToTab: (NavigationTab) -> Unit
+    navigateToTab: (NavigationTab) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -74,15 +78,17 @@ fun HomeScreenRoot(
             }
             viewModel.onAction(action)
         },
-        navigateWithTab = navigateToTab
+        navigateWithTab = navigateToTab,
+        animatedVisibilityScope = animatedVisibilityScope
     )
 }
 
 @Composable
-private fun HomeScreen(
+private fun SharedTransitionScope.HomeScreen(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
-    navigateWithTab: (NavigationTab) -> Unit
+    navigateWithTab: (NavigationTab) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     var heightOffsetLimit by remember {
@@ -119,6 +125,12 @@ private fun HomeScreen(
                             .padding(horizontal = 24.dp)
                             .padding(top = 24.dp)
                             .height(40.dp)
+                            .sharedElement(
+                                state = rememberSharedContentState(
+                                    key = "searchBar",
+                                ),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
                     )
                 },
                 measurePolicy = { measurables, constraints ->

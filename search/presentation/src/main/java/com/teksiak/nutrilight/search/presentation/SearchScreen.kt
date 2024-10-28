@@ -1,7 +1,12 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.teksiak.nutrilight.search.presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
@@ -62,11 +67,12 @@ import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
 
 @Composable
-fun SearchScreenRoot(
+fun SharedTransitionScope.SearchScreenRoot(
     viewModel: SearchViewModel,
     onScanBarcode: () -> Unit,
     onNavigateBack: () -> Unit,
-    onNavigateToProduct: (String) -> Unit
+    onNavigateToProduct: (String) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val searchedProducts = viewModel.searchedProducts.collectAsLazyPagingItems()
@@ -82,15 +88,17 @@ fun SearchScreenRoot(
                 else -> Unit
             }
             viewModel.onAction(action)
-        }
+        },
+        animatedVisibilityScope = animatedVisibilityScope
     )
 }
 
 @Composable
-private fun SearchScreen(
+private fun SharedTransitionScope.SearchScreen(
     state: SearchState,
     searchedProducts: LazyPagingItems<Product>,
-    onAction: (SearchAction) -> Unit
+    onAction: (SearchAction) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     state.productToRemove?.let {
         RemoveFavouriteDialog(
@@ -123,6 +131,12 @@ private fun SearchScreen(
                     .padding(horizontal = 24.dp)
                     .padding(top = 24.dp)
                     .height(40.dp)
+                    .sharedElement(
+                        state = rememberSharedContentState(
+                            key = "searchBar",
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
             )
         }
     ) { paddingValues ->
