@@ -29,17 +29,26 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
 import com.teksiak.nutrilight.core.presentation.NavigationTab
+import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
+import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
+import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightInformation
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
+import com.teksiak.nutrilight.product.presentation.history.HistoryAction
 import kotlin.math.roundToInt
 
 @Composable
@@ -68,6 +77,7 @@ fun SharedTransitionScope.HomeScreenRoot(
                 HomeAction.ScanBarcode -> {
                     navigateToTab(NavigationTab.Scanner)
                 }
+                HomeAction.NavigateToMoreTab -> navigateToTab(NavigationTab.More)
                 HomeAction.NavigateToProductsHistory -> navigateToTab(NavigationTab.History)
                 HomeAction.NavigateToFavouriteProducts -> navigateToTab(NavigationTab.Favourites)
                 is HomeAction.NavigateToProduct -> {
@@ -156,13 +166,53 @@ private fun SharedTransitionScope.HomeScreen(
                 .padding(horizontal = 24.dp)
                 .padding(top = 8.dp),
         ) {
+            item {
+                NutrilightInformation(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    title = stringResource(id = R.string.hey_you),
+                    description = buildAnnotatedString {
+                        withStyle(
+                            style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                        ) {
+                            withStyle(
+                                style = SpanStyle(color = TintedBlack)
+                            ) {
+                                append(stringResource(id = R.string.confused_about_product_information))
+                                append(stringResource(id = R.string.see) + " ")
+                            }
+                            withLink(
+                                link = LinkAnnotation.Clickable(
+                                    tag = "more_tab",
+                                    linkInteractionListener = {
+                                        onAction(HomeAction.NavigateToMoreTab)
+                                    }
+                                )
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Primary)
+                                ) {
+                                    append(stringResource(id = R.string.more_tab) + " ")
+                                }s
+
+                            }
+                            withStyle(
+                                style = SpanStyle(color = TintedBlack)
+                            ) {
+                                append(stringResource(id = R.string.for_details))
+                            }
+                        }
+                    }
+                )
+            }
             if (state.productsHistory.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(id = R.string.products_history),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
-                            .padding(top = 16.dp)
+                            .padding(top = 24.dp)
                             .animateItem()
                     )
                 }
