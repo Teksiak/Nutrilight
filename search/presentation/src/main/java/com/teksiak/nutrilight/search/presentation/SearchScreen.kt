@@ -61,7 +61,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.LoadingA
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
-import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
+import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchTopBar
 import com.teksiak.nutrilight.core.presentation.ui_models.CountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toCountryUi
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
@@ -117,7 +117,7 @@ private fun SharedTransitionScope.SearchScreen(
 
     NutrilightScaffold(
         topAppBar = {
-            SearchBar(
+            SearchTopBar(
                 searchValue = state.searchQuery,
                 onSearchValueChange = { onAction(SearchAction.SearchQueryChanged(it)) },
                 onSearch = { onAction(SearchAction.SearchProducts) },

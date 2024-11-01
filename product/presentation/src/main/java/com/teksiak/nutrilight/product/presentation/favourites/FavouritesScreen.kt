@@ -57,6 +57,7 @@ import com.teksiak.nutrilight.core.presentation.designsystem.ShadedWhite
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
 import com.teksiak.nutrilight.core.presentation.designsystem.TintedBlack
 import com.teksiak.nutrilight.core.presentation.designsystem.components.CircleButton
+import com.teksiak.nutrilight.core.presentation.designsystem.components.ExpandableSearchInput
 import com.teksiak.nutrilight.core.presentation.designsystem.components.NutrilightScaffold
 import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductCard
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchInput
@@ -178,53 +179,65 @@ private fun FavouritesScreen(
                             softWrap = false,
                         )
                     }
-                    AnimatedContent(
-                        targetState = state.isSearchActive,
-                        transitionSpec = {
-                            expandHorizontally(
-                                expandFrom = Alignment.CenterHorizontally,
-                                animationSpec = tween(300)
-                            ).togetherWith(
-                                slideOutHorizontally(
-                                    targetOffsetX = { fullWidth -> fullWidth },
-                                    animationSpec = tween(300)
-                                )
-                            )
-                        }
-                    ) { showSearch ->
-                        if (showSearch) {
-                            SearchInput(
-                                modifier = Modifier.fillMaxWidth(),
-                                value = state.searchQuery,
-                                onValueChange = { onAction(FavouritesAction.SearchProducts(it)) },
-                                onSearch = { },
-                                onClear = { onAction(FavouritesAction.ClearSearch) },
-                                onFocusChanged = { isFocused ->
-                                    isSearchFocused = isFocused
-                                },
-                                focusOnComposition = true
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .border(1.dp, ShadedWhite, CircleShape)
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null
-                                    ) {
-                                        onAction(FavouritesAction.ToggleSearchbar)
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = SearchIcon,
-                                    contentDescription = "Search",
-                                    tint = TintedBlack
-                                )
-                            }
-                        }
-                    }
+                    ExpandableSearchInput(
+                        modifier = Modifier
+                            .animateContentSize(),
+                        isExpanded = state.isSearchActive,
+                        onExpand = { onAction(FavouritesAction.ToggleSearchbar) },
+                        value = state.searchQuery,
+                        onValueChange = { onAction(FavouritesAction.SearchProducts(it)) },
+                        onClear = { onAction(FavouritesAction.ClearSearch) },
+                        onFocusChanged = { isFocused ->
+                            isSearchFocused = isFocused
+                        },
+                        focusOnExpand = true,
+                    )
+//                    AnimatedContent(
+//                        targetState = state.isSearchActive,
+//                        transitionSpec = {
+//                            expandHorizontally(
+//                                expandFrom = Alignment.CenterHorizontally,
+//                                animationSpec = tween(300)
+//                            ).togetherWith(
+//                                slideOutHorizontally(
+//                                    targetOffsetX = { fullWidth -> fullWidth },
+//                                    animationSpec = tween(300)
+//                                )
+//                            )
+//                        }
+//                    ) { showSearch ->
+//                        if (showSearch) {
+//                            SearchInput(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                value = state.searchQuery,
+//                                onValueChange = { onAction(FavouritesAction.SearchProducts(it)) },
+//                                onClear = { onAction(FavouritesAction.ClearSearch) },
+//                                onFocusChanged = { isFocused ->
+//                                    isSearchFocused = isFocused
+//                                },
+//                                focusOnComposition = true
+//                            )
+//                        } else {
+//                            Box(
+//                                modifier = Modifier
+//                                    .size(40.dp)
+//                                    .border(1.dp, ShadedWhite, CircleShape)
+//                                    .clickable(
+//                                        interactionSource = remember { MutableInteractionSource() },
+//                                        indication = null
+//                                    ) {
+//                                        onAction(FavouritesAction.ToggleSearchbar)
+//                                    },
+//                                contentAlignment = Alignment.Center
+//                            ) {
+//                                Icon(
+//                                    imageVector = SearchIcon,
+//                                    contentDescription = "Search",
+//                                    tint = TintedBlack
+//                                )
+//                            }
+//                        }
+//                    }
                 }
                 AnimatedVisibility(
                     visible = !isTyping,
