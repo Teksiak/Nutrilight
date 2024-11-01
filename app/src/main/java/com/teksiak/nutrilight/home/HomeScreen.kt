@@ -3,6 +3,7 @@
 package com.teksiak.nutrilight.home
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teksiak.nutrilight.R
+import com.teksiak.nutrilight.core.domain.product.Product
 import com.teksiak.nutrilight.core.presentation.NavigationTab
 import com.teksiak.nutrilight.core.presentation.designsystem.Primary
 import com.teksiak.nutrilight.core.presentation.designsystem.Silver
@@ -76,6 +80,7 @@ fun SharedTransitionScope.HomeScreenRoot(
                 HomeAction.ScanBarcode -> {
                     navigateToTab(NavigationTab.Scanner)
                 }
+
                 HomeAction.NavigateToMoreTab -> navigateToTab(NavigationTab.More)
                 HomeAction.NavigateToProductsHistory -> navigateToTab(NavigationTab.History)
                 HomeAction.NavigateToFavouriteProducts -> navigateToTab(NavigationTab.Favourites)
@@ -206,104 +211,143 @@ private fun SharedTransitionScope.HomeScreen(
                     }
                 )
             }
-            if (state.productsHistory.isNotEmpty()) {
-                item {
+            ProductShowCase(
+                modifier = Modifier.padding(top = 24.dp),
+                titleRes = R.string.products_history,
+                key = "history",
+                productList = state.productsHistory,
+                showProductImages = state.showProductImages,
+                onFavouriteToggle = { onAction(HomeAction.ToggleFavourite(it)) },
+                onNavigate = { onAction(HomeAction.NavigateToProduct(it)) },
+                onSeeMore = { onAction(HomeAction.NavigateToFavouriteProducts) },
+                emptyList = {
                     Text(
-                        text = stringResource(id = R.string.products_history),
-                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
-                            .padding(top = 24.dp)
-                            .animateItem()
-                    )
-                }
-            }
-
-            items(
-                items = state.productsHistory.take(3),
-                key = { it.code + "-his" }
-            ) { product ->
-                ProductCard(
-                    productUi = product.toProductUi(state.showProductImages),
-                    onFavouriteToggle = { onAction(HomeAction.ToggleFavourite(it)) },
-                    onNavigate = { onAction(HomeAction.NavigateToProduct(it)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .animateItem(),
-                )
-            }
-            if (state.productsHistory.size > 3) {
-                item {
-                    Text(
-                        text = stringResource(R.string.see_more),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Silver,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = {
-                                        onAction(HomeAction.NavigateToProductsHistory)
-                                    }
-                                )
-                            }
+                            .padding(top = 16.dp)
                             .fillMaxWidth()
-                            .padding(top = 12.dp)
-                            .animateItem()
-                    )
-                }
-            }
-
-            if (state.favouriteProducts.isNotEmpty()) {
-                item {
-                    Text(
-                        text = stringResource(id = R.string.favourite_products),
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier
-                            .padding(top = 24.dp)
-                            .animateItem()
-                    )
-                }
-            }
-
-            items(
-                items = state.favouriteProducts.take(3),
-                key = { it.code + "-fav" }
-            ) { product ->
-                ProductCard(
-                    productUi = product.toProductUi(state.showProductImages),
-                    onFavouriteToggle = { onAction(HomeAction.ToggleFavourite(it)) },
-                    onNavigate = { onAction(HomeAction.NavigateToProduct(it)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .animateItem(),
-                )
-            }
-            if (state.favouriteProducts.size > 3) {
-                item {
-                    Text(
-                        text = stringResource(R.string.see_more),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Silver,
+                            .animateItem(),
                         textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = {
-                                        onAction(HomeAction.NavigateToFavouriteProducts)
-                                    }
-                                )
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Silver)
+                                ) {
+                                    append(stringResource(id = com.teksiak.nutrilight.product.presentation.R.string.empty_history))
+                                }
+                                append("\n")
+                                withStyle(
+                                    style = SpanStyle(color = Primary)
+                                ) {
+                                    append(stringResource(id = com.teksiak.nutrilight.product.presentation.R.string.try_scanning_something))
+                                }
                             }
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                            .animateItem()
+                        }
                     )
                 }
-            }
+            )
+
+            ProductShowCase(
+                modifier = Modifier.padding(top = 24.dp),
+                titleRes = R.string.favourite_products,
+                key = "fav",
+                productList = state.favouriteProducts,
+                showProductImages = state.showProductImages,
+                onFavouriteToggle = { onAction(HomeAction.ToggleFavourite(it)) },
+                onNavigate = { onAction(HomeAction.NavigateToProduct(it)) },
+                onSeeMore = { onAction(HomeAction.NavigateToFavouriteProducts) },
+                emptyList = {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .animateItem(),
+                        textAlign = TextAlign.Center,
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                            ) {
+                                withStyle(
+                                    style = SpanStyle(color = Silver)
+                                ) {
+                                    append(stringResource(id = com.teksiak.nutrilight.product.presentation.R.string.no_favourites_added))
+                                }
+                                append("\n")
+                                withStyle(
+                                    style = SpanStyle(color = Primary)
+                                ) {
+                                    append(stringResource(id = com.teksiak.nutrilight.product.presentation.R.string.save_your_top_picks))
+                                }
+                            }
+                        }
+                    )
+                }
+            )
+
             item {
                 Spacer(modifier = Modifier.height(24.dp))
             }
+        }
+    }
+}
+
+private fun LazyListScope.ProductShowCase(
+    @StringRes titleRes: Int,
+    key: Any? = null,
+    productList: List<Product>,
+    showProductImages: Boolean,
+    onFavouriteToggle: (String) -> Unit,
+    onNavigate: (String) -> Unit,
+    onSeeMore: () -> Unit,
+    modifier: Modifier = Modifier,
+    emptyList: @Composable LazyItemScope.() -> Unit = {}
+) {
+    item {
+        Text(
+            text = stringResource(titleRes),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = modifier
+                .animateItem()
+        )
+    }
+    items(
+        items = productList.take(3),
+        key = { it.code + key.toString() }
+    ) { product ->
+        ProductCard(
+            productUi = product.toProductUi(showProductImages),
+            onFavouriteToggle = { onFavouriteToggle(it) },
+            onNavigate = { onNavigate(it) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .animateItem(),
+        )
+    }
+    if (productList.size > 3) {
+        item {
+            Text(
+                text = stringResource(R.string.see_more),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Silver,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = {
+                                onSeeMore()
+                            }
+                        )
+                    }
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+                    .animateItem()
+            )
+        }
+    } else if (productList.isEmpty()) {
+        item {
+            emptyList()
         }
     }
 }
