@@ -1,5 +1,6 @@
 package com.teksiak.nutrilight.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teksiak.nutrilight.core.domain.ProductsRepository
@@ -27,7 +28,8 @@ class HomeViewModel @Inject constructor(
         .onEach { products ->
             _state.update { state ->
                 state.copy(
-                    productsHistory = products
+                    productsHistory = products,
+                    isLoading = false
                 )
             }
         }
@@ -41,7 +43,8 @@ class HomeViewModel @Inject constructor(
         .onEach { products ->
             _state.update { state ->
                 state.copy(
-                    favouriteProducts = products
+                    favouriteProducts = products,
+                    isLoading = false
                 )
             }
         }
@@ -52,6 +55,9 @@ class HomeViewModel @Inject constructor(
         )
 
     init {
+        _state.update {
+            it.copy(isLoading = true)
+        }
         settingsRepository.showProductImages
             .onEach { showProductImages ->
                 _state.update { state ->

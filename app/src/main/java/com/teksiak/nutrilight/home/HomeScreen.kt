@@ -48,7 +48,6 @@ import com.teksiak.nutrilight.core.presentation.designsystem.components.ProductC
 import com.teksiak.nutrilight.core.presentation.designsystem.components.RemoveFavouriteDialog
 import com.teksiak.nutrilight.core.presentation.designsystem.components.SearchBar
 import com.teksiak.nutrilight.core.presentation.ui_models.toProductUi
-import com.teksiak.nutrilight.product.presentation.history.HistoryAction
 import kotlin.math.roundToInt
 
 @Composable
@@ -194,7 +193,7 @@ private fun SharedTransitionScope.HomeScreen(
                                     style = SpanStyle(color = Primary)
                                 ) {
                                     append(stringResource(id = R.string.more_tab) + " ")
-                                }s
+                                }
 
                             }
                             withStyle(

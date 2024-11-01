@@ -1,10 +1,7 @@
-@file:OptIn(ExperimentalSerializationApi::class)
-
 package com.teksiak.nutrilight
 
 import android.util.Log
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
@@ -12,12 +9,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.teksiak.nutrilight.core.presentation.NavigationRoute
 import com.teksiak.nutrilight.core.presentation.toRoute
 import com.teksiak.nutrilight.home.HomeScreenRoot
@@ -34,7 +31,6 @@ import com.teksiak.nutrilight.scanner.presentation.ScannerScreenRoot
 import com.teksiak.nutrilight.scanner.presentation.ScannerViewModel
 import com.teksiak.nutrilight.search.presentation.SearchScreenRoot
 import com.teksiak.nutrilight.search.presentation.SearchViewModel
-import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -60,7 +56,7 @@ fun NavigationRoot(
 
             composable<NavigationRoute.HomeRoute> {
                 HomeScreenRoot(
-                    viewModel = viewModel<HomeViewModel>(viewModelStoreOwner),
+                    viewModel = hiltViewModel<HomeViewModel>(viewModelStoreOwner),
                     onSearchProducts = {
                         navController.navigate(NavigationRoute.SearchRoute)
                     },

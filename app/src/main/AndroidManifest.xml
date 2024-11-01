@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:enableOnBackInvokedCallback="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Nutrilight"
+        android:theme="@style/Theme.Nutrilight.Splash"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

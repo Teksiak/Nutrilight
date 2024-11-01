@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
