@@ -7,6 +7,7 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,6 +62,7 @@ fun SearchTopBar(
     onScanBarClick: () -> Unit,
     onClick: () -> Unit = {},
     focusOnComposition: Boolean = false,
+    isEnabled: Boolean = true
 ) {
     var isSearchFocused by remember { mutableStateOf(false) }
     val isTyping = if(isSearchFocused) {
@@ -76,16 +79,21 @@ fun SearchTopBar(
             value = searchValue,
             onValueChange = onSearchValueChange,
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            onClick()
+                        }
+                    )
+                },
             onSearch = onSearch,
             onClear = onClear,
             onFocusChanged = { isFocused ->
                 isSearchFocused = isFocused
-                if(isFocused) {
-                    onClick()
-                }
             },
-            focusOnComposition = focusOnComposition
+            focusOnComposition = focusOnComposition,
+            isEnabled = isEnabled
         )
         AnimatedVisibility(
             visible = !isTyping,
@@ -115,13 +123,14 @@ fun SearchInput(
     onSearch: (String) -> Unit = {},
     onClear: () -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
-    focusOnComposition: Boolean = false
+    focusOnComposition: Boolean = false,
+    isEnabled: Boolean = true
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
-        if(focusOnComposition) {
+        if(focusOnComposition && isEnabled) {
             focusRequester.requestFocus()
         }
     }
@@ -136,6 +145,7 @@ fun SearchInput(
             .padding(8.dp)
             .focusRequester(focusRequester)
             .onFocusChanged { onFocusChanged(it.isFocused) },
+        enabled = isEnabled,
         textStyle = MaterialTheme.typography.bodyLarge,
         cursorBrush = SolidColor(TintedBlack),
         singleLine = true,

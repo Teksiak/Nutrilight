@@ -122,9 +122,9 @@ private fun SharedTransitionScope.HomeScreen(
                 content = {
                     SearchTopBar(
                         searchValue = "",
-                        onSearchValueChange = {  },
-                        onSearch = { },
-                        onClear = { },
+                        onSearchValueChange = {},
+                        onSearch = {},
+                        onClear = {},
                         onScanBarClick = {
                             onAction(HomeAction.ScanBarcode)
                         },
@@ -139,7 +139,8 @@ private fun SharedTransitionScope.HomeScreen(
                                     key = "searchBar",
                                 ),
                                 animatedVisibilityScope = animatedVisibilityScope
-                            )
+                            ),
+                        isEnabled = false
                     )
                 },
                 measurePolicy = { measurables, constraints ->
