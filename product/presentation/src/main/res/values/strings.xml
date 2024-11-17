@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brands">Brands</string>
+    <string name="quantity">Quantity</string>
+    <string name="packaging">Packaging</string>
+    <string name="in_100g">In 100 g</string>
+    <string name="protein">Protein</string>
+    <string name="fat">Fat</string>
+    <string name="carbs">Carbs</string>
+    <string name="calories">Calories</string>
+    <string name="nutrition_facts">Nutrition facts</string>
+    <string name="energy">Energy</string>
+    <string name="saturated_fat">Saturated fat</string>
+    <string name="carbohydrates">Carbohydrates</string>
+    <string name="sugars">Sugars</string>
+    <string name="fiber">Fiber</string>
+    <string name="salt">Salt</string>
+    <string name="nova_1_title">Unprocessed or Minimally Processed Foods</string>
+    <string name="nova_1_description">Pure and simple - these are your go-to foods that haven’t been messed with much.</string>
+    <string name="nova_2_title">Processed Culinary Ingredients</string>
+    <string name="nova_2_description">Cooking essentials - things like salt and flour that help bring your recipes to life.</string>
+    <string name="nova_3_title">Processed Foods</string>
+    <string name="nova_3_description">Everyday favorites that are a bit processed, like your morning toast or a jar of pickles.</string>
+    <string name="nova_4_title">Ultra-Processed Foods</string>
+    <string name="nova_4_description">Quick and easy treats or meals that have been through a lot of processing, with extra flavors and preservatives.</string>
+    <string name="favourites_title">Your Favourites</string>
+    <string name="no_favourites_added">No favorites added yet!</string>
+    <string name="save_your_top_picks">Save your top picks by tapping the Heart Icon.</string>
+    <string name="no_favourite_matches">We couldn’t find that in Your favourites!</string>
+    <string name="history">Products History</string>
+    <string name="try_scanning_something">Try Scanning something tasty to get started!</string>
+    <string name="empty_history">Your history is looking a bit empty.</string>
+    <string name="data_resources">Data from Open Food Facts, under ODbL and CC BY-SA licenses.</string>
+    <string name="show_more">Show more</string>
+    <string name="allergens">Allergens</string>
+    <string name="product_image">Product image</string>
+    <string name="product_id">Product ID:</string>
+    <string name="copy">Copy</string>
+    <string name="history_too_short">Is your products history too short?</string>
+    <string name="check_more_tab_to_adjust_size">Check the More tab to adjust its size!</string>
+</resources>

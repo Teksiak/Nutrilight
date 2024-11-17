@@ -1,0 +1,27 @@
+{
+  "code": "20724696",
+  "product": {
+    "allergens": "en:nuts",
+    "brands": "Alesto,Lidl,Solent",
+    "code": "20724696",
+    "ingredients": [
+      {
+        "ciqual_food_code": "15041",
+        "id": "en:almond",
+        "is_in_taxonomy": 1,
+        "percent_estimate": 100,
+        "percent_max": 100,
+        "percent_min": 100,
+        "processing": "en:shelled",
+        "text": "almonds",
+        "vegan": "yes",
+        "vegetarian": "yes"
+      }
+    ],
+    "packaging": "en:Andere Kunststoffe,en:Kunststoff,en:Tüte",
+    "product_name": "Californian Almond test",
+    "quantity": "200g"
+  },
+  "status": 1,
+  "status_verbose": "product found"
+}
